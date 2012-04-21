@@ -3,9 +3,7 @@
  * Licensed under GNU's GPL 2, see README
  */
 
-package info.lamatricexiste.network.Network;
-
-import info.lamatricexiste.network.ActivityMain;
+package ch.fixme.status;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,18 +28,18 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
-public class DownloadFile {
+public class Net {
 
     private static String TAG = "DownloadFile";
     private final String USERAGENT = "Android/" + android.os.Build.VERSION.RELEASE + " ("
             + android.os.Build.MODEL + ") MyHackerspace/";
     private HttpClient httpclient;
 
-    public DownloadFile(final Context ctxt, String url, FileOutputStream out) throws IOException,
+    public Net(final Context ctxt, String url, FileOutputStream out) throws IOException,
             NullPointerException {
         String version = "unknown";
         try {
-            version = ctxt.getPackageManager().getPackageInfo(ActivityMain.TAG, 0).versionName;
+            version = ctxt.getPackageManager().getPackageInfo(Main.PKG, 0).versionName;
         } catch (NameNotFoundException e) {
         }
 

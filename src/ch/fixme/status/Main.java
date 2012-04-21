@@ -1,6 +1,7 @@
 package ch.fixme.status;
 
-import info.lamatricexiste.network.Network.DownloadFile;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,76 +19,82 @@ import android.widget.TextView;
 
 public class Main extends Activity {
 
-	private static final int DIALOG_LOADING = 0;
-	private static final String API_KEY = "apiurl";
-	private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
-	public static final String API_NAME = "space";
-	public static final String API_STATUS = "open";
-	public static final String API_STATUS_TXT = "status";
-	public static final String API_ICON = "icon";
-	public static final String API_ICON_OPEN = "open";
-	public static final String API_ICON_CLOSED = "closed";
+    public static final String PKG = "ch.fixme.status";
+    private static final String API_KEY = "apiurl";
+    private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
+    private static final String API_NAME = "space";
+    private static final String API_STATUS = "open";
+    private static final String API_STATUS_TXT = "status";
+    private static final String API_ICON = "icon";
+    private static final String API_ICON_OPEN = "open";
+    private static final String API_ICON_CLOSED = "closed";
+    private static final int DIALOG_LOADING = 0;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		String apiUrl = PreferenceManager
-				.getDefaultSharedPreferences(Main.this).getString(API_KEY,
-						API_DEFAULT);
-		new GetApiTask().execute(apiUrl);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        String apiUrl = PreferenceManager.getDefaultSharedPreferences(Main.this).getString(API_KEY,
+                API_DEFAULT);
+        new GetApiTask().execute(apiUrl);
+    }
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		AlertDialog dialog = null;
-		switch (id) {
-		case DIALOG_LOADING:
-			dialog = new ProgressDialog(this);
-			dialog.setCancelable(false);
-			dialog.setMessage("Loading...");
-			((ProgressDialog) dialog).setIndeterminate(true);
-			break;
-		}
-		return dialog;
-	}
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        AlertDialog dialog = null;
+        switch (id) {
+            case DIALOG_LOADING:
+                dialog = new ProgressDialog(this);
+                dialog.setCancelable(false);
+                dialog.setMessage("Loading...");
+                ((ProgressDialog) dialog).setIndeterminate(true);
+                break;
+        }
+        return dialog;
+    }
 
-	private class GetApiTask extends AsyncTask<String, Void, String> {
+    private class GetApiTask extends AsyncTask<String, Void, String> {
 
-		@Override
-		protected void onPreExecute() {
-			showDialog(DIALOG_LOADING);
-		}
+        @Override
+        protected void onPreExecute() {
+            showDialog(DIALOG_LOADING);
+        }
 
-		@Override
-		protected String doInBackground(String... url) {
-		    new DownloadFile(ctxt, String.format(DB_REMOTE, file), ctxt.openFileOutput(file,
-                    Context.MODE_PRIVATE));
-			return "";
-		}
+        @Override
+        protected String doInBackground(String... url) {
+            try {
+                new Net(Main.this, "distantFile", Main.this.openFileOutput("localFile",
+                        Context.MODE_PRIVATE));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
 
-		@Override
-		protected void onPostExecute(String result) {
-			try {
-				JSONObject api = new JSONObject(result);
-				String status = API_ICON_CLOSED;
-				if (api.getBoolean(API_STATUS)) {
-					status = API_ICON_OPEN;
-				}
-				((TextView) findViewById(R.id.name)).setText(api
-						.getString(API_NAME));
-				((TextView) findViewById(R.id.status)).setText(api
-						.getString(API_STATUS_TXT));
-				((WebView) findViewById(R.id.image)).loadData("<img src=\""
-						+ api.getJSONObject(API_ICON).getString(status)
-						+ "\" />", "text/html", "utf-8");
-				findViewById(R.id.image).setBackgroundColor(0);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			dismissDialog(DIALOG_LOADING);
-		}
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject api = new JSONObject(result);
+                String status = API_ICON_CLOSED;
+                if (api.getBoolean(API_STATUS)) {
+                    status = API_ICON_OPEN;
+                }
+                ((TextView) findViewById(R.id.name)).setText(api.getString(API_NAME));
+                ((TextView) findViewById(R.id.status)).setText(api.getString(API_STATUS_TXT));
+                ((WebView) findViewById(R.id.image)).loadData(
+                        "<img src=\"" + api.getJSONObject(API_ICON).getString(status) + "\" />",
+                        "text/html", "utf-8");
+                findViewById(R.id.image).setBackgroundColor(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            dismissDialog(DIALOG_LOADING);
+        }
 
-	}
+    }
 
 }
