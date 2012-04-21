@@ -18,7 +18,7 @@ import android.util.Log;
 public class Net
 {
 
-    final static String TAG = "Net";
+    private final static String TAG = "Net";
 
     static public String get(String url) {
         StringBuilder builder = new StringBuilder();
