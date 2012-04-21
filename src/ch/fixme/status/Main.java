@@ -1,5 +1,7 @@
 package ch.fixme.status;
 
+import info.lamatricexiste.network.Network.DownloadFile;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -58,7 +61,9 @@ public class Main extends Activity {
 
 		@Override
 		protected String doInBackground(String... url) {
-			return Net.get(url[0]);
+		    new DownloadFile(ctxt, String.format(DB_REMOTE, file), ctxt.openFileOutput(file,
+                    Context.MODE_PRIVATE));
+			return "";
 		}
 
 		@Override
