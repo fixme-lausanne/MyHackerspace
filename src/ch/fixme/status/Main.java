@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Window;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -29,7 +28,6 @@ public class Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		String apiUrl = PreferenceManager
 				.getDefaultSharedPreferences(Main.this).getString(API_KEY,
@@ -73,12 +71,12 @@ public class Main extends Activity {
 				}
 				((TextView) findViewById(R.id.name)).setText(api
 						.getString(API_NAME));
+				((TextView) findViewById(R.id.status)).setText(api
+						.getString(API_STATUS_TXT));
 				((WebView) findViewById(R.id.image)).loadData("<img src=\""
 						+ api.getJSONObject(API_ICON).getString(status)
 						+ "\" />", "text/html", "utf-8");
 				findViewById(R.id.image).setBackgroundColor(0);
-				((TextView) findViewById(R.id.status)).setText(api
-						.getString(API_STATUS_TXT));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
