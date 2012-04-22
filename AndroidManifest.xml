@@ -3,6 +3,9 @@
     package="ch.fixme.status"
     android:versionCode="1"
     android:versionName="1.0" >
+    
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -18,7 +21,13 @@
             </intent-filter>
         </activity>
         
-        <receiver android:name="ExampleAppWidgetProvider" >
+        <activity android:name=".WidgetConfigure">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        
+        <receiver android:name=".Widget" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		    </intent-filter>
@@ -28,7 +37,5 @@
         
     </application>
 
-    <uses-sdk android:minSdkVersion="3" />
-    <uses-permission android:name="android.permission.INTERNET" />
     
 </manifest>
