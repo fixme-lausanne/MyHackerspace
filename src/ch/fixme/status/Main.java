@@ -1,7 +1,9 @@
 package ch.fixme.status;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.net.ssl.SSLException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,6 +30,10 @@ public class Main extends Activity {
     private static final String API_ICON_OPEN = "open";
     private static final String API_ICON_CLOSED = "closed";
     private static final int DIALOG_LOADING = 0;
+
+    // private static final String TMPFILE = "tmpfile";
+    // private static final String PATH = "/data/data/ch.fixme.status/files/" +
+    // TMPFILE;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,17 +67,17 @@ public class Main extends Activity {
 
         @Override
         protected String doInBackground(String... url) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
-                new Net(Main.this, "distantFile", Main.this.openFileOutput("localFile",
-                        Context.MODE_PRIVATE));
-            } catch (NullPointerException e) {
+                new Net(url[0], os);
+            } catch (SSLException e) {
                 e.printStackTrace();
-            } catch (FileNotFoundException e) {
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return "";
+            return os.toString();
         }
 
         @Override

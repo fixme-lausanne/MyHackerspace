@@ -5,15 +5,14 @@
 
 package ch.fixme.status;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
-import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.SSLException;
 
@@ -24,8 +23,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class Net {
@@ -35,16 +32,9 @@ public class Net {
             + android.os.Build.MODEL + ") MyHackerspace/";
     private HttpClient httpclient;
 
-    public Net(final Context ctxt, String url, FileOutputStream out) throws IOException,
-            NullPointerException {
-        String version = "unknown";
-        try {
-            version = ctxt.getPackageManager().getPackageInfo(Main.PKG, 0).versionName;
-        } catch (NameNotFoundException e) {
-        }
-
+    public Net(String url, OutputStream out) throws SSLException, IOException, NullPointerException {
         httpclient = new DefaultHttpClient();
-        httpclient.getParams().setParameter("http.useragent", USERAGENT + version);
+        httpclient.getParams().setParameter("http.useragent", USERAGENT);
         InputStream in = openURL(url);
         if (in == null) {
             Log.e(TAG, "Unable to download: " + url);
@@ -81,21 +71,34 @@ public class Net {
         }
     }
 
-    private InputStream openURL(String url) {
+    private InputStream openURL(String url) throws SSLException {
         HttpGet httpget = new HttpGet(url);
         HttpResponse response;
         try {
-            try {
-                response = httpclient.execute(httpget);
-            } catch (SSLException e) {
-                Log.i(TAG, "SSL Certificate is not trusted");
-                response = httpclient.execute(httpget);
-            }
+            // try {
+            response = httpclient.execute(httpget);
+            // } catch (SSLException e) {
+            // /*
+            // * KeyStore trustStore =
+            // * KeyStore.getInstance(KeyStore.getDefaultType());
+            // * KeyStore.getDefaultType(); FileInputStream in = new
+            // * FileInputStream(new
+            // * File("data/data/ch.fixme.status/my.trustore3")); try {
+            // * trustStore.load(in, "coucou".toCharArray()); } finally {
+            // * in.close(); }
+            // *
+            // * SSLSocketFactory socketFactory = new
+            // * SSLSocketFactory(trustStore); SchemeRegistry registry = new
+            // * SchemeRegistry(); registry.register(new Scheme("https",
+            // * socketFactory, 443));
+            // */
+            // response = httpclient.execute(httpget);
+            // }
             Log.i(TAG, "Status:[" + response.getStatusLine().toString() + "]");
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
-                return new GZIPInputStream(entity.getContent());
+                return entity.getContent();
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG, "There was a protocol based error", e);
@@ -123,4 +126,5 @@ public class Net {
             }
         }
     }
+
 }
