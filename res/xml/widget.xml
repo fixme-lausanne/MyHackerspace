@@ -4,5 +4,5 @@
     android:updatePeriodMillis="86400000"
     android:initialLayout="@layout/widget"
     android:previewImage="@drawable/preview"
-    android:configure="ch.fixme.status.WidgetConfigure">
+    android:configure="ch.fixme.status.Main">
 </appwidget-provider>
