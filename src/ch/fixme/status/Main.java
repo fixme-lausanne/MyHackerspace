@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.net.ssl.SSLException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,13 +13,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -38,13 +37,14 @@ public class Main extends Activity {
 	private static final String API_ICON_CLOSED = "closed";
 	private static final int DIALOG_LOADING = 0;
 
+	private SharedPreferences mPrefs;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		String apiUrl = PreferenceManager
-				.getDefaultSharedPreferences(Main.this).getString(API_KEY,
-						API_DEFAULT);
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
+		String apiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
 		new GetApiTask().execute(apiUrl, API_DIRECTORY);
 	}
 
@@ -100,37 +100,42 @@ public class Main extends Activity {
 						status));
 				((TextView) findViewById(R.id.name)).setText(api
 						.getString(API_NAME));
-				((TextView) findViewById(R.id.status)).setText(api
-						.getString(API_STATUS_TXT));
+				// ((TextView) findViewById(R.id.status)).setText(api
+				// .getString(API_STATUS_TXT));
 				findViewById(R.id.image).setBackgroundColor(0);
 				// Construct hackerspaces list
 				Spinner s = (Spinner) findViewById(R.id.choose);
 				JSONObject obj = new JSONObject(result[1]);
-				String[] arr = new String[obj.length()];
-				for (int i = 0; i < arr.length; i++) {
-					arr[i] = (String) obj.names().get(i);
+				JSONArray arr = obj.names();
+				String[] names = new String[obj.length()];
+				final String[] url = new String[obj.length()];
+				for (int i = 0; i < result.length; i++) {
+					names[i] = arr.getString(i);
+					url[i] = obj.getString(names[i]);
 				}
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-						Main.this, android.R.layout.simple_spinner_item, arr);
+						Main.this, android.R.layout.simple_spinner_item, names);
 				adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 				s.setAdapter(adapter);
-				s.setSelection(0);
-				s.setOnItemSelectedListener(new OnItemSelectedListener() {
-					@Override
-					public void onItemSelected(AdapterView<?> adapter, View v,
-							int position, long id) {
-					}
-
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
+				// s.setSelection(0);
+				// s.setOnItemSelectedListener(new OnItemSelectedListener() {
+				// @Override
+				// public void onItemSelected(AdapterView<?> adapter, View v,
+				// int position, long id) {
+				// Editor edit = mPrefs.edit();
+				// edit.putString(API_KEY, url[position]);
+				// edit.commit();
+				// }
+				//
+				// @Override
+				// public void onNothingSelected(AdapterView<?> arg0) {
+				// }
+				// });
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			dismissDialog(DIALOG_LOADING);
 		}
-
 	}
 
 	private class GetImage extends AsyncTask<String, Void, byte[]> {
