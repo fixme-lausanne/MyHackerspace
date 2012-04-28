@@ -51,7 +51,8 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         mApiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
-        new GetApiTask().execute(mApiUrl, API_DIRECTORY);
+        new GetApiTask().execute(mApiUrl);
+        new GetDirTask().execute(API_DIRECTORY);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Main extends Activity {
         return dialog;
     }
 
-    private class GetApiTask extends AsyncTask<String, Void, String[]> {
+    private class GetDirTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -76,13 +77,10 @@ public class Main extends Activity {
         }
 
         @Override
-        protected String[] doInBackground(String... url) {
-            // Download the current selected space api and the api directory
-            ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
+        protected String doInBackground(String... url) {
             ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
             try {
-                new Net(url[0], spaceOs);
-                new Net(url[1], direcOs);
+                new Net(url[0], direcOs);
             } catch (SSLException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
@@ -90,28 +88,15 @@ public class Main extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new String[] { spaceOs.toString(), direcOs.toString() };
+            return direcOs.toString();
         }
 
         @Override
-        protected void onPostExecute(String[] result) {
+        protected void onPostExecute(String result) {
             try {
-                // Display current hackerspace information
-                JSONObject api = new JSONObject(result[0]);
-                String status = API_ICON_CLOSED;
-                if (api.getBoolean(API_STATUS)) {
-                    status = API_ICON_OPEN;
-                }
-                new GetImage().execute(api.getJSONObject(API_ICON).getString(
-                        status));
-                ((TextView) findViewById(R.id.name)).setText(api
-                        .getString(API_NAME));
-                // ((TextView) findViewById(R.id.status)).setText(api
-                // .getString(API_STATUS_TXT));
-                findViewById(R.id.image).setBackgroundColor(0);
                 // Construct hackerspaces list
                 Spinner s = (Spinner) findViewById(R.id.choose);
-                JSONObject obj = new JSONObject(result[1]);
+                JSONObject obj = new JSONObject(result);
                 JSONArray arr = obj.names();
                 int len = obj.length();
                 String[] names = new String[len];
@@ -129,6 +114,7 @@ public class Main extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapter, View v,
                             int position, long id) {
+                        new GetApiTask().execute(url.get(position));
                         Editor edit = mPrefs.edit();
                         edit.putString(API_KEY, url.get(position));
                         edit.commit();
@@ -140,8 +126,55 @@ public class Main extends Activity {
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
+            } finally {
+                dismissDialog(DIALOG_LOADING);
             }
-            dismissDialog(DIALOG_LOADING);
+        }
+    }
+
+    private class GetApiTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            showDialog(DIALOG_LOADING);
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
+            try {
+                new Net(url[0], spaceOs);
+            } catch (SSLException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return spaceOs.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                // Display current hackerspace information
+                JSONObject api = new JSONObject(result);
+                String status = API_ICON_CLOSED;
+                if (api.getBoolean(API_STATUS)) {
+                    status = API_ICON_OPEN;
+                }
+                new GetImage().execute(api.getJSONObject(API_ICON).getString(
+                        status));
+                ((TextView) findViewById(R.id.name)).setText(api
+                        .getString(API_NAME));
+                ((TextView) findViewById(R.id.status)).setText(api
+                        .getString(API_STATUS_TXT));
+                findViewById(R.id.image).setBackgroundColor(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                dismissDialog(DIALOG_LOADING);
+            }
         }
     }
 
