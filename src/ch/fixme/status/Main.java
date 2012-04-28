@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 public class Main extends Activity {
 
+    // API: http://hackerspaces.nl/spaceapi/
+
     public static final String PKG = "ch.fixme.status";
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_KEY = "apiurl";
@@ -167,13 +169,16 @@ public class Main extends Activity {
                 if (api.getBoolean(API_STATUS)) {
                     status = API_ICON_OPEN;
                 }
-                new GetImage().execute(api.getJSONObject(API_ICON).getString(
-                        status));
                 ((TextView) findViewById(R.id.name)).setText(api
                         .getString(API_NAME));
-                ((TextView) findViewById(R.id.status)).setText(api
-                        .getString(API_STATUS_TXT));
-                findViewById(R.id.image).setBackgroundColor(0);
+                if (!api.isNull(API_STATUS_TXT)) {
+                    ((TextView) findViewById(R.id.status)).setText(api
+                            .getString(API_STATUS_TXT));
+                }
+                JSONObject status_icon = api.getJSONObject(API_ICON);
+                if (!status_icon.isNull(status)) {
+                    new GetImage().execute(status_icon.getString(status));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
