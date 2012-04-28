@@ -192,8 +192,14 @@ public class Main extends Activity {
                 if (api.getBoolean(API_STATUS)) {
                     status = API_ICON_OPEN;
                     status_txt = OPEN;
+                    ((TextView) findViewById(R.id.status_txt))
+                            .setCompoundDrawablesWithIntrinsicBounds(
+                                    android.R.drawable.presence_online, 0, 0, 0);
                 } else {
                     status_txt = CLOSED;
+                    ((TextView) findViewById(R.id.status_txt))
+                            .setCompoundDrawablesWithIntrinsicBounds(
+                                    android.R.drawable.presence_busy, 0, 0, 0);
                 }
                 ((TextView) findViewById(R.id.space_name)).setText(api
                         .getString(API_NAME));
