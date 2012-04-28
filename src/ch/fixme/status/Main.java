@@ -30,7 +30,6 @@ public class Main extends Activity {
     // API: http://hackerspaces.nl/spaceapi/
 
     public static final String PKG = "ch.fixme.status";
-    private static final String ERROR = "error";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_ERROR = 1;
 
@@ -38,6 +37,7 @@ public class Main extends Activity {
     private static final String API_KEY = "apiurl";
     private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
     private static final String API_NAME = "space";
+    private static final String API_LOGO = "logo";
     private static final String API_STATUS = "open";
     private static final String API_STATUS_TXT = "status";
     private static final String API_ICON = "icon";
@@ -152,9 +152,10 @@ public class Main extends Activity {
             showDialog(DIALOG_LOADING);
             mErrorMsg = null;
             // Clean UI
-            ((TextView) findViewById(R.id.name)).setText("");
-            ((TextView) findViewById(R.id.status)).setText("");
-            ((ImageView) findViewById(R.id.image)).setImageBitmap(null);
+            ((TextView) findViewById(R.id.space_name)).setText("");
+            ((TextView) findViewById(R.id.status_txt)).setText("");
+            ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
+            ((ImageView) findViewById(R.id.status_image)).setImageBitmap(null);
         }
 
         @Override
@@ -174,19 +175,21 @@ public class Main extends Activity {
             try {
                 // Display current hackerspace information
                 JSONObject api = new JSONObject(result);
+                new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
                 String status = API_ICON_CLOSED;
                 if (api.getBoolean(API_STATUS)) {
                     status = API_ICON_OPEN;
                 }
-                ((TextView) findViewById(R.id.name)).setText(api
+                ((TextView) findViewById(R.id.space_name)).setText(api
                         .getString(API_NAME));
                 if (!api.isNull(API_STATUS_TXT)) {
-                    ((TextView) findViewById(R.id.status)).setText(api
+                    ((TextView) findViewById(R.id.status_txt)).setText(api
                             .getString(API_STATUS_TXT));
                 }
                 JSONObject status_icon = api.getJSONObject(API_ICON);
                 if (!status_icon.isNull(status)) {
-                    new GetImage().execute(status_icon.getString(status));
+                    new GetImage(R.id.status_image).execute(status_icon
+                            .getString(status));
                 }
             } catch (JSONException e) {
                 mErrorMsg = e.getLocalizedMessage();
@@ -198,6 +201,12 @@ public class Main extends Activity {
     }
 
     private class GetImage extends AsyncTask<String, Void, byte[]> {
+
+        private int mId;
+
+        public GetImage(int id) {
+            mId = id;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -219,7 +228,7 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(byte[] result) {
-            ((ImageView) findViewById(R.id.image)).setImageBitmap(BitmapFactory
+            ((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
                     .decodeByteArray(result, 0, result.length));
             showError();
         }
