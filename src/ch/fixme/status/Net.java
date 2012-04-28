@@ -28,11 +28,13 @@ import android.util.Log;
 public class Net {
 
     private static String TAG = "DownloadFile";
-    private final String USERAGENT = "Android/" + android.os.Build.VERSION.RELEASE + " ("
-            + android.os.Build.MODEL + ") MyHackerspace/";
+    private final String USERAGENT = "Android/"
+            + android.os.Build.VERSION.RELEASE + " (" + android.os.Build.MODEL
+            + ") MyHackerspace/";
     private HttpClient httpclient;
 
-    public Net(String url, OutputStream out) throws SSLException, IOException, NullPointerException {
+    public Net(String url, OutputStream out) throws SSLException, IOException,
+            NullPointerException {
         httpclient = new DefaultHttpClient();
         httpclient.getParams().setParameter("http.useragent", USERAGENT);
         InputStream in = openURL(url);
@@ -111,8 +113,9 @@ public class Net {
         return null;
     }
 
-    public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest)
-            throws IOException, NullPointerException {
+    public static void fastChannelCopy(final ReadableByteChannel src,
+            final WritableByteChannel dest) throws IOException,
+            NullPointerException {
         if (src != null && dest != null) {
             final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
             while (src.read(buffer) != -1) {

@@ -100,8 +100,10 @@ public class Main extends Activity {
                 if (api.getBoolean(API_STATUS)) {
                     status = API_ICON_OPEN;
                 }
-                new GetImage().execute(api.getJSONObject(API_ICON).getString(status));
-                ((TextView) findViewById(R.id.name)).setText(api.getString(API_NAME));
+                new GetImage().execute(api.getJSONObject(API_ICON).getString(
+                        status));
+                ((TextView) findViewById(R.id.name)).setText(api
+                        .getString(API_NAME));
                 // ((TextView) findViewById(R.id.status)).setText(api
                 // .getString(API_STATUS_TXT));
                 findViewById(R.id.image).setBackgroundColor(0);
@@ -116,14 +118,15 @@ public class Main extends Activity {
                     names[i] = arr.getString(i);
                     url[i] = obj.getString(names[i]);
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main.this,
-                        android.R.layout.simple_spinner_item, names);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                        Main.this, android.R.layout.simple_spinner_item, names);
                 adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 s.setAdapter(adapter);
                 s.setSelection(0);
                 s.setOnItemSelectedListener(new OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+                    public void onItemSelected(AdapterView<?> adapter, View v,
+                            int position, long id) {
                         Editor edit = mPrefs.edit();
                         edit.putString(API_KEY, url[position]);
                         edit.commit();
@@ -159,8 +162,8 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(byte[] result) {
-            ((ImageView) findViewById(R.id.image)).setImageBitmap(BitmapFactory.decodeByteArray(
-                    result, 0, result.length));
+            ((ImageView) findViewById(R.id.image)).setImageBitmap(BitmapFactory
+                    .decodeByteArray(result, 0, result.length));
         }
 
     }
