@@ -153,7 +153,10 @@ public class Main extends Activity {
             mErrorMsg = null;
             // Clean UI
             ((TextView) findViewById(R.id.space_name)).setText("");
+            ((TextView) findViewById(R.id.space_url)).setText("");
             ((TextView) findViewById(R.id.status_txt)).setText("");
+            ((TextView) findViewById(R.id.location_address)).setText("");
+            ((TextView) findViewById(R.id.location_map)).setText("");
             ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
             ((ImageView) findViewById(R.id.status_image)).setImageBitmap(null);
         }
