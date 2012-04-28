@@ -137,6 +137,10 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
+            // Clean UI
+            ((TextView) findViewById(R.id.name)).setText("");
+            ((TextView) findViewById(R.id.status)).setText("");
+            ((ImageView) findViewById(R.id.image)).setImageBitmap(null);
         }
 
         @Override
