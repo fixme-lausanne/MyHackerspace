@@ -1,10 +1,7 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.net.ssl.SSLException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +30,10 @@ public class Main extends Activity {
     // API: http://hackerspaces.nl/spaceapi/
 
     public static final String PKG = "ch.fixme.status";
+    private static final String ERROR = "error";
+    private static final int DIALOG_LOADING = 0;
+    private static final int DIALOG_ERROR = 1;
+
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_KEY = "apiurl";
     private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
@@ -42,10 +43,10 @@ public class Main extends Activity {
     private static final String API_ICON = "icon";
     private static final String API_ICON_OPEN = "open";
     private static final String API_ICON_CLOSED = "closed";
-    private static final int DIALOG_LOADING = 0;
 
     private SharedPreferences mPrefs;
     private String mApiUrl;
+    private String mErrorMsg = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +68,19 @@ public class Main extends Activity {
                 dialog.setMessage("Loading...");
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 break;
+            case DIALOG_ERROR:
+                dialog = new AlertDialog.Builder(this).setTitle("Error")
+                        .setMessage(mErrorMsg).setNeutralButton("Ok", null)
+                        .create();
+                break;
         }
         return dialog;
+    }
+
+    private void showError() {
+        if (mErrorMsg != null) {
+            showDialog(DIALOG_ERROR);
+        }
     }
 
     private class GetDirTask extends AsyncTask<String, Void, String> {
@@ -76,6 +88,7 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
+            mErrorMsg = null;
         }
 
         @Override
@@ -83,11 +96,8 @@ public class Main extends Activity {
             ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
             try {
                 new Net(url[0], direcOs);
-            } catch (SSLException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
+                mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return direcOs.toString();
@@ -130,6 +140,7 @@ public class Main extends Activity {
                 e.printStackTrace();
             } finally {
                 dismissDialog(DIALOG_LOADING);
+                showError();
             }
         }
     }
@@ -139,6 +150,7 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
+            mErrorMsg = null;
             // Clean UI
             ((TextView) findViewById(R.id.name)).setText("");
             ((TextView) findViewById(R.id.status)).setText("");
@@ -150,11 +162,8 @@ public class Main extends Activity {
             ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
             try {
                 new Net(url[0], spaceOs);
-            } catch (SSLException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
+                mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return spaceOs.toString();
@@ -180,9 +189,10 @@ public class Main extends Activity {
                     new GetImage().execute(status_icon.getString(status));
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                mErrorMsg = e.getLocalizedMessage();
             } finally {
                 dismissDialog(DIALOG_LOADING);
+                showError();
             }
         }
     }
@@ -190,15 +200,18 @@ public class Main extends Activity {
     private class GetImage extends AsyncTask<String, Void, byte[]> {
 
         @Override
+        protected void onPreExecute() {
+            // TODO: Show that the image is loading
+            mErrorMsg = null;
+        }
+
+        @Override
         protected byte[] doInBackground(String... url) {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
                 new Net(url[0], os);
-            } catch (SSLException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
+                mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return os.toByteArray();
@@ -208,6 +221,7 @@ public class Main extends Activity {
         protected void onPostExecute(byte[] result) {
             ((ImageView) findViewById(R.id.image)).setImageBitmap(BitmapFactory
                     .decodeByteArray(result, 0, result.length));
+            showError();
         }
 
     }

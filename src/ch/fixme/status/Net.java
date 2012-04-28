@@ -73,41 +73,34 @@ public class Net {
         }
     }
 
-    private InputStream openURL(String url) throws SSLException {
+    private InputStream openURL(String url) throws ClientProtocolException,
+            IOException {
         HttpGet httpget = new HttpGet(url);
         HttpResponse response;
-        try {
-            // try {
-            response = httpclient.execute(httpget);
-            // } catch (SSLException e) {
-            // /*
-            // * KeyStore trustStore =
-            // * KeyStore.getInstance(KeyStore.getDefaultType());
-            // * KeyStore.getDefaultType(); FileInputStream in = new
-            // * FileInputStream(new
-            // * File("data/data/ch.fixme.status/my.trustore3")); try {
-            // * trustStore.load(in, "coucou".toCharArray()); } finally {
-            // * in.close(); }
-            // *
-            // * SSLSocketFactory socketFactory = new
-            // * SSLSocketFactory(trustStore); SchemeRegistry registry = new
-            // * SchemeRegistry(); registry.register(new Scheme("https",
-            // * socketFactory, 443));
-            // */
-            // response = httpclient.execute(httpget);
-            // }
-            Log.i(TAG, "Status:[" + response.getStatusLine().toString() + "]");
-            HttpEntity entity = response.getEntity();
+        // try {
+        response = httpclient.execute(httpget);
+        // } catch (SSLException e) {
+        // /*
+        // * KeyStore trustStore =
+        // * KeyStore.getInstance(KeyStore.getDefaultType());
+        // * KeyStore.getDefaultType(); FileInputStream in = new
+        // * FileInputStream(new
+        // * File("data/data/ch.fixme.status/my.trustore3")); try {
+        // * trustStore.load(in, "coucou".toCharArray()); } finally {
+        // * in.close(); }
+        // *
+        // * SSLSocketFactory socketFactory = new
+        // * SSLSocketFactory(trustStore); SchemeRegistry registry = new
+        // * SchemeRegistry(); registry.register(new Scheme("https",
+        // * socketFactory, 443));
+        // */
+        // response = httpclient.execute(httpget);
+        // }
+        Log.i(TAG, "Status:[" + response.getStatusLine().toString() + "]");
+        HttpEntity entity = response.getEntity();
 
-            if (entity != null) {
-                return entity.getContent();
-            }
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, "There was a protocol based error", e);
-        } catch (UnknownHostException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "There was an IO Stream related error", e);
+        if (entity != null) {
+            return entity.getContent();
         }
 
         return null;
