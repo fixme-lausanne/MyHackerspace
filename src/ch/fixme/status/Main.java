@@ -2,6 +2,7 @@ package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.net.ssl.SSLException;
 
@@ -42,14 +43,15 @@ public class Main extends Activity {
     private static final int DIALOG_LOADING = 0;
 
     private SharedPreferences mPrefs;
+    private String mApiUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        String apiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
-        new GetApiTask().execute(apiUrl, API_DIRECTORY);
+        mApiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
+        new GetApiTask().execute(mApiUrl, API_DIRECTORY);
     }
 
     @Override
@@ -113,22 +115,22 @@ public class Main extends Activity {
                 JSONArray arr = obj.names();
                 int len = obj.length();
                 String[] names = new String[len];
-                final String[] url = new String[len];
+                final ArrayList<String> url = new ArrayList<String>(len);
                 for (int i = 0; i < len; i++) {
                     names[i] = arr.getString(i);
-                    url[i] = obj.getString(names[i]);
+                    url.add(i, obj.getString(names[i]));
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                         Main.this, android.R.layout.simple_spinner_item, names);
                 adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 s.setAdapter(adapter);
-                s.setSelection(0);
+                s.setSelection(url.indexOf(mApiUrl));
                 s.setOnItemSelectedListener(new OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapter, View v,
                             int position, long id) {
                         Editor edit = mPrefs.edit();
-                        edit.putString(API_KEY, url[position]);
+                        edit.putString(API_KEY, url.get(position));
                         edit.commit();
                     }
 
