@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="15dip"
+    android:paddingRight="15dip" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -57,7 +58,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dip"
             android:orientation="vertical" >
 
             <!-- STATUS -->
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="4dip"
-                android:paddingTop="8dip"
+                android:paddingTop="16dip"
                 android:text="Location"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -134,7 +134,7 @@
         android:id="@+id/choose"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dip"
+        android:layout_marginBottom="12dip"
         android:drawSelectorOnTop="true"
         android:prompt="@string/choose" />
 

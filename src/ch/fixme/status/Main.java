@@ -1,7 +1,9 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,17 +34,23 @@ public class Main extends Activity {
     public static final String PKG = "ch.fixme.status";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_ERROR = 1;
+    public static final String OPEN = "Open";
+    public static final String CLOSED = "Closed";
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_KEY = "apiurl";
     private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
     private static final String API_NAME = "space";
+    private static final String API_URL = "url";
     private static final String API_LOGO = "logo";
     private static final String API_STATUS = "open";
     private static final String API_STATUS_TXT = "status";
     private static final String API_ICON = "icon";
     private static final String API_ICON_OPEN = "open";
     private static final String API_ICON_CLOSED = "closed";
+    private static final String API_ADDRESS = "address";
+    private static final String API_LON = "lon";
+    private static final String API_LAT = "lat";
 
     private SharedPreferences mPrefs;
     private String mApiUrl;
@@ -176,23 +184,42 @@ public class Main extends Activity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                // Display current hackerspace information
                 JSONObject api = new JSONObject(result);
+                // Mandatory fields
                 new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
+                String status_txt = "";
                 String status = API_ICON_CLOSED;
                 if (api.getBoolean(API_STATUS)) {
                     status = API_ICON_OPEN;
+                    status_txt = OPEN;
+                } else {
+                    status_txt = CLOSED;
                 }
                 ((TextView) findViewById(R.id.space_name)).setText(api
                         .getString(API_NAME));
+                ((TextView) findViewById(R.id.space_url)).setText(api
+                        .getString(API_URL));
+                // Status text
                 if (!api.isNull(API_STATUS_TXT)) {
-                    ((TextView) findViewById(R.id.status_txt)).setText(api
-                            .getString(API_STATUS_TXT));
+                    status_txt += ": " + api.getString(API_STATUS_TXT);
+                    ((TextView) findViewById(R.id.status_txt))
+                            .setText(status_txt);
                 }
+                // Status icon
                 JSONObject status_icon = api.getJSONObject(API_ICON);
                 if (!status_icon.isNull(status)) {
                     new GetImage(R.id.status_image).execute(status_icon
                             .getString(status));
+                }
+                // Location
+                if (!api.isNull(API_ADDRESS)) {
+                    ((TextView) findViewById(R.id.location_address))
+                            .setText(api.getString(API_ADDRESS));
+                }
+                if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
+                    ((TextView) findViewById(R.id.location_map))
+                            .setText(api.getString(API_LON) + ", "
+                                    + api.getString(API_LAT));
                 }
             } catch (JSONException e) {
                 mErrorMsg = e.getLocalizedMessage();
