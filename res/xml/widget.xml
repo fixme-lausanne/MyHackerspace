@@ -1,8 +1,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="72dp"
-    android:minHeight="72dp"
-    android:updatePeriodMillis="86400000"
+    android:configure="ch.fixme.status.Main"
     android:initialLayout="@layout/widget"
+    android:minHeight="72dp"
+    android:minWidth="72dp"
     android:previewImage="@drawable/preview"
-    android:configure="ch.fixme.status.Main">
-</appwidget-provider>
+    android:updatePeriodMillis="5000" />

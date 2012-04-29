@@ -33,7 +33,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,16 +48,9 @@ public class Main extends Activity {
     public static final String CLOSED = "Closed";
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
-    private static final String API_KEY = "apiurl";
-    private static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
     private static final String API_NAME = "space";
     private static final String API_URL = "url";
-    private static final String API_LOGO = "logo";
-    private static final String API_STATUS = "open";
     private static final String API_STATUS_TXT = "status";
-    // private static final String API_ICON = "icon";
-    private static final String API_ICON_OPEN = "open";
-    private static final String API_ICON_CLOSED = "closed";
     private static final String API_ADDRESS = "address";
     private static final String API_LON = "lon";
     private static final String API_LAT = "lat";
@@ -69,6 +61,14 @@ public class Main extends Activity {
     private static final String API_TWITTER = "twitter";
     private static final String API_ML = "ml";
     private static final String TWITTER = "https://twitter.com/#!/";
+
+    protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
+    protected static final String API_KEY = "apiurl";
+    protected static final String API_ICON = "icon";
+    protected static final String API_ICON_OPEN = "open";
+    protected static final String API_ICON_CLOSED = "closed";
+    protected static final String API_LOGO = "logo";
+    protected static final String API_STATUS = "open";
 
     private SharedPreferences mPrefs;
     private String mApiUrl;
@@ -175,18 +175,18 @@ public class Main extends Activity {
                             // Update widget
                             if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
                                     .equals(getIntent().getAction())) {
-                                Context ctxt = getApplication();
-                                AppWidgetManager appWidgetManager = AppWidgetManager
-                                        .getInstance(ctxt);
-                                RemoteViews views = new RemoteViews(ctxt
-                                        .getPackageName(), R.layout.widget);
-                                appWidgetManager.updateAppWidget(mAppWidgetId,
-                                        views);
+                                
+                                final Context ctxt = Main.this;
+                                Widget.updateWidget(ctxt, mAppWidgetId,
+                                        AppWidgetManager.getInstance(ctxt),
+                                        null);
+
                                 Intent resultValue = new Intent();
                                 resultValue.putExtra(
                                         AppWidgetManager.EXTRA_APPWIDGET_ID,
                                         mAppWidgetId);
                                 setResult(RESULT_OK, resultValue);
+                                dismissDialog(DIALOG_LOADING);
                                 finish();
                             } else {
                                 new GetApiTask().execute(url.get(position));

@@ -4,18 +4,17 @@
     Licensed under GNU's GPL 2, see README
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:baselineAligned="false"
-    android:focusable="false" >
+    android:gravity="center_vertical" >
 
     <ImageView
-        android:id="@+id/image"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:id="@+id/widget_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:background="@android:drawable/btn_default_small"
         android:contentDescription="Status image of the hackerspace"
-        android:src="@android:drawable/ic_menu_gallery" />
+        android:src="@android:drawable/ic_popup_sync" />
 
 </LinearLayout>
