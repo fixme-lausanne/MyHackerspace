@@ -27,15 +27,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/presence_online"
-        android:drawablePadding="2dip"
+        android:drawablePadding="8dip"
         android:text="The space is open"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <ImageView
-        android:id="@+id/status_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Image of the status of the hackerspace"
-        android:src="@android:drawable/ic_menu_gallery" />
+<!--     <ImageView -->
+<!--         android:id="@+id/status_image" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:contentDescription="Image of the status of the hackerspace" -->
+<!--         android:src="@android:drawable/ic_menu_gallery" /> -->
 
 </LinearLayout>
