@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+ * Licensed under GNU's GPL 2, see README
+ */
+
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
@@ -47,7 +52,7 @@ public class Main extends Activity {
     private static final String API_LOGO = "logo";
     private static final String API_STATUS = "open";
     private static final String API_STATUS_TXT = "status";
-    private static final String API_ICON = "icon";
+    // private static final String API_ICON = "icon";
     private static final String API_ICON_OPEN = "open";
     private static final String API_ICON_CLOSED = "closed";
     private static final String API_ADDRESS = "address";

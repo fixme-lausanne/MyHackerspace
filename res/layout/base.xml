@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+    Licensed under GNU's GPL 2, see README
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/group"
     android:layout_width="fill_parent"
@@ -31,11 +35,11 @@
         android:text="The space is open"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-<!--     <ImageView -->
-<!--         android:id="@+id/status_image" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:contentDescription="Image of the status of the hackerspace" -->
-<!--         android:src="@android:drawable/ic_menu_gallery" /> -->
+    <!-- <ImageView -->
+    <!-- android:id="@+id/status_image" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:contentDescription="Image of the status of the hackerspace" -->
+    <!-- android:src="@android:drawable/ic_menu_gallery" /> -->
 
 </LinearLayout>
