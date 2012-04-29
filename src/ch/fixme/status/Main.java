@@ -59,6 +59,7 @@ public class Main extends Activity {
     private static final String API_PHONE = "phone";
     private static final String API_TWITTER = "twitter";
     private static final String API_ML = "ml";
+    private static final String TWITTER = "https://twitter.com/#!/";
 
     private SharedPreferences mPrefs;
     private String mApiUrl;
@@ -159,6 +160,11 @@ public class Main extends Activity {
                 dismissDialog(DIALOG_LOADING);
                 showError();
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            dismissDialog(DIALOG_LOADING);
         }
     }
 
@@ -276,13 +282,14 @@ public class Main extends Activity {
                     if (!contact.isNull(API_TWITTER)) {
                         TextView tv = (TextView) mInflater.inflate(
                                 R.layout.entry, null);
-                        tv.setText(contact.getString(API_TWITTER));
+                        tv.setText(TWITTER + contact.getString(API_TWITTER));
                         mVg.addView(tv);
                     }
                     // IRC
                     if (!contact.isNull(API_IRC)) {
                         TextView tv = (TextView) mInflater.inflate(
                                 R.layout.entry, null);
+                        tv.setAutoLinkMask(0);
                         tv.setText(contact.getString(API_IRC));
                         mVg.addView(tv);
                     }
@@ -308,6 +315,11 @@ public class Main extends Activity {
                 dismissDialog(DIALOG_LOADING);
                 showError();
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            dismissDialog(DIALOG_LOADING);
         }
     }
 
