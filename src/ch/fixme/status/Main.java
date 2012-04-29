@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import ch.fixme.status.Widget.UpdateService;
 
 public class Main extends Activity {
 
@@ -175,11 +176,14 @@ public class Main extends Activity {
                             // Update widget
                             if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
                                     .equals(getIntent().getAction())) {
-                                
+
                                 final Context ctxt = Main.this;
-                                Widget.updateWidget(ctxt, mAppWidgetId,
-                                        AppWidgetManager.getInstance(ctxt),
-                                        null);
+                                Intent intent = new Intent(ctxt,
+                                        UpdateService.class);
+                                intent.putExtra(
+                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                        mAppWidgetId);
+                                ctxt.startService(intent);
 
                                 Intent resultValue = new Intent();
                                 resultValue.putExtra(

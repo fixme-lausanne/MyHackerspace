@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -24,7 +25,7 @@ import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
-    private Context mCtxt;
+    protected Context mCtxt;
     private AppWidgetManager mManager;
 
     public void onUpdate(Context ctxt, AppWidgetManager manager,
@@ -32,13 +33,13 @@ public class Widget extends AppWidgetProvider {
         Log.e("TEST", "onUpdate");
         mCtxt = ctxt;
         mManager = manager;
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            int appWidgetId = appWidgetIds[i];
-            new GetApiTask(appWidgetId).execute(PreferenceManager
-                    .getDefaultSharedPreferences(ctxt).getString(Main.API_KEY,
-                            Main.API_DEFAULT));
-        }
+        // final int N = appWidgetIds.length;
+        // for (int i = 0; i < N; i++) {
+        // int appWidgetId = appWidgetIds[i];
+        // Intent intent = new Intent(ctxt, UpdateService.class);
+        // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        // ctxt.startService(intent);
+        // }
         super.onUpdate(ctxt, manager, appWidgetIds);
     }
 
@@ -128,5 +129,22 @@ public class Widget extends AppWidgetProvider {
             }
         }
 
+    }
+
+    public class UpdateService extends IntentService {
+
+        public UpdateService() {
+            super("MyHackerspaceWidgetService");
+        }
+
+        @Override
+        protected void onHandleIntent(Intent intent) {
+            int widgetId = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+            new GetApiTask(widgetId).execute(PreferenceManager
+                    .getDefaultSharedPreferences(this).getString(Main.API_KEY,
+                            Main.API_DEFAULT));
+            stopSelf();
+        }
     }
 }
