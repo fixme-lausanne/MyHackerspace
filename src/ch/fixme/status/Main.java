@@ -16,6 +16,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
@@ -30,6 +33,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -69,6 +73,8 @@ public class Main extends Activity {
     private SharedPreferences mPrefs;
     private String mApiUrl;
     private String mErrorMsg = null;
+    private int mAppWidgetId;
+    private boolean initialize = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,18 @@ public class Main extends Activity {
         mApiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
         new GetApiTask().execute(mApiUrl);
         new GetDirTask().execute(API_DIRECTORY);
+
+        // Configure the widget
+        Intent intent = getIntent();
+        if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
+                .getAction())) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                mAppWidgetId = extras.getInt(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        AppWidgetManager.INVALID_APPWIDGET_ID);
+            }
+        }
     }
 
     @Override
@@ -149,10 +167,33 @@ public class Main extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapter, View v,
                             int position, long id) {
-                        new GetApiTask().execute(url.get(position));
-                        Editor edit = mPrefs.edit();
-                        edit.putString(API_KEY, url.get(position));
-                        edit.commit();
+                        if (!initialize) {
+                            // Save choice
+                            Editor edit = mPrefs.edit();
+                            edit.putString(API_KEY, url.get(position));
+                            edit.commit();
+                            // Update widget
+                            if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
+                                    .equals(getIntent().getAction())) {
+                                Context ctxt = getApplication();
+                                AppWidgetManager appWidgetManager = AppWidgetManager
+                                        .getInstance(ctxt);
+                                RemoteViews views = new RemoteViews(ctxt
+                                        .getPackageName(), R.layout.widget);
+                                appWidgetManager.updateAppWidget(mAppWidgetId,
+                                        views);
+                                Intent resultValue = new Intent();
+                                resultValue.putExtra(
+                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                        mAppWidgetId);
+                                setResult(RESULT_OK, resultValue);
+                                finish();
+                            } else {
+                                new GetApiTask().execute(url.get(position));
+                            }
+                        } else {
+                            initialize = false;
+                        }
                     }
 
                     @Override

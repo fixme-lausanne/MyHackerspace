@@ -13,6 +13,5 @@
     android:drawablePadding="8dip"
     android:paddingBottom="2dip"
     android:paddingTop="2dip"
-    android:text="Entry"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textIsSelectable="true" />

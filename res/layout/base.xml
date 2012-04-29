@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dip"
-        android:text="Status"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#0099CC" />
@@ -33,7 +32,6 @@
         android:autoLink="all"
         android:drawableLeft="@android:drawable/presence_online"
         android:drawablePadding="8dip"
-        android:text="The space is open"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <!-- <ImageView -->

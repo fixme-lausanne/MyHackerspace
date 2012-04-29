@@ -38,7 +38,6 @@
                 android:layout_marginLeft="4dip"
                 android:layout_marginRight="4dip"
                 android:gravity="center_horizontal"
-                android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
@@ -50,7 +49,6 @@
                 android:layout_marginRight="4dip"
                 android:autoLink="web"
                 android:gravity="center_horizontal"
-                android:text="https://fixme.ch"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
     </LinearLayout>

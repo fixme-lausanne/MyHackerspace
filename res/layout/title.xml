@@ -8,7 +8,6 @@
     android:layout_height="wrap_content"
     android:paddingBottom="4dip"
     android:paddingTop="16dip"
-    android:text="Title"
     android:textAllCaps="true"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="#0099CC" />
