@@ -51,92 +51,10 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <!-- STATUS -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dip"
-                android:text="Status"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#0099CC" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="8dip"
-                android:background="#0099CC" />
-
-            <TextView
-                android:id="@+id/status_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/presence_online"
-                android:drawablePadding="2dip"
-                android:text="The space is open"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <ImageView
-                android:id="@+id/status_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="Image of the status of the hackerspace"
-                android:src="@android:drawable/ic_menu_gallery" />
-
-            <!-- LOCATION -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="4dip"
-                android:paddingTop="16dip"
-                android:text="Location"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#0099CC" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="8dip"
-                android:background="#0099CC" />
-
-            <TextView
-                android:id="@+id/location_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/sym_contact_card"
-                android:drawablePadding="8dip"
-                android:text="Rue de Genève 79, 1004 Lausanne, Switzerland"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/location_map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/sym_contact_card"
-                android:drawablePadding="8dip"
-                android:text="6.613828, 46.524652"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-        </LinearLayout>
-    </ScrollView>
+        android:layout_weight="1" />
 
     <Spinner
         android:id="@+id/choose"

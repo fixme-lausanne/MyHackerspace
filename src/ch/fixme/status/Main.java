@@ -1,9 +1,7 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,11 +17,14 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -162,11 +163,8 @@ public class Main extends Activity {
             // Clean UI
             ((TextView) findViewById(R.id.space_name)).setText("");
             ((TextView) findViewById(R.id.space_url)).setText("");
-            ((TextView) findViewById(R.id.status_txt)).setText("");
-            ((TextView) findViewById(R.id.location_address)).setText("");
-            ((TextView) findViewById(R.id.location_map)).setText("");
             ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
-            ((ImageView) findViewById(R.id.status_image)).setImageBitmap(null);
+            ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
         }
 
         @Override
@@ -184,9 +182,15 @@ public class Main extends Activity {
         @Override
         protected void onPostExecute(String result) {
             try {
+                LayoutInflater inflater = getLayoutInflater();
+                ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
+                LinearLayout vg = (LinearLayout) inflater.inflate(
+                        R.layout.base, null);
+                scroll.removeAllViews(); // FIXME: Why need to be called twice ?
+                scroll.addView(vg);
+
                 JSONObject api = new JSONObject(result);
                 // Mandatory fields
-                new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
                 String status_txt = "";
                 String status = API_ICON_CLOSED;
                 if (api.getBoolean(API_STATUS)) {
@@ -212,23 +216,39 @@ public class Main extends Activity {
                             .setText(status_txt);
                 }
                 // Status icon
-                JSONObject status_icon = api.getJSONObject(API_ICON);
-                if (!status_icon.isNull(status)) {
-                    new GetImage(R.id.status_image).execute(status_icon
-                            .getString(status));
+                if (!api.isNull(API_ICON)) {
+                    JSONObject status_icon = api.getJSONObject(API_ICON);
+                    if (!status_icon.isNull(status)) {
+                        new GetImage(R.id.status_image).execute(status_icon
+                                .getString(status));
+                    }
                 }
                 // Location
-                if (!api.isNull(API_ADDRESS)) {
-                    ((TextView) findViewById(R.id.location_address))
-                            .setText(api.getString(API_ADDRESS));
+                if (!api.isNull(API_ADDRESS)
+                        || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
+                    TextView title = (TextView) inflater.inflate(
+                            R.layout.title, null);
+                    title.setText("Location");
+                    vg.addView(title);
+                    inflater.inflate(R.layout.separator, vg);
+                    if (!api.isNull(API_ADDRESS)) {
+                        TextView tv = (TextView) inflater.inflate(
+                                R.layout.entry, null);
+                        tv.setText(api.getString(API_ADDRESS));
+                        vg.addView(tv);
+                    }
+                    if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
+                        TextView tv = (TextView) inflater.inflate(
+                                R.layout.entry, null);
+                        tv.setText(api.getString(API_LON) + ", "
+                                + api.getString(API_LAT));
+                        vg.addView(tv);
+                    }
                 }
-                if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
-                    ((TextView) findViewById(R.id.location_map))
-                            .setText(api.getString(API_LON) + ", "
-                                    + api.getString(API_LAT));
-                }
+                new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
             } catch (JSONException e) {
                 mErrorMsg = e.getLocalizedMessage();
+                e.printStackTrace();
             } finally {
                 dismissDialog(DIALOG_LOADING);
                 showError();
