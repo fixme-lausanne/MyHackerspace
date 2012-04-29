@@ -30,6 +30,7 @@
         android:id="@+id/status_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoLink="all"
         android:drawableLeft="@android:drawable/presence_online"
         android:drawablePadding="8dip"
         android:text="The space is open"
