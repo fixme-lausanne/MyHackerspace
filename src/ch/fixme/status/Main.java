@@ -82,6 +82,7 @@ public class Main extends Activity {
                 dialog = new ProgressDialog(this);
                 dialog.setCancelable(false);
                 dialog.setMessage("Loading...");
+                dialog.setCancelable(true);
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 break;
             case DIALOG_ERROR:
