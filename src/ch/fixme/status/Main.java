@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -242,12 +243,14 @@ public class Main extends Activity {
                     if (!api.isNull(API_ADDRESS)) {
                         TextView tv = (TextView) mInflater.inflate(
                                 R.layout.entry, null);
+                        tv.setAutoLinkMask(Linkify.MAP_ADDRESSES);
                         tv.setText(api.getString(API_ADDRESS));
                         mVg.addView(tv);
                     }
                     if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
                         TextView tv = (TextView) mInflater.inflate(
                                 R.layout.entry, null);
+                        tv.setAutoLinkMask(0);
                         tv.setText(api.getString(API_LON) + ", "
                                 + api.getString(API_LAT));
                         mVg.addView(tv);
