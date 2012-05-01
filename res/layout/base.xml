@@ -17,7 +17,8 @@
         android:paddingTop="8dip"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#0099CC" />
+        android:textColor="#0099CC"
+        android:text="Status" />
 
     <View
         android:layout_width="fill_parent"
