@@ -7,6 +7,8 @@ package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +53,9 @@ public class Main extends Activity {
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
     private static final String API_URL = "url";
+    private static final String API_LASTCHANGE = "lastchange";
     private static final String API_STATUS_TXT = "status";
+    private static final String API_DURATION = "duration";
     private static final String API_ADDRESS = "address";
     private static final String API_LON = "lon";
     private static final String API_LAT = "lat";
@@ -284,11 +288,23 @@ public class Main extends Activity {
                 // } else {
                 new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
                 // }
-                // Status text
+                // Status
                 if (!api.isNull(API_STATUS_TXT)) {
                     status_txt += ": " + api.getString(API_STATUS_TXT);
                 }
                 ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
+                if (!api.isNull(API_LASTCHANGE)) {
+                    Date date = new Date(api.getLong(API_LASTCHANGE));
+                    SimpleDateFormat formatter = new SimpleDateFormat();
+                    TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
+                    tv.setText("Open since: " + formatter.format(date));
+                    mVg.addView(tv);
+                }
+                if (!api.isNull(API_DURATION)) {
+                    TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
+                    tv.setText("Duration: " + api.getString(API_DURATION) + " hour(s)");
+                    mVg.addView(tv);
+                }
                 // Location
                 if (!api.isNull(API_ADDRESS)
                         || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
