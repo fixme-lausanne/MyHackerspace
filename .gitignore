@@ -3,3 +3,4 @@ gen
 .project
 .classpath
 project.properties
+local.properties
