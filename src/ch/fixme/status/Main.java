@@ -300,7 +300,7 @@ public class Main extends Activity {
                     tv.setText("Open since: " + formatter.format(date));
                     mVg.addView(tv);
                 }
-                if (!api.isNull(API_DURATION)) {
+                if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
                     TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
                     tv.setText("Duration: " + api.getString(API_DURATION) + " hour(s)");
                     mVg.addView(tv);
