@@ -294,10 +294,10 @@ public class Main extends Activity {
                 }
                 ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
                 if (!api.isNull(API_LASTCHANGE)) {
-                    Date date = new Date(api.getLong(API_LASTCHANGE));
+                    Date date = new Date(api.getLong(API_LASTCHANGE)*1000);
                     SimpleDateFormat formatter = new SimpleDateFormat();
                     TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
-                    tv.setText("Open since: " + formatter.format(date));
+                    tv.setText("Last change: " + formatter.format(date));
                     mVg.addView(tv);
                 }
                 if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
