@@ -6,9 +6,9 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +19,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -38,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import ch.fixme.status.Widget.UpdateService;
 
 public class Main extends Activity {
 

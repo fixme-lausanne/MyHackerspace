@@ -25,14 +25,9 @@ import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
-    protected Context mCtxt;
-    private AppWidgetManager mManager;
-
     public void onUpdate(Context ctxt, AppWidgetManager manager,
             int[] appWidgetIds) {
         Log.e("TEST", "onUpdate");
-        mCtxt = ctxt;
-        mManager = manager;
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
@@ -43,11 +38,13 @@ public class Widget extends AppWidgetProvider {
         super.onUpdate(ctxt, manager, appWidgetIds);
     }
 
-    private class GetImage extends AsyncTask<String, Void, byte[]> {
+    private static class GetImage extends AsyncTask<String, Void, byte[]> {
 
         private int mId;
+        private Context mCtxt;
 
-        public GetImage(int id) {
+        public GetImage(Context ctxt, int id) {
+            mCtxt = ctxt;
             mId = id;
         }
 
@@ -64,7 +61,8 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onPostExecute(byte[] result) {
-            updateWidget(mCtxt, mId, mManager,
+            AppWidgetManager manager = AppWidgetManager.getInstance(mCtxt);
+            updateWidget(mCtxt, mId, manager,
                     BitmapFactory.decodeByteArray(result, 0, result.length));
         }
 
@@ -86,11 +84,13 @@ public class Widget extends AppWidgetProvider {
         manager.updateAppWidget(widgetId, views);
     }
 
-    private class GetApiTask extends AsyncTask<String, Void, String> {
+    private static class GetApiTask extends AsyncTask<String, Void, String> {
 
         private int mId;
+        private Context mCtxt;
 
-        public GetApiTask(int id) {
+        public GetApiTask(Context ctxt, int id) {
+            mCtxt = ctxt;
             mId = id;
         }
 
@@ -118,11 +118,12 @@ public class Widget extends AppWidgetProvider {
                 if (!api.isNull(Main.API_ICON)) {
                     JSONObject status_icon = api.getJSONObject(Main.API_ICON);
                     if (!status_icon.isNull(status)) {
-                        new GetImage(mId)
-                                .execute(status_icon.getString(status));
+                        new GetImage(mCtxt, mId).execute(status_icon
+                                .getString(status));
                     }
                 } else {
-                    new GetImage(mId).execute(api.getString(Main.API_LOGO));
+                    new GetImage(mCtxt, mId).execute(api
+                            .getString(Main.API_LOGO));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -131,7 +132,7 @@ public class Widget extends AppWidgetProvider {
 
     }
 
-    public class UpdateService extends IntentService {
+    public static class UpdateService extends IntentService {
 
         public UpdateService() {
             super("MyHackerspaceWidgetService");
@@ -142,8 +143,9 @@ public class Widget extends AppWidgetProvider {
             Log.e("TEST", "onHandleIntent");
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
-            new GetApiTask(widgetId).execute(PreferenceManager
-                    .getDefaultSharedPreferences(this).getString(Main.API_KEY,
+            new GetApiTask(getApplicationContext(), widgetId)
+                    .execute(PreferenceManager.getDefaultSharedPreferences(
+                            UpdateService.this).getString(Main.API_KEY,
                             Main.API_DEFAULT));
             stopSelf();
         }
