@@ -59,12 +59,25 @@
         android:layout_height="0dip"
         android:layout_weight="1" />
 
-    <Spinner
-        android:id="@+id/choose"
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dip"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/choose" />
+        android:orientation="horizontal" >
+        <Spinner
+            android:id="@+id/choose"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="12dip"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/choose" />
+        <Button
+            android:id="@+id/choose_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ok"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

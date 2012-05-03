@@ -100,6 +100,12 @@ public class Main extends Activity {
                         AppWidgetManager.EXTRA_APPWIDGET_ID,
                         AppWidgetManager.INVALID_APPWIDGET_ID);
             }
+            findViewById(R.id.choose_ok).setVisibility(View.VISIBLE);
+            findViewById(R.id.choose_ok).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    updateWidgetAndQuit();
+                }
+            });
         }
     }
 
@@ -127,6 +133,14 @@ public class Main extends Activity {
         if (mErrorMsg != null) {
             showDialog(DIALOG_ERROR);
         }
+    }
+
+    private void updateWidgetAndQuit() {
+        Intent resultValue = new Intent();
+        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, resultValue);
+        dismissDialog(DIALOG_LOADING);
+        finish();
     }
 
     private class GetDirTask extends AsyncTask<String, Void, String> {
@@ -177,25 +191,9 @@ public class Main extends Activity {
                             Editor edit = mPrefs.edit();
                             edit.putString(API_KEY, url.get(position));
                             edit.commit();
-                            // Update widget
                             if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
                                     .equals(getIntent().getAction())) {
-
-                                final Context ctxt = Main.this;
-                                Intent intent = new Intent(ctxt,
-                                        UpdateService.class);
-                                intent.putExtra(
-                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                                        mAppWidgetId);
-                                ctxt.startService(intent);
-
-                                Intent resultValue = new Intent();
-                                resultValue.putExtra(
-                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                                        mAppWidgetId);
-                                setResult(RESULT_OK, resultValue);
-                                dismissDialog(DIALOG_LOADING);
-                                finish();
+                                updateWidgetAndQuit();
                             } else {
                                 new GetApiTask().execute(url.get(position));
                             }

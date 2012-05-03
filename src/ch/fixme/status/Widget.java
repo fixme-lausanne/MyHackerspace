@@ -33,13 +33,13 @@ public class Widget extends AppWidgetProvider {
         Log.e("TEST", "onUpdate");
         mCtxt = ctxt;
         mManager = manager;
-        // final int N = appWidgetIds.length;
-        // for (int i = 0; i < N; i++) {
-        // int appWidgetId = appWidgetIds[i];
-        // Intent intent = new Intent(ctxt, UpdateService.class);
-        // intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // ctxt.startService(intent);
-        // }
+        final int N = appWidgetIds.length;
+        for (int i = 0; i < N; i++) {
+            int appWidgetId = appWidgetIds[i];
+            Intent intent = new Intent(ctxt, UpdateService.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            ctxt.startService(intent);
+        }
         super.onUpdate(ctxt, manager, appWidgetIds);
     }
 
@@ -139,6 +139,7 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onHandleIntent(Intent intent) {
+            Log.e("TEST", "onHandleIntent");
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
             new GetApiTask(widgetId).execute(PreferenceManager
