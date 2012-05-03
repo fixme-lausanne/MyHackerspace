@@ -42,11 +42,12 @@ public class Main extends Activity {
 
     // API: http://hackerspaces.nl/spaceapi/
 
+    public static String TAG = "MyHackerspace";
     public static final String PKG = "ch.fixme.status";
-    private static final int DIALOG_LOADING = 0;
-    private static final int DIALOG_ERROR = 1;
     public static final String OPEN = "Open";
     public static final String CLOSED = "Closed";
+    private static final int DIALOG_LOADING = 0;
+    private static final int DIALOG_ERROR = 1;
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
@@ -99,11 +100,12 @@ public class Main extends Activity {
                         AppWidgetManager.INVALID_APPWIDGET_ID);
             }
             findViewById(R.id.choose_ok).setVisibility(View.VISIBLE);
-            findViewById(R.id.choose_ok).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    updateWidgetAndQuit();
-                }
-            });
+            findViewById(R.id.choose_ok).setOnClickListener(
+                    new View.OnClickListener() {
+                        public void onClick(View v) {
+                            updateWidgetAndQuit();
+                        }
+                    });
         }
     }
 
@@ -290,15 +292,18 @@ public class Main extends Activity {
                 }
                 ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
                 if (!api.isNull(API_LASTCHANGE)) {
-                    Date date = new Date(api.getLong(API_LASTCHANGE)*1000);
+                    Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
                     SimpleDateFormat formatter = new SimpleDateFormat();
-                    TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
+                    TextView tv = (TextView) mInflater.inflate(R.layout.entry,
+                            null);
                     tv.setText("Last change: " + formatter.format(date));
                     mVg.addView(tv);
                 }
                 if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
-                    TextView tv = (TextView) mInflater.inflate(R.layout.entry, null);
-                    tv.setText("Duration: " + api.getString(API_DURATION) + " hour(s)");
+                    TextView tv = (TextView) mInflater.inflate(R.layout.entry,
+                            null);
+                    tv.setText("Duration: " + api.getString(API_DURATION)
+                            + " hour(s)");
                     mVg.addView(tv);
                 }
                 // Location

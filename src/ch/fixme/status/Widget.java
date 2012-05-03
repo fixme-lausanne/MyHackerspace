@@ -20,14 +20,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
     public void onUpdate(Context ctxt, AppWidgetManager manager,
             int[] appWidgetIds) {
-        Log.e("TEST", "onUpdate");
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
@@ -140,7 +138,6 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onHandleIntent(Intent intent) {
-            Log.e("TEST", "onHandleIntent");
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
             new GetApiTask(getApplicationContext(), widgetId)

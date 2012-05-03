@@ -26,7 +26,6 @@ import android.util.Log;
 
 public class Net {
 
-    private static String TAG = "DownloadFile";
     private final String USERAGENT = "Android/"
             + android.os.Build.VERSION.RELEASE + " (" + android.os.Build.MODEL
             + ") MyHackerspace/";
@@ -38,7 +37,7 @@ public class Net {
         httpclient.getParams().setParameter("http.useragent", USERAGENT);
         InputStream in = openURL(url);
         if (in == null) {
-            Log.e(TAG, "Unable to download: " + url);
+            Log.e(Main.TAG, "Unable to download: " + url);
             return;
         }
 
@@ -46,7 +45,7 @@ public class Net {
         final WritableByteChannel outputChannel = Channels.newChannel(out);
 
         try {
-            Log.i(TAG, "Downloading " + url);
+            Log.i(Main.TAG, "Downloading " + url);
             fastChannelCopy(inputChannel, outputChannel);
         } finally {
             try {
@@ -64,9 +63,9 @@ public class Net {
                 }
             } catch (Exception e) {
                 if (e != null && e.getMessage() != null) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(Main.TAG, e.getMessage());
                 } else {
-                    Log.e(TAG, "fastChannelCopy() unknown error");
+                    Log.e(Main.TAG, "fastChannelCopy() unknown error");
                 }
             }
         }
@@ -95,7 +94,7 @@ public class Net {
         // */
         // response = httpclient.execute(httpget);
         // }
-        Log.i(TAG, "Status:[" + response.getStatusLine().toString() + "]");
+        Log.i(Main.TAG, "Status:[" + response.getStatusLine().toString() + "]");
         HttpEntity entity = response.getEntity();
 
         if (entity != null) {
