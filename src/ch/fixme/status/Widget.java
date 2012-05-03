@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
@@ -138,6 +139,7 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onHandleIntent(Intent intent) {
+            Log.i(Main.TAG, "UpdateService started");
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
             new GetApiTask(getApplicationContext(), widgetId)

@@ -15,18 +15,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import ch.fixme.status.Widget.UpdateService;
 
 public class Main extends Activity {
 
@@ -136,9 +142,23 @@ public class Main extends Activity {
     }
 
     private void updateWidgetAndQuit() {
-        Intent resultValue = new Intent();
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-        setResult(RESULT_OK, resultValue);
+        // Set result causing initial widget configuration
+        Intent i = new Intent(Main.this, UpdateService.class);
+        i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        setResult(RESULT_OK, i);
+
+        // Set recuring service
+        // FIXME: Set interval in preferences
+        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        Context ctxt = getApplicationContext();
+        AlarmManager am = (AlarmManager) ctxt
+                .getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pi = PendingIntent.getService(ctxt, 0, i,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime(), interval, pi);
+        Log.v(TAG, "start notification every " + interval / 1000 + "s");
+
         dismissDialog(DIALOG_LOADING);
         finish();
     }
