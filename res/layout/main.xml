@@ -76,8 +76,10 @@
             android:id="@+id/choose_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ok"
-            android:visibility="gone" />
+            android:paddingLeft="18dip"
+            android:paddingRight="18dip"
+            android:visibility="gone"
+            android:text="Ok" />
     </LinearLayout>
 
 </LinearLayout>
