@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
@@ -41,10 +42,12 @@ public class Widget extends AppWidgetProvider {
 
         private int mId;
         private Context mCtxt;
+        private String mText;
 
-        public GetImage(Context ctxt, int id) {
+        public GetImage(Context ctxt, int id, String text) {
             mCtxt = ctxt;
             mId = id;
+            mText = text;
         }
 
         @Override
@@ -62,13 +65,14 @@ public class Widget extends AppWidgetProvider {
         protected void onPostExecute(byte[] result) {
             AppWidgetManager manager = AppWidgetManager.getInstance(mCtxt);
             updateWidget(mCtxt, mId, manager,
-                    BitmapFactory.decodeByteArray(result, 0, result.length));
+                    BitmapFactory.decodeByteArray(result, 0, result.length),
+                    mText);
         }
 
     }
 
     protected static void updateWidget(final Context ctxt, int widgetId,
-            AppWidgetManager manager, Bitmap bitmap) {
+            AppWidgetManager manager, Bitmap bitmap, String text) {
         RemoteViews views = new RemoteViews(ctxt.getPackageName(),
                 R.layout.widget);
         if (bitmap != null) {
@@ -76,6 +80,12 @@ public class Widget extends AppWidgetProvider {
         } else {
             views.setImageViewResource(R.id.widget_image,
                     android.R.drawable.ic_popup_sync);
+        }
+        if (text != null) {
+            views.setTextViewText(R.id.widget_status, text);
+            views.setViewVisibility(R.id.widget_status, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.widget_status, View.GONE);
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(ctxt, 0,
                 new Intent(ctxt, Main.class), 0);
@@ -117,18 +127,21 @@ public class Widget extends AppWidgetProvider {
                 if (!api.isNull(Main.API_ICON)) {
                     JSONObject status_icon = api.getJSONObject(Main.API_ICON);
                     if (!status_icon.isNull(status)) {
-                        new GetImage(mCtxt, mId).execute(status_icon
+                        new GetImage(mCtxt, mId, null).execute(status_icon
                                 .getString(status));
                     }
                 } else {
-                    new GetImage(mCtxt, mId).execute(api
+                    String status_text = Main.CLOSED;
+                    if (api.getBoolean(Main.API_STATUS)) {
+                        status_text = Main.OPEN;
+                    }
+                    new GetImage(mCtxt, mId, status_text).execute(api
                             .getString(Main.API_LOGO));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public static class UpdateService extends IntentService {

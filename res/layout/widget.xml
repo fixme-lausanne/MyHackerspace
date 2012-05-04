@@ -3,7 +3,7 @@
     Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
     Licensed under GNU's GPL 2, see README
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_vertical" >
@@ -12,9 +12,19 @@
         android:id="@+id/widget_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/widget_status"
         android:adjustViewBounds="true"
         android:background="@android:drawable/btn_default_small"
         android:contentDescription="Status image of the hackerspace"
         android:src="@android:drawable/ic_popup_sync" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/widget_status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/black"
+        android:gravity="center_horizontal"
+        android:visibility="gone" />
+
+</RelativeLayout>
