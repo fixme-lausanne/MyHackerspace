@@ -4,3 +4,4 @@ gen
 .classpath
 project.properties
 local.properties
+build.properties
