@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -26,16 +28,29 @@ import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
-    public void onUpdate(Context ctxt, AppWidgetManager manager,
-            int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            int appWidgetId = appWidgetIds[i];
-            Intent intent = new Intent(ctxt, UpdateService.class);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            ctxt.startService(intent);
+    public void onReceive(Context ctxt, Intent intent) {
+        // Alarm
+        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        AlarmManager am = (AlarmManager) ctxt
+                .getSystemService(Context.ALARM_SERVICE);
+
+        // Remove widget alarm
+        String action = intent.getAction();
+        if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
+            int widgetId = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+            PendingIntent pi = PendingIntent.getService(ctxt, 0,
+                    getIntent(ctxt, widgetId),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pi);
+            Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         }
-        super.onUpdate(ctxt, manager, appWidgetIds);
+    }
+
+    public static Intent getIntent(Context ctxt, int widgetId) {
+        Intent i = new Intent(ctxt, UpdateService.class);
+        i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        return i;
     }
 
     private static class GetImage extends AsyncTask<String, Void, byte[]> {

@@ -42,7 +42,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import ch.fixme.status.Widget.UpdateService;
 
 public class Main extends Activity {
 
@@ -142,15 +141,15 @@ public class Main extends Activity {
     }
 
     private void updateWidgetAndQuit() {
+        Context ctxt = getApplicationContext();
+
         // Set result causing initial widget configuration
-        Intent i = new Intent(Main.this, UpdateService.class);
-        i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        Intent i = Widget.getIntent(ctxt, mAppWidgetId);
         setResult(RESULT_OK, i);
 
         // Set recuring service
         // FIXME: Set interval in preferences
         long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-        Context ctxt = getApplicationContext();
         AlarmManager am = (AlarmManager) ctxt
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, 0, i,
