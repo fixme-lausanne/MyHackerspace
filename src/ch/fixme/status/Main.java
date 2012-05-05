@@ -142,22 +142,11 @@ public class Main extends Activity {
 
     private void updateWidgetAndQuit() {
         Context ctxt = getApplicationContext();
-
         // Set result causing initial widget configuration
         Intent i = Widget.getIntent(ctxt, mAppWidgetId);
         setResult(RESULT_OK, i);
-
         // Set recuring service
-        // FIXME: Set interval in preferences
-        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-        AlarmManager am = (AlarmManager) ctxt
-                .getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pi = PendingIntent.getService(ctxt, 0, i,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime(), interval, pi);
-        Log.v(TAG, "start notification every " + interval / 1000 + "s");
-
+        Widget.setAlarm(ctxt, i);
         dismissDialog(DIALOG_LOADING);
         finish();
     }

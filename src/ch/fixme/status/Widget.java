@@ -29,11 +29,6 @@ import android.widget.RemoteViews;
 public class Widget extends AppWidgetProvider {
 
     public void onReceive(Context ctxt, Intent intent) {
-        // Alarm
-        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-        AlarmManager am = (AlarmManager) ctxt
-                .getSystemService(Context.ALARM_SERVICE);
-
         // Remove widget alarm
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
@@ -42,15 +37,42 @@ public class Widget extends AppWidgetProvider {
             PendingIntent pi = PendingIntent.getService(ctxt, 0,
                     getIntent(ctxt, widgetId),
                     PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) ctxt
+                    .getSystemService(Context.ALARM_SERVICE);
             am.cancel(pi);
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         }
+        super.onReceive(ctxt, intent);
     }
 
-    public static Intent getIntent(Context ctxt, int widgetId) {
+    public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
+            int[] appWidgetIds) {
+        final int N = appWidgetIds.length;
+        for (int i = 0; i < N; i++) {
+            int widgetId = appWidgetIds[i];
+            Intent intent = getIntent(ctxt, widgetId);
+            setAlarm(ctxt, intent);
+            Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
+        }
+
+    }
+
+    protected static Intent getIntent(Context ctxt, int widgetId) {
         Intent i = new Intent(ctxt, UpdateService.class);
         i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         return i;
+    }
+
+    protected static void setAlarm(Context ctxt, Intent i) {
+        // FIXME: Set interval in preferences
+        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        AlarmManager am = (AlarmManager) ctxt
+                .getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pi = PendingIntent.getService(ctxt, 0, i,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime(), interval, pi);
+        Log.i(Main.TAG, "start notification every " + interval / 1000 + "s");
     }
 
     private static class GetImage extends AsyncTask<String, Void, byte[]> {
@@ -106,6 +128,7 @@ public class Widget extends AppWidgetProvider {
                 new Intent(ctxt, Main.class), 0);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         manager.updateAppWidget(widgetId, views);
+        Log.i(Main.TAG, "Update widget image for id=" + widgetId);
     }
 
     private static class GetApiTask extends AsyncTask<String, Void, String> {
@@ -177,4 +200,5 @@ public class Widget extends AppWidgetProvider {
             stopSelf();
         }
     }
+
 }
