@@ -115,9 +115,18 @@ public class Main extends Activity {
         } else {
             setTheme(R.style.MyTheme);
             setContentView(R.layout.main);
-            mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
-            new GetDirTask().execute(API_DIRECTORY);
+            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+                mApiUrl = mPrefs.getString(
+                        PREF_API_URL_WIDGET
+                                + intent.getIntExtra(
+                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                        AppWidgetManager.INVALID_APPWIDGET_ID),
+                        API_DEFAULT);
+            } else {
+                mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
+            }
             new GetApiTask().execute(mApiUrl);
+            new GetDirTask().execute(API_DIRECTORY);
         }
     }
 

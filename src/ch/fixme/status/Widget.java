@@ -33,7 +33,8 @@ public class Widget extends AppWidgetProvider {
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
             // Remove widget alarm
             int widgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
             PendingIntent pi = PendingIntent.getService(ctxt, widgetId,
                     getIntent(ctxt, widgetId), 0);
             AlarmManager am = (AlarmManager) ctxt
@@ -123,8 +124,10 @@ public class Widget extends AppWidgetProvider {
         } else {
             views.setViewVisibility(R.id.widget_status, View.GONE);
         }
+        Intent clickIntent = new Intent(ctxt, Main.class);
+        clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         PendingIntent pendingIntent = PendingIntent.getActivity(ctxt, widgetId,
-                new Intent(ctxt, Main.class), 0);
+                clickIntent, 0);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         manager.updateAppWidget(widgetId, views);
         Log.i(Main.TAG, "Update widget image for id=" + widgetId);
@@ -191,7 +194,8 @@ public class Widget extends AppWidgetProvider {
         protected void onHandleIntent(Intent intent) {
             Log.i(Main.TAG, "UpdateService started");
             int widgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
             new GetApiTask(getApplicationContext(), widgetId)
                     .execute(PreferenceManager.getDefaultSharedPreferences(
                             UpdateService.this).getString(
