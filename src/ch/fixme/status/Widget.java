@@ -68,6 +68,7 @@ public class Widget extends AppWidgetProvider {
         AlarmManager am = (AlarmManager) ctxt
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
+        am.cancel(pi);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime(), interval, pi);
         Log.i(Main.TAG, "start notification every " + interval / 1000 + "s");
