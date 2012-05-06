@@ -127,7 +127,7 @@ public class Widget extends AppWidgetProvider {
         Intent clickIntent = new Intent(ctxt, Main.class);
         clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         PendingIntent pendingIntent = PendingIntent.getActivity(ctxt, widgetId,
-                clickIntent, 0);
+                clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         manager.updateAppWidget(widgetId, views);
         Log.i(Main.TAG, "Update widget image for id=" + widgetId);
