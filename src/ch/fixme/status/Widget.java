@@ -17,6 +17,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -196,11 +197,13 @@ public class Widget extends AppWidgetProvider {
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            new GetApiTask(getApplicationContext(), widgetId)
-                    .execute(PreferenceManager.getDefaultSharedPreferences(
-                            UpdateService.this).getString(
-                            Main.PREF_API_URL_WIDGET + widgetId,
-                            Main.API_DEFAULT));
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(UpdateService.this);
+            if (prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
+                new GetApiTask(getApplicationContext(), widgetId).execute(prefs
+                        .getString(Main.PREF_API_URL_WIDGET + widgetId,
+                                Main.API_DEFAULT));
+            }
             stopSelf();
         }
     }
