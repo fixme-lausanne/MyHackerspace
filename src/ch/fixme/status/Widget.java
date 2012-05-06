@@ -18,6 +18,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -41,6 +42,14 @@ public class Widget extends AppWidgetProvider {
             AlarmManager am = (AlarmManager) ctxt
                     .getSystemService(Context.ALARM_SERVICE);
             am.cancel(pi);
+
+            // remove preference
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(ctxt);
+            Editor edit = prefs.edit();
+            edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
+            edit.commit();
+
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         }
         super.onReceive(ctxt, intent);
