@@ -85,14 +85,16 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        new GetDirTask().execute(API_DIRECTORY);
 
         // Configure the widget
         Intent intent = getIntent();
         if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
                 .getAction())) {
+            setTheme(android.R.style.Theme_Dialog);
+            setContentView(R.layout.main);
+            new GetDirTask().execute(API_DIRECTORY);
+
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 mAppWidgetId = extras.getInt(
@@ -100,6 +102,7 @@ public class Main extends Activity {
                         AppWidgetManager.INVALID_APPWIDGET_ID);
             }
             findViewById(R.id.main_view).setVisibility(View.GONE);
+            findViewById(R.id.scroll).setVisibility(View.GONE);
             findViewById(R.id.choose_msg).setVisibility(View.VISIBLE);
             findViewById(R.id.choose_ok).setVisibility(View.VISIBLE);
             findViewById(R.id.choose_ok).setOnClickListener(
@@ -110,7 +113,10 @@ public class Main extends Activity {
                         }
                     });
         } else {
+            setTheme(R.style.MyTheme);
+            setContentView(R.layout.main);
             mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
+            new GetDirTask().execute(API_DIRECTORY);
             new GetApiTask().execute(mApiUrl);
         }
     }
@@ -191,20 +197,20 @@ public class Main extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapter, View v,
                             int position, long id) {
-                        if (!initialize) {
-                            Editor edit = mPrefs.edit();
-                            if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
-                                    .equals(getIntent().getAction())) {
-                                edit.putString(PREF_API_URL_WIDGET
-                                        + mAppWidgetId, url.get(position));
-                            } else {
+                        Editor edit = mPrefs.edit();
+                        if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
+                                .equals(getIntent().getAction())) {
+                            edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
+                                    url.get(position));
+                        } else {
+                            if (!initialize) {
                                 edit.putString(PREF_API_URL, url.get(position));
                                 new GetApiTask().execute(url.get(position));
+                            } else {
+                                initialize = false;
                             }
-                            edit.commit();
-                        } else {
-                            initialize = false;
                         }
+                        edit.commit();
                     }
 
                     @Override

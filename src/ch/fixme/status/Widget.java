@@ -65,7 +65,7 @@ public class Widget extends AppWidgetProvider {
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId) {
         // FIXME: Set interval in preferences
-        long interval = 10000; // AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
         AlarmManager am = (AlarmManager) ctxt
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
