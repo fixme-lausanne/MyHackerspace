@@ -15,10 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -28,10 +26,8 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,10 +43,12 @@ public class Main extends Activity {
 
     // API: http://hackerspaces.nl/spaceapi/
 
-    public static String TAG = "MyHackerspace";
-    public static final String PKG = "ch.fixme.status";
-    public static final String OPEN = "Open";
-    public static final String CLOSED = "Closed";
+    protected static String TAG = "MyHackerspace";
+    protected static final String PKG = "ch.fixme.status";
+    protected static final String OPEN = "Open";
+    protected static final String CLOSED = "Closed";
+    protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
+    private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_ERROR = 1;
 
@@ -72,7 +70,6 @@ public class Main extends Activity {
     private static final String TWITTER = "https://twitter.com/#!/";
 
     protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
-    protected static final String API_KEY = "apiurl";
     protected static final String API_ICON = "icon";
     protected static final String API_ICON_OPEN = "open";
     protected static final String API_ICON_CLOSED = "closed";
@@ -90,8 +87,6 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        mApiUrl = mPrefs.getString(API_KEY, API_DEFAULT);
-        new GetApiTask().execute(mApiUrl);
         new GetDirTask().execute(API_DIRECTORY);
 
         // Configure the widget
@@ -104,13 +99,19 @@ public class Main extends Activity {
                         AppWidgetManager.EXTRA_APPWIDGET_ID,
                         AppWidgetManager.INVALID_APPWIDGET_ID);
             }
+            findViewById(R.id.main_view).setVisibility(View.GONE);
+            findViewById(R.id.choose_msg).setVisibility(View.VISIBLE);
             findViewById(R.id.choose_ok).setVisibility(View.VISIBLE);
             findViewById(R.id.choose_ok).setOnClickListener(
                     new View.OnClickListener() {
                         public void onClick(View v) {
-                            updateWidgetAndQuit();
+                            setWidgetAlarm();
+                            finish();
                         }
                     });
+        } else {
+            mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
+            new GetApiTask().execute(mApiUrl);
         }
     }
 
@@ -140,15 +141,11 @@ public class Main extends Activity {
         }
     }
 
-    private void updateWidgetAndQuit() {
+    private void setWidgetAlarm() {
         Context ctxt = getApplicationContext();
-        // Set result causing initial widget configuration
         Intent i = Widget.getIntent(ctxt, mAppWidgetId);
         setResult(RESULT_OK, i);
-        // Set recuring service
-        Widget.setAlarm(ctxt, i);
-        dismissDialog(DIALOG_LOADING);
-        finish();
+        Widget.setAlarm(ctxt, i, mAppWidgetId);
     }
 
     private class GetDirTask extends AsyncTask<String, Void, String> {
@@ -195,16 +192,16 @@ public class Main extends Activity {
                     public void onItemSelected(AdapterView<?> adapter, View v,
                             int position, long id) {
                         if (!initialize) {
-                            // Save choice
                             Editor edit = mPrefs.edit();
-                            edit.putString(API_KEY, url.get(position));
-                            edit.commit();
                             if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
                                     .equals(getIntent().getAction())) {
-                                updateWidgetAndQuit();
+                                edit.putString(PREF_API_URL_WIDGET
+                                        + mAppWidgetId, url.get(position));
                             } else {
+                                edit.putString(PREF_API_URL, url.get(position));
                                 new GetApiTask().execute(url.get(position));
                             }
+                            edit.commit();
                         } else {
                             initialize = false;
                         }

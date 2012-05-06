@@ -10,7 +10,19 @@
     android:paddingLeft="15dip"
     android:paddingRight="15dip" >
 
+    <TextView
+        android:id="@+id/choose_msg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:layout_marginTop="8dip"
+        android:gravity="center_horizontal"
+        android:text="Select a hackerspace and press OK"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/main_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dip"
@@ -59,27 +71,29 @@
         android:layout_height="0dip"
         android:layout_weight="1" />
 
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dip"
+        android:layout_marginTop="12dip"
         android:orientation="horizontal" >
+
         <Spinner
             android:id="@+id/choose"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginBottom="12dip"
             android:drawSelectorOnTop="true"
             android:prompt="@string/choose" />
+
         <Button
             android:id="@+id/choose_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="18dip"
-            android:paddingRight="18dip"
-            android:visibility="gone"
-            android:text="Ok" />
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="Ok"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>
