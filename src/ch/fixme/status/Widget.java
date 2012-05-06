@@ -29,7 +29,6 @@ import android.widget.RemoteViews;
 public class Widget extends AppWidgetProvider {
 
     public void onReceive(Context ctxt, Intent intent) {
-        Log.i(Main.TAG, "intent=" + intent.toString());
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
             // Remove widget alarm
@@ -45,17 +44,17 @@ public class Widget extends AppWidgetProvider {
         super.onReceive(ctxt, intent);
     }
 
-    // public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
-    // int[] appWidgetIds) {
-    // final int N = appWidgetIds.length;
-    // for (int i = 0; i < N; i++) {
-    // int widgetId = appWidgetIds[i];
-    // Intent intent = getIntent(ctxt, widgetId);
-    // setAlarm(ctxt, intent);
-    // Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
-    // }
-    // super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
-    // }
+    public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
+            int[] appWidgetIds) {
+        final int N = appWidgetIds.length;
+        for (int i = 0; i < N; i++) {
+            int widgetId = appWidgetIds[i];
+            Intent intent = getIntent(ctxt, widgetId);
+            setAlarm(ctxt, intent, widgetId);
+            Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
+        }
+        super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
+    }
 
     protected static Intent getIntent(Context ctxt, int widgetId) {
         Intent i = new Intent(ctxt, UpdateService.class);
