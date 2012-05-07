@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -129,13 +130,18 @@ public class Main extends Activity {
                 mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
             }
             final Bundle data = (Bundle) getLastNonConfigurationInstance();
-            if ( data == null ) {
+            if ( data == null || !(savedInstanceState.containsKey("hs") && savedInstanceState.containsKey("dir")) ) {
                 new GetApiTask().execute(mApiUrl);
                 new GetDirTask().execute(API_DIRECTORY);
             } else {
                 mErrorMsg = null;
-                mResultHs = data.getString("hs");
-                mResultDir = data.getString("dir");
+                if(data != null) {
+                    mResultHs = data.getString("hs");
+                    mResultDir = data.getString("dir");
+                } else if(savedInstanceState != null) {
+                    mResultHs = savedInstanceState.getString("hs");
+                    mResultDir = savedInstanceState.getString("dir");
+                }
                 populateDataHs();
                 populateDataDir();
             }
@@ -148,6 +154,13 @@ public class Main extends Activity {
         data.putString("hs", mResultHs);
         data.putString("dir", mResultDir);
         return data;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("hs", mResultHs);
+        outState.putString("dir", mResultDir);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -334,8 +347,9 @@ public class Main extends Activity {
         } finally {
             try {
                 dismissDialog(DIALOG_LOADING);
-            } catch (IllegalArgumentException e)
-            {}
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, e.getMessage());
+            }
             showError();
         }
     }
@@ -473,8 +487,9 @@ public class Main extends Activity {
         } finally {
             try {
                 dismissDialog(DIALOG_LOADING);
-            } catch (IllegalArgumentException e)
-            {}
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, e.getMessage());
+            }
             showError();
         }
     }
