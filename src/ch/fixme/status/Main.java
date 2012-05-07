@@ -91,10 +91,10 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
 
-        // Configure the widget
         Intent intent = getIntent();
         if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
                 .getAction())) {
+            // Configure the widget
             setTheme(android.R.style.Theme_Dialog);
             setContentView(R.layout.main);
             new GetDirTask().execute(API_DIRECTORY);
@@ -117,6 +117,7 @@ public class Main extends Activity {
                         }
                     });
         } else {
+            // Show current hackerspace information
             setTheme(R.style.MyTheme);
             setContentView(R.layout.main);
             if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
