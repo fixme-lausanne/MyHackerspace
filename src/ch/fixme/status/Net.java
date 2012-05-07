@@ -108,7 +108,7 @@ public class Net {
             final WritableByteChannel dest) throws IOException,
             NullPointerException {
         if (src != null && dest != null) {
-            final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(32);
             while (src.read(buffer) != -1) {
                 buffer.flip();
                 dest.write(buffer);
