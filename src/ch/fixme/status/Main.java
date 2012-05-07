@@ -53,6 +53,8 @@ public class Main extends Activity {
     private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_ERROR = 1;
+    private static final String STATE_HS = "hs";
+    private static final String STATE_DIR = "dir";
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
@@ -131,17 +133,18 @@ public class Main extends Activity {
                 mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
             }
             final Bundle data = (Bundle) getLastNonConfigurationInstance();
-            if ( data == null || !(savedInstanceState.containsKey("hs") && savedInstanceState.containsKey("dir")) ) {
+            if ( data == null || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState.containsKey(STATE_DIR)) ) {
                 new GetApiTask().execute(mApiUrl);
                 new GetDirTask().execute(API_DIRECTORY);
             } else {
+                // Recover from saved instance
                 mErrorMsg = null;
                 if(data != null) {
-                    mResultHs = data.getString("hs");
-                    mResultDir = data.getString("dir");
+                    mResultHs = data.getString(STATE_HS);
+                    mResultDir = data.getString(STATE_DIR);
                 } else if(savedInstanceState != null) {
-                    mResultHs = savedInstanceState.getString("hs");
-                    mResultDir = savedInstanceState.getString("dir");
+                    mResultHs = savedInstanceState.getString(STATE_HS);
+                    mResultDir = savedInstanceState.getString(STATE_DIR);
                 }
                 populateDataHs();
                 populateDataDir();
@@ -152,15 +155,15 @@ public class Main extends Activity {
     @Override
     public Bundle onRetainNonConfigurationInstance() {
         Bundle data = new Bundle(2);
-        data.putString("hs", mResultHs);
-        data.putString("dir", mResultDir);
+        data.putString(STATE_HS, mResultHs);
+        data.putString(STATE_DIR, mResultDir);
         return data;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("hs", mResultHs);
-        outState.putString("dir", mResultDir);
+        outState.putString(STATE_HS, mResultHs);
+        outState.putString(STATE_DIR, mResultDir);
         super.onSaveInstanceState(outState);
     }
 
