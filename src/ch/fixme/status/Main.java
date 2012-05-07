@@ -241,16 +241,11 @@ public class Main extends Activity {
     }
 
     private class GetApiTask extends AsyncTask<String, Void, String> {
-        private LayoutInflater mInflater;
-        private LinearLayout mVg;
-
+        
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
             mErrorMsg = null;
-            // Initialize views
-            mInflater = getLayoutInflater();
-            mVg = (LinearLayout) mInflater.inflate(R.layout.base, null);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
             ((TextView) findViewById(R.id.space_name)).setText("");
@@ -272,136 +267,7 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            try {
-                JSONObject api = new JSONObject(result);
-                ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
-                scroll.removeAllViews();
-                scroll.addView(mVg);
-                // Mandatory fields
-                String status_txt = "";
-                String status = API_ICON_CLOSED;
-                if (api.getBoolean(API_STATUS)) {
-                    status = API_ICON_OPEN;
-                    status_txt = OPEN;
-                    ((TextView) findViewById(R.id.status_txt))
-                            .setCompoundDrawablesWithIntrinsicBounds(
-                                    android.R.drawable.presence_online, 0, 0, 0);
-                } else {
-                    status_txt = CLOSED;
-                    ((TextView) findViewById(R.id.status_txt))
-                            .setCompoundDrawablesWithIntrinsicBounds(
-                                    android.R.drawable.presence_busy, 0, 0, 0);
-                }
-                ((TextView) findViewById(R.id.space_name)).setText(api
-                        .getString(API_NAME));
-                ((TextView) findViewById(R.id.space_url)).setText(api
-                        .getString(API_URL));
-                // Status icon or space icon
-                // if (!api.isNull(API_ICON)) {
-                // JSONObject status_icon = api.getJSONObject(API_ICON);
-                // if (!status_icon.isNull(status)) {
-                // new GetImage(R.id.space_image).execute(status_icon
-                // .getString(status));
-                // }
-                // } else {
-                new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
-                // }
-                // Status
-                if (!api.isNull(API_STATUS_TXT)) {
-                    status_txt += ": " + api.getString(API_STATUS_TXT);
-                }
-                ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
-                if (!api.isNull(API_LASTCHANGE)) {
-                    Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
-                    SimpleDateFormat formatter = new SimpleDateFormat();
-                    TextView tv = (TextView) mInflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText("Last change: " + formatter.format(date));
-                    mVg.addView(tv);
-                }
-                if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
-                    TextView tv = (TextView) mInflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText("Duration: " + api.getString(API_DURATION)
-                            + " hour(s)");
-                    mVg.addView(tv);
-                }
-                // Location
-                if (!api.isNull(API_ADDRESS)
-                        || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
-                    TextView title = (TextView) mInflater.inflate(
-                            R.layout.title, null);
-                    title.setText("Location");
-                    mVg.addView(title);
-                    mInflater.inflate(R.layout.separator, mVg);
-                    if (!api.isNull(API_ADDRESS)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setAutoLinkMask(Linkify.MAP_ADDRESSES);
-                        tv.setText(api.getString(API_ADDRESS));
-                        mVg.addView(tv);
-                    }
-                    if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setAutoLinkMask(0);
-                        tv.setText(api.getString(API_LON) + ", "
-                                + api.getString(API_LAT));
-                        mVg.addView(tv);
-                    }
-                }
-                // Contact
-                if (!api.isNull(API_CONTACT)) {
-                    TextView title = (TextView) mInflater.inflate(
-                            R.layout.title, null);
-                    title.setText("Contact");
-                    mVg.addView(title);
-                    mInflater.inflate(R.layout.separator, mVg);
-                    JSONObject contact = api.getJSONObject(API_CONTACT);
-                    // Phone
-                    if (!contact.isNull(API_PHONE)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(contact.getString(API_PHONE));
-                        mVg.addView(tv);
-                    }
-                    // Twitter
-                    if (!contact.isNull(API_TWITTER)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(TWITTER + contact.getString(API_TWITTER));
-                        mVg.addView(tv);
-                    }
-                    // IRC
-                    if (!contact.isNull(API_IRC)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setAutoLinkMask(0);
-                        tv.setText(contact.getString(API_IRC));
-                        mVg.addView(tv);
-                    }
-                    // Email
-                    if (!contact.isNull(API_EMAIL)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(contact.getString(API_EMAIL));
-                        mVg.addView(tv);
-                    }
-                    // Mailing-List
-                    if (!contact.isNull(API_ML)) {
-                        TextView tv = (TextView) mInflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(contact.getString(API_ML));
-                        mVg.addView(tv);
-                    }
-                }
-            } catch (JSONException e) {
-                mErrorMsg = e.getLocalizedMessage();
-                e.printStackTrace();
-            } finally {
-                dismissDialog(DIALOG_LOADING);
-                showError();
-            }
+            populateData(result);
         }
 
         @Override
@@ -443,6 +309,142 @@ public class Main extends Activity {
             showError();
         }
 
+    }
+
+    private void populateData(String result) {
+        try {
+            JSONObject api = new JSONObject(result);
+            // Initialize views
+            LayoutInflater inflater = getLayoutInflater();
+            LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base, null);
+            ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
+            scroll.removeAllViews();
+            scroll.addView(vg);
+            // Mandatory fields
+            String status_txt = "";
+            String status = API_ICON_CLOSED;
+            if (api.getBoolean(API_STATUS)) {
+                status = API_ICON_OPEN;
+                status_txt = OPEN;
+                ((TextView) findViewById(R.id.status_txt))
+                        .setCompoundDrawablesWithIntrinsicBounds(
+                                android.R.drawable.presence_online, 0, 0, 0);
+            } else {
+                status_txt = CLOSED;
+                ((TextView) findViewById(R.id.status_txt))
+                        .setCompoundDrawablesWithIntrinsicBounds(
+                                android.R.drawable.presence_busy, 0, 0, 0);
+            }
+            ((TextView) findViewById(R.id.space_name)).setText(api
+                    .getString(API_NAME));
+            ((TextView) findViewById(R.id.space_url)).setText(api
+                    .getString(API_URL));
+            // Status icon or space icon
+            // if (!api.isNull(API_ICON)) {
+            // JSONObject status_icon = api.getJSONObject(API_ICON);
+            // if (!status_icon.isNull(status)) {
+            // new GetImage(R.id.space_image).execute(status_icon
+            // .getString(status));
+            // }
+            // } else {
+            new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
+            // }
+            // Status
+            if (!api.isNull(API_STATUS_TXT)) {
+                status_txt += ": " + api.getString(API_STATUS_TXT);
+            }
+            ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
+            if (!api.isNull(API_LASTCHANGE)) {
+                Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
+                SimpleDateFormat formatter = new SimpleDateFormat();
+                TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                        null);
+                tv.setText("Last change: " + formatter.format(date));
+                vg.addView(tv);
+            }
+            if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
+                TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                        null);
+                tv.setText("Duration: " + api.getString(API_DURATION)
+                        + " hour(s)");
+                vg.addView(tv);
+            }
+            // Location
+            if (!api.isNull(API_ADDRESS)
+                    || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
+                TextView title = (TextView) inflater.inflate(
+                        R.layout.title, null);
+                title.setText("Location");
+                vg.addView(title);
+                inflater.inflate(R.layout.separator, vg);
+                if (!api.isNull(API_ADDRESS)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setAutoLinkMask(Linkify.MAP_ADDRESSES);
+                    tv.setText(api.getString(API_ADDRESS));
+                    vg.addView(tv);
+                }
+                if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setAutoLinkMask(0);
+                    tv.setText(api.getString(API_LON) + ", "
+                            + api.getString(API_LAT));
+                    vg.addView(tv);
+                }
+            }
+            // Contact
+            if (!api.isNull(API_CONTACT)) {
+                TextView title = (TextView) inflater.inflate(
+                        R.layout.title, null);
+                title.setText("Contact");
+                vg.addView(title);
+                inflater.inflate(R.layout.separator, vg);
+                JSONObject contact = api.getJSONObject(API_CONTACT);
+                // Phone
+                if (!contact.isNull(API_PHONE)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setText(contact.getString(API_PHONE));
+                    vg.addView(tv);
+                }
+                // Twitter
+                if (!contact.isNull(API_TWITTER)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setText(TWITTER + contact.getString(API_TWITTER));
+                    vg.addView(tv);
+                }
+                // IRC
+                if (!contact.isNull(API_IRC)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setAutoLinkMask(0);
+                    tv.setText(contact.getString(API_IRC));
+                    vg.addView(tv);
+                }
+                // Email
+                if (!contact.isNull(API_EMAIL)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setText(contact.getString(API_EMAIL));
+                    vg.addView(tv);
+                }
+                // Mailing-List
+                if (!contact.isNull(API_ML)) {
+                    TextView tv = (TextView) inflater.inflate(
+                            R.layout.entry, null);
+                    tv.setText(contact.getString(API_ML));
+                    vg.addView(tv);
+                }
+            }
+        } catch (JSONException e) {
+            mErrorMsg = e.getLocalizedMessage();
+            e.printStackTrace();
+        } finally {
+            dismissDialog(DIALOG_LOADING);
+            showError();
+        }
     }
 
 }
