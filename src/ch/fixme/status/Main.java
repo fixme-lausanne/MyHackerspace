@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -119,9 +121,19 @@ public class Main extends Activity {
                         }
                     });
         } else {
-            // Show current hackerspace information
             setTheme(R.style.MyTheme);
             setContentView(R.layout.main);
+
+            // Network check
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo == null || !netInfo.isConnected()) {
+                mErrorMsg = "Network unreachable";
+                showError();
+                return;
+            }
+
+            // Show current hackerspace information
             if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
                 mApiUrl = mPrefs.getString(
                         PREF_API_URL_WIDGET
