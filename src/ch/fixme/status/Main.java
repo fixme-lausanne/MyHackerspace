@@ -6,6 +6,7 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.IllegalArgumentException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class Main extends Activity {
     protected static final String API_STATUS = "open";
 
     private SharedPreferences mPrefs;
+    private String mResultHs;
+    private String mResultDir;
     private String mApiUrl;
     private String mErrorMsg = null;
     private int mAppWidgetId;
@@ -125,9 +128,26 @@ public class Main extends Activity {
             } else {
                 mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
             }
-            new GetApiTask().execute(mApiUrl);
-            new GetDirTask().execute(API_DIRECTORY);
+            final Bundle data = (Bundle) getLastNonConfigurationInstance();
+            if ( data == null ) {
+                new GetApiTask().execute(mApiUrl);
+                new GetDirTask().execute(API_DIRECTORY);
+            } else {
+                mErrorMsg = null;
+                mResultHs = data.getString("hs");
+                mResultDir = data.getString("dir");
+                populateDataHs();
+                populateDataDir();
+            }
         }
+    }
+
+    @Override
+    public Bundle onRetainNonConfigurationInstance() {
+        Bundle data = new Bundle(2);
+        data.putString("hs", mResultHs);
+        data.putString("dir", mResultDir);
+        return data;
     }
 
     @Override
@@ -185,53 +205,8 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            try {
-                // Construct hackerspaces list
-                Spinner s = (Spinner) findViewById(R.id.choose);
-                JSONObject obj = new JSONObject(result);
-                JSONArray arr = obj.names();
-                int len = obj.length();
-                String[] names = new String[len];
-                final ArrayList<String> url = new ArrayList<String>(len);
-                for (int i = 0; i < len; i++) {
-                    names[i] = arr.getString(i);
-                    url.add(i, obj.getString(names[i]));
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                        Main.this, android.R.layout.simple_spinner_item, names);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                s.setAdapter(adapter);
-                s.setSelection(url.indexOf(mApiUrl));
-                s.setOnItemSelectedListener(new OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapter, View v,
-                            int position, long id) {
-                        Editor edit = mPrefs.edit();
-                        if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
-                                .equals(getIntent().getAction())) {
-                            edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
-                                    url.get(position));
-                        } else {
-                            if (!initialize) {
-                                edit.putString(PREF_API_URL, url.get(position));
-                                new GetApiTask().execute(url.get(position));
-                            } else {
-                                initialize = false;
-                            }
-                        }
-                        edit.commit();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
-                dismissDialog(DIALOG_LOADING);
-                showError();
-            }
+            mResultDir = result;
+            populateDataDir();
         }
 
         @Override
@@ -267,7 +242,8 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            populateData(result);
+            mResultHs = result;
+            populateDataHs();
         }
 
         @Override
@@ -311,9 +287,62 @@ public class Main extends Activity {
 
     }
 
-    private void populateData(String result) {
+    private void populateDataDir(){
         try {
-            JSONObject api = new JSONObject(result);
+            // Construct hackerspaces list
+            Spinner s = (Spinner) findViewById(R.id.choose);
+            JSONObject obj = new JSONObject(mResultDir);
+            JSONArray arr = obj.names();
+            int len = obj.length();
+            String[] names = new String[len];
+            final ArrayList<String> url = new ArrayList<String>(len);
+            for (int i = 0; i < len; i++) {
+                names[i] = arr.getString(i);
+                url.add(i, obj.getString(names[i]));
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    Main.this, android.R.layout.simple_spinner_item, names);
+            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+            s.setAdapter(adapter);
+            s.setSelection(url.indexOf(mApiUrl));
+            s.setOnItemSelectedListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapter, View v,
+                        int position, long id) {
+                    Editor edit = mPrefs.edit();
+                    if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
+                            .equals(getIntent().getAction())) {
+                        edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
+                                url.get(position));
+                    } else {
+                        if (!initialize) {
+                            edit.putString(PREF_API_URL, url.get(position));
+                            new GetApiTask().execute(url.get(position));
+                        } else {
+                            initialize = false;
+                        }
+                    }
+                    edit.commit();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                dismissDialog(DIALOG_LOADING);
+            } catch (IllegalArgumentException e)
+            {}
+            showError();
+        }
+    }
+
+    private void populateDataHs() {
+        try {
+            JSONObject api = new JSONObject(mResultHs);
             // Initialize views
             LayoutInflater inflater = getLayoutInflater();
             LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base, null);
@@ -442,7 +471,10 @@ public class Main extends Activity {
             mErrorMsg = e.getLocalizedMessage();
             e.printStackTrace();
         } finally {
-            dismissDialog(DIALOG_LOADING);
+            try {
+                dismissDialog(DIALOG_LOADING);
+            } catch (IllegalArgumentException e)
+            {}
             showError();
         }
     }
