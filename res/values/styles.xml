@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyTheme" parent="android:Theme.NoTitleBar">
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:textColor">@android:color/black</item>
+    <style name="MyTheme" parent="android:Theme.Light.NoTitleBar">
     </style>
 </resources>
 
