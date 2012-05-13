@@ -85,8 +85,10 @@ public class Main extends Activity {
     private String mResultHs;
     private String mResultDir;
     private String mApiUrl;
-    private String mErrorMsg = null;
-    private String mErrorTitle = null;
+    private String mErrorApiMsg = null;
+    private String mErrorApiTitle = null;
+    private String mErrorDirTitle = null;
+    private String mErrorDirMsg = null;
     private int mAppWidgetId;
     private boolean initialize = true;
 
@@ -128,8 +130,8 @@ public class Main extends Activity {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo == null || !netInfo.isConnected()) {
-                mErrorTitle = "Network";
-                mErrorMsg = "Network unreachable";
+                mErrorDirTitle = "Network";
+                mErrorDirMsg = "Network unreachable";
                 showError();
                 return;
             }
@@ -149,11 +151,12 @@ public class Main extends Activity {
             if (data == null
                     || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
                             .containsKey(STATE_DIR))) {
-                new GetApiTask().execute(mApiUrl);
                 new GetDirTask().execute(API_DIRECTORY);
+                new GetApiTask().execute(mApiUrl);
             } else {
                 // Recover from saved instance
-                mErrorMsg = null;
+                mErrorDirMsg = null;
+                mErrorApiMsg = null;
                 mResultHs = data.getString(STATE_HS);
                 mResultDir = data.getString(STATE_DIR);
                 populateDataHs();
@@ -189,17 +192,24 @@ public class Main extends Activity {
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 break;
             case DIALOG_ERROR:
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle("Error: " + mErrorTitle)
-                        .setMessage(mErrorMsg).setNeutralButton("Ok", null)
-                        .create();
+                if (mErrorApiMsg != null) {
+                    dialog = new AlertDialog.Builder(this)
+                            .setTitle("Error: " + mErrorApiTitle)
+                            .setMessage(mErrorApiMsg)
+                            .setNeutralButton("Ok", null).create();
+                } else if (mErrorDirMsg != null) {
+                    dialog = new AlertDialog.Builder(this)
+                            .setTitle("Error: " + mErrorDirTitle)
+                            .setMessage(mErrorDirMsg)
+                            .setNeutralButton("Ok", null).create();
+                }
                 break;
         }
         return dialog;
     }
 
     private void showError() {
-        if (mErrorMsg != null) {
+        if (mErrorDirMsg != null || mErrorApiMsg != null) {
             showDialog(DIALOG_ERROR);
         }
     }
@@ -216,7 +226,7 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
-            mErrorMsg = null;
+            mErrorDirMsg = null;
         }
 
         @Override
@@ -225,8 +235,8 @@ public class Main extends Activity {
             try {
                 new Net(url[0], direcOs);
             } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorDirTitle = e.getClass().getCanonicalName();
+                mErrorDirMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return direcOs.toString();
@@ -234,8 +244,13 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            mResultDir = result;
-            populateDataDir();
+            if (mErrorDirMsg == null) {
+                mResultDir = result;
+                populateDataDir();
+            } else {
+                dismissDialog(DIALOG_LOADING);
+                showError();
+            }
         }
 
         @Override
@@ -249,7 +264,7 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
-            mErrorMsg = null;
+            mErrorApiMsg = null;
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
             ((TextView) findViewById(R.id.space_name)).setText("");
@@ -263,8 +278,8 @@ public class Main extends Activity {
             try {
                 new Net(url[0], spaceOs);
             } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorApiTitle = e.getClass().getCanonicalName();
+                mErrorApiMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return spaceOs.toString();
@@ -272,8 +287,13 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            mResultHs = result;
-            populateDataHs();
+            if (mErrorApiMsg == null) {
+                mResultHs = result;
+                populateDataHs();
+            } else {
+                dismissDialog(DIALOG_LOADING);
+                showError();
+            }
         }
 
         @Override
@@ -293,7 +313,7 @@ public class Main extends Activity {
         @Override
         protected void onPreExecute() {
             // TODO: Show that the image is loading
-            mErrorMsg = null;
+            mErrorApiMsg = null;
         }
 
         @Override
@@ -302,8 +322,8 @@ public class Main extends Activity {
             try {
                 new Net(url[0], os);
             } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorApiTitle = e.getClass().getCanonicalName();
+                mErrorApiMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
             return os.toByteArray();
@@ -311,9 +331,12 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(byte[] result) {
-            ((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
-                    .decodeByteArray(result, 0, result.length));
-            showError();
+            if (mErrorApiMsg == null) {
+                ((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
+                        .decodeByteArray(result, 0, result.length));
+            } else {
+                showError();
+            }
         }
 
     }
@@ -373,7 +396,6 @@ public class Main extends Activity {
     }
 
     private void populateDataHs() {
-        mErrorMsg = null;
         try {
             JSONObject api = new JSONObject(mResultHs);
             // Initialize views
@@ -500,8 +522,8 @@ public class Main extends Activity {
                 }
             }
         } catch (JSONException e) {
-            mErrorTitle = e.getClass().getCanonicalName();
-            mErrorMsg = e.getLocalizedMessage();
+            mErrorApiTitle = e.getClass().getCanonicalName();
+            mErrorApiMsg = e.getLocalizedMessage();
             e.printStackTrace();
         } finally {
             try {

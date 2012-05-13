@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.SSLException;
+
 import android.os.Build;
 
 public class Net {
@@ -18,9 +20,10 @@ public class Net {
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
             + Build.MODEL + ") MyHackerspace/1.4";
 
-    public Net(String urlStr, OutputStream out) throws IOException {
+    public Net(String urlStr, OutputStream out) throws SSLException,
+            IOException {
         // HTTP connection reuse which was buggy pre-froyo
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
         }
 
