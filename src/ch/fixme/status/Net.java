@@ -5,120 +5,40 @@
 
 package ch.fixme.status;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-import javax.net.ssl.SSLException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.util.Log;
+import android.os.Build;
 
 public class Net {
 
-    private final String USERAGENT = "Android/"
-            + android.os.Build.VERSION.RELEASE + " (" + android.os.Build.MODEL
-            + ") MyHackerspace/";
-    private HttpClient httpclient;
+    private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
+            + Build.MODEL + ") MyHackerspace/1.4";
 
-    public Net(String url, OutputStream out) throws SSLException, IOException,
-            NullPointerException {
-        httpclient = new DefaultHttpClient();
-        httpclient.getParams().setParameter("http.useragent", USERAGENT);
-        InputStream in = openURL(url);
-        if (in == null) {
-            Log.e(Main.TAG, "Unable to download: " + url);
-            return;
+    public Net(String urlStr, OutputStream out) throws IOException {
+        // HTTP connection reuse which was buggy pre-froyo
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
         }
 
-        final ReadableByteChannel inputChannel = Channels.newChannel(in);
-        final WritableByteChannel outputChannel = Channels.newChannel(out);
-
+        URL url = new URL(urlStr);
+        HttpURLConnection urlConnection = (HttpURLConnection) url
+                .openConnection();
         try {
-            Log.i(Main.TAG, "Downloading " + url);
-            fastChannelCopy(inputChannel, outputChannel);
+            urlConnection.setInstanceFollowRedirects(true);
+            urlConnection.setRequestProperty("User-Agent", USERAGENT);
+            BufferedInputStream in = new BufferedInputStream(
+                    urlConnection.getInputStream());
+            byte[] buffer = new byte[2 * 1024];
+            int len1 = 0;
+            while ((len1 = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len1);
+            }
         } finally {
-            try {
-                if (inputChannel != null) {
-                    inputChannel.close();
-                }
-                if (outputChannel != null) {
-                    outputChannel.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-            } catch (Exception e) {
-                if (e != null && e.getMessage() != null) {
-                    Log.e(Main.TAG, e.getMessage());
-                } else {
-                    Log.e(Main.TAG, "fastChannelCopy() unknown error");
-                }
-            }
+            urlConnection.disconnect();
         }
     }
-
-    private InputStream openURL(String url) throws ClientProtocolException,
-            IOException {
-        HttpGet httpget = new HttpGet(url);
-        HttpResponse response;
-        // try {
-        response = httpclient.execute(httpget);
-        // } catch (SSLException e) {
-        // /*
-        // * KeyStore trustStore =
-        // * KeyStore.getInstance(KeyStore.getDefaultType());
-        // * KeyStore.getDefaultType(); FileInputStream in = new
-        // * FileInputStream(new
-        // * File("data/data/ch.fixme.status/my.trustore3")); try {
-        // * trustStore.load(in, "coucou".toCharArray()); } finally {
-        // * in.close(); }
-        // *
-        // * SSLSocketFactory socketFactory = new
-        // * SSLSocketFactory(trustStore); SchemeRegistry registry = new
-        // * SchemeRegistry(); registry.register(new Scheme("https",
-        // * socketFactory, 443));
-        // */
-        // response = httpclient.execute(httpget);
-        // }
-        Log.i(Main.TAG, "Status:[" + response.getStatusLine().toString() + "]");
-        HttpEntity entity = response.getEntity();
-
-        if (entity != null) {
-            return entity.getContent();
-        }
-
-        return null;
-    }
-
-    public static void fastChannelCopy(final ReadableByteChannel src,
-            final WritableByteChannel dest) throws IOException,
-            NullPointerException {
-        if (src != null && dest != null) {
-            final ByteBuffer buffer = ByteBuffer.allocateDirect(32);
-            while (src.read(buffer) != -1) {
-                buffer.flip();
-                dest.write(buffer);
-                buffer.compact();
-            }
-            buffer.flip();
-            while (buffer.hasRemaining()) {
-                dest.write(buffer);
-            }
-        }
-    }
-
 }

@@ -145,19 +145,16 @@ public class Main extends Activity {
                 mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
             }
             final Bundle data = (Bundle) getLastNonConfigurationInstance();
-            if ( data == null || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState.containsKey(STATE_DIR)) ) {
+            if (data == null
+                    || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
+                            .containsKey(STATE_DIR))) {
                 new GetApiTask().execute(mApiUrl);
                 new GetDirTask().execute(API_DIRECTORY);
             } else {
                 // Recover from saved instance
                 mErrorMsg = null;
-                if(data != null) {
-                    mResultHs = data.getString(STATE_HS);
-                    mResultDir = data.getString(STATE_DIR);
-                } else if(savedInstanceState != null) {
-                    mResultHs = savedInstanceState.getString(STATE_HS);
-                    mResultDir = savedInstanceState.getString(STATE_DIR);
-                }
+                mResultHs = data.getString(STATE_HS);
+                mResultDir = data.getString(STATE_DIR);
                 populateDataHs();
                 populateDataDir();
             }
@@ -245,7 +242,7 @@ public class Main extends Activity {
     }
 
     private class GetApiTask extends AsyncTask<String, Void, String> {
-        
+
         @Override
         protected void onPreExecute() {
             showDialog(DIALOG_LOADING);
@@ -316,7 +313,7 @@ public class Main extends Activity {
 
     }
 
-    private void populateDataDir(){
+    private void populateDataDir() {
         try {
             // Construct hackerspaces list
             Spinner s = (Spinner) findViewById(R.id.choose);
@@ -329,8 +326,8 @@ public class Main extends Activity {
                 names[i] = arr.getString(i);
                 url.add(i, obj.getString(names[i]));
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                    Main.this, android.R.layout.simple_spinner_item, names);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main.this,
+                    android.R.layout.simple_spinner_item, names);
             adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
             s.setAdapter(adapter);
             s.setSelection(url.indexOf(mApiUrl));
@@ -371,11 +368,13 @@ public class Main extends Activity {
     }
 
     private void populateDataHs() {
+        mErrorMsg = null;
         try {
             JSONObject api = new JSONObject(mResultHs);
             // Initialize views
             LayoutInflater inflater = getLayoutInflater();
-            LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base, null);
+            LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
+                    null);
             ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
             scroll.removeAllViews();
             scroll.addView(vg);
@@ -416,14 +415,12 @@ public class Main extends Activity {
             if (!api.isNull(API_LASTCHANGE)) {
                 Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
                 SimpleDateFormat formatter = new SimpleDateFormat();
-                TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                        null);
+                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setText("Last change: " + formatter.format(date));
                 vg.addView(tv);
             }
             if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                        null);
+                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setText("Duration: " + api.getString(API_DURATION)
                         + " hour(s)");
                 vg.addView(tv);
@@ -431,21 +428,21 @@ public class Main extends Activity {
             // Location
             if (!api.isNull(API_ADDRESS)
                     || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
-                TextView title = (TextView) inflater.inflate(
-                        R.layout.title, null);
+                TextView title = (TextView) inflater.inflate(R.layout.title,
+                        null);
                 title.setText("Location");
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 if (!api.isNull(API_ADDRESS)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setAutoLinkMask(Linkify.MAP_ADDRESSES);
                     tv.setText(api.getString(API_ADDRESS));
                     vg.addView(tv);
                 }
                 if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setAutoLinkMask(0);
                     tv.setText(api.getString(API_LON) + ", "
                             + api.getString(API_LAT));
@@ -454,45 +451,45 @@ public class Main extends Activity {
             }
             // Contact
             if (!api.isNull(API_CONTACT)) {
-                TextView title = (TextView) inflater.inflate(
-                        R.layout.title, null);
+                TextView title = (TextView) inflater.inflate(R.layout.title,
+                        null);
                 title.setText("Contact");
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 JSONObject contact = api.getJSONObject(API_CONTACT);
                 // Phone
                 if (!contact.isNull(API_PHONE)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setText(contact.getString(API_PHONE));
                     vg.addView(tv);
                 }
                 // Twitter
                 if (!contact.isNull(API_TWITTER)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setText(TWITTER + contact.getString(API_TWITTER));
                     vg.addView(tv);
                 }
                 // IRC
                 if (!contact.isNull(API_IRC)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setAutoLinkMask(0);
                     tv.setText(contact.getString(API_IRC));
                     vg.addView(tv);
                 }
                 // Email
                 if (!contact.isNull(API_EMAIL)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setText(contact.getString(API_EMAIL));
                     vg.addView(tv);
                 }
                 // Mailing-List
                 if (!contact.isNull(API_ML)) {
-                    TextView tv = (TextView) inflater.inflate(
-                            R.layout.entry, null);
+                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
+                            null);
                     tv.setText(contact.getString(API_ML));
                     vg.addView(tv);
                 }
