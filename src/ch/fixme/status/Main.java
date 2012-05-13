@@ -91,6 +91,8 @@ public class Main extends Activity {
     private String mErrorDirMsg = null;
     private int mAppWidgetId;
     private boolean initialize = true;
+    private boolean finishApi = false;
+    private boolean finishDir = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class Main extends Activity {
         Intent intent = getIntent();
         if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
                 .getAction())) {
+            finishApi = true;
             // Configure the widget
             setContentView(R.layout.main);
             new GetDirTask().execute(API_DIRECTORY);
@@ -155,6 +158,8 @@ public class Main extends Activity {
                 new GetApiTask().execute(mApiUrl);
             } else {
                 // Recover from saved instance
+                finishApi = true;
+                finishDir = true;
                 mErrorDirMsg = null;
                 mErrorApiMsg = null;
                 mResultHs = data.getString(STATE_HS);
@@ -214,6 +219,12 @@ public class Main extends Activity {
         }
     }
 
+    private void dismissLoading() {
+        if (finishApi && finishDir) {
+            dismissDialog(DIALOG_LOADING);
+        }
+    }
+
     private void setWidgetAlarm() {
         Context ctxt = getApplicationContext();
         Intent i = Widget.getIntent(ctxt, mAppWidgetId);
@@ -244,18 +255,20 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
+            finishDir = true;
+            dismissLoading();
             if (mErrorDirMsg == null) {
                 mResultDir = result;
                 populateDataDir();
             } else {
-                dismissDialog(DIALOG_LOADING);
                 showError();
             }
         }
 
         @Override
         protected void onCancelled() {
-            dismissDialog(DIALOG_LOADING);
+            finishDir = true;
+            dismissLoading();
         }
     }
 
@@ -287,18 +300,20 @@ public class Main extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
+            finishApi = true;
+            dismissLoading();
             if (mErrorApiMsg == null) {
                 mResultHs = result;
                 populateDataHs();
             } else {
-                dismissDialog(DIALOG_LOADING);
                 showError();
             }
         }
 
         @Override
         protected void onCancelled() {
-            dismissDialog(DIALOG_LOADING);
+            finishApi = true;
+            dismissLoading();
         }
     }
 
@@ -386,11 +401,6 @@ public class Main extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
-            try {
-                dismissDialog(DIALOG_LOADING);
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, e.getMessage());
-            }
             showError();
         }
     }
@@ -407,9 +417,9 @@ public class Main extends Activity {
             scroll.addView(vg);
             // Mandatory fields
             String status_txt = "";
-            String status = API_ICON_CLOSED;
+            // String status = API_ICON_CLOSED;
             if (api.getBoolean(API_STATUS)) {
-                status = API_ICON_OPEN;
+                // status = API_ICON_OPEN;
                 status_txt = OPEN;
                 ((TextView) findViewById(R.id.status_txt))
                         .setCompoundDrawablesWithIntrinsicBounds(
@@ -526,11 +536,6 @@ public class Main extends Activity {
             mErrorApiMsg = e.getLocalizedMessage();
             e.printStackTrace();
         } finally {
-            try {
-                dismissDialog(DIALOG_LOADING);
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, e.getMessage());
-            }
             showError();
         }
     }
