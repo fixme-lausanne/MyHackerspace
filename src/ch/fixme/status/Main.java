@@ -94,15 +94,17 @@ public class Main extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Before onCreate for Android 1.5
         setTheme(android.R.style.Theme_Light_NoTitleBar);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
 
         Intent intent = getIntent();
         if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
                 .getAction())) {
             // Configure the widget
-            setTheme(android.R.style.Theme_Dialog);
             setContentView(R.layout.main);
             new GetDirTask().execute(API_DIRECTORY);
 
@@ -124,10 +126,6 @@ public class Main extends Activity {
                         }
                     });
         } else {
-            // FIXME Does not work in Android 1.5 ?
-            setTheme(android.R.style.Theme_Light_NoTitleBar);
-            setContentView(R.layout.main);
-
             // Network check
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
