@@ -6,7 +6,6 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.IllegalArgumentException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,6 +86,7 @@ public class Main extends Activity {
     private String mResultDir;
     private String mApiUrl;
     private String mErrorMsg = null;
+    private String mErrorTitle = null;
     private int mAppWidgetId;
     private boolean initialize = true;
 
@@ -128,6 +128,7 @@ public class Main extends Activity {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo == null || !netInfo.isConnected()) {
+                mErrorTitle = "Network";
                 mErrorMsg = "Network unreachable";
                 showError();
                 return;
@@ -188,7 +189,8 @@ public class Main extends Activity {
                 ((ProgressDialog) dialog).setIndeterminate(true);
                 break;
             case DIALOG_ERROR:
-                dialog = new AlertDialog.Builder(this).setTitle("Error")
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle("Error: " + mErrorTitle)
                         .setMessage(mErrorMsg).setNeutralButton("Ok", null)
                         .create();
                 break;
@@ -223,6 +225,7 @@ public class Main extends Activity {
             try {
                 new Net(url[0], direcOs);
             } catch (Exception e) {
+                mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
@@ -260,6 +263,7 @@ public class Main extends Activity {
             try {
                 new Net(url[0], spaceOs);
             } catch (Exception e) {
+                mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
@@ -298,6 +302,7 @@ public class Main extends Activity {
             try {
                 new Net(url[0], os);
             } catch (Exception e) {
+                mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
             }
@@ -495,6 +500,7 @@ public class Main extends Activity {
                 }
             }
         } catch (JSONException e) {
+            mErrorTitle = e.getClass().getCanonicalName();
             mErrorMsg = e.getLocalizedMessage();
             e.printStackTrace();
         } finally {
