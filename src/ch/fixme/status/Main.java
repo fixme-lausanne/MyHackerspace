@@ -94,6 +94,8 @@ public class Main extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(android.R.style.Theme_Light_NoTitleBar);
+        super.onCreate(savedInstanceState);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
 
         Intent intent = getIntent();
@@ -101,7 +103,6 @@ public class Main extends Activity {
                 .getAction())) {
             // Configure the widget
             setTheme(android.R.style.Theme_Dialog);
-            super.onCreate(savedInstanceState);
             setContentView(R.layout.main);
             new GetDirTask().execute(API_DIRECTORY);
 
@@ -125,7 +126,6 @@ public class Main extends Activity {
         } else {
             // FIXME Does not work in Android 1.5 ?
             setTheme(android.R.style.Theme_Light_NoTitleBar);
-            super.onCreate(savedInstanceState);
             setContentView(R.layout.main);
 
             // Network check
