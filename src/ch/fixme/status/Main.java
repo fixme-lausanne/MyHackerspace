@@ -94,7 +94,6 @@ public class Main extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
 
         Intent intent = getIntent();
@@ -102,6 +101,7 @@ public class Main extends Activity {
                 .getAction())) {
             // Configure the widget
             setTheme(android.R.style.Theme_Dialog);
+            super.onCreate(savedInstanceState);
             setContentView(R.layout.main);
             new GetDirTask().execute(API_DIRECTORY);
 
@@ -123,7 +123,9 @@ public class Main extends Activity {
                         }
                     });
         } else {
-            setTheme(R.style.MyTheme);
+            // FIXME Does not work in Android 1.5 ?
+            setTheme(android.R.style.Theme_Light_NoTitleBar);
+            super.onCreate(savedInstanceState);
             setContentView(R.layout.main);
 
             // Network check
@@ -356,7 +358,7 @@ public class Main extends Activity {
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main.this,
                     android.R.layout.simple_spinner_item, names);
-            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
             s.setAdapter(adapter);
             s.setSelection(url.indexOf(mApiUrl));
             s.setOnItemSelectedListener(new OnItemSelectedListener() {
