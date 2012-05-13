@@ -6,6 +6,7 @@
 package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
+import java.net.UnknownHostException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +75,11 @@ public class Widget extends AppWidgetProvider {
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId) {
+        setAlarm(ctxt, i, widgetId, 0);
+    }
+
+    protected static void setAlarm(Context ctxt, Intent i, int widgetId,
+            int delay) {
         // FIXME: Set interval in preferences
         long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
         AlarmManager am = (AlarmManager) ctxt
@@ -81,7 +87,7 @@ public class Widget extends AppWidgetProvider {
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime(), interval, pi);
+                SystemClock.elapsedRealtime() + delay, interval, pi);
         Log.i(Main.TAG, "start notification every " + interval / 1000 + "s");
     }
 
@@ -147,6 +153,7 @@ public class Widget extends AppWidgetProvider {
 
         private int mId;
         private Context mCtxt;
+        private boolean retry = false;
 
         public GetApiTask(Context ctxt, int id) {
             mCtxt = ctxt;
@@ -158,6 +165,8 @@ public class Widget extends AppWidgetProvider {
             ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
             try {
                 new Net(url[0], spaceOs);
+            } catch (UnknownHostException e) {
+                Log.e(Main.TAG, "Try again ???");
             } catch (Exception e) {
                 e.printStackTrace();
             }
