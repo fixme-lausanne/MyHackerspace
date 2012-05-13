@@ -26,6 +26,7 @@ public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
             + Build.MODEL + ") MyHackerspace/1.4";
+    private static final int BUFSIZE = 2 * 1024;
 
     public Net(String urlStr, OutputStream out)
             throws NoSuchAlgorithmException, KeyManagementException,
@@ -49,8 +50,8 @@ public class Net {
             urlConnection.setInstanceFollowRedirects(true);
             urlConnection.setRequestProperty("User-Agent", USERAGENT);
             BufferedInputStream in = new BufferedInputStream(
-                    urlConnection.getInputStream());
-            byte[] buffer = new byte[2 * 1024];
+                    urlConnection.getInputStream(), BUFSIZE);
+            byte[] buffer = new byte[BUFSIZE];
             int len1 = 0;
             while ((len1 = in.read(buffer)) > 0) {
                 out.write(buffer, 0, len1);
