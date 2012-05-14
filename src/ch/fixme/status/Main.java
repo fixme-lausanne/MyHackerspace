@@ -75,6 +75,7 @@ public class Main extends Activity {
     private static final String API_PHONE = "phone";
     private static final String API_TWITTER = "twitter";
     private static final String API_ML = "ml";
+    private static final String API_SENSORS = "sensors";
     private static final String TWITTER = "https://twitter.com/#!/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&";
@@ -544,6 +545,37 @@ public class Main extends Activity {
                             null);
                     tv.setText(contact.getString(API_ML));
                     vg.addView(tv);
+                }
+            }
+            // Sensors
+            if (!api.isNull(API_SENSORS)) {
+                TextView title = (TextView) inflater.inflate(R.layout.title,
+                        null);
+                title.setText("Sensors");
+                vg.addView(title);
+                inflater.inflate(R.layout.separator, vg);
+                JSONObject sensors = api.getJSONObject(API_SENSORS);
+                // Iterate through sensors
+                JSONArray arr = sensors.names();
+                int len = sensors.length();
+                String name;
+                String value;
+                for (int i = 0; i < len; i++) {
+                    name = arr.getString(i);
+                    value = sensors.getJSONArray(name);
+                    if ( value.length() > 1 ) {
+                        for( int j = 0; j < value.length(); j++) {
+                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                            tv.setAutoLinkMask(0);
+                            JSONObject item = value.getJSONObject(j);
+                            if(!item.isNull("value")){
+                                tv.setText(name + ": " + item.getString("value"));
+                            } else {
+                                tv.setText(name + ": " + value.toString());
+                            }
+                            vg.addView(tv);
+                        }
+                    }
                 }
             }
         } catch (JSONException e) {
