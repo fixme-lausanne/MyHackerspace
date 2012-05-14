@@ -560,25 +560,25 @@ public class Main extends Activity {
                 int len = sensors.length();
                 String name;
                 String value;
-                for (int i = 0; i < len; i++) {
-                    name = arr.getString(i);
-                    value = sensors.getJSONArray(name);
-                    if ( value.length() > 1 ) {
-                        for( int j = 0; j < value.length(); j++) {
-                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                            tv.setAutoLinkMask(0);
-                            JSONObject item = value.getJSONObject(j);
-                            if(!item.isNull("value")){
-                                tv.setText(name + ": " + item.getString("value"));
-                            } else {
-                                tv.setText(name + ": " + value.toString());
-                            }
-                            vg.addView(tv);
-                        }
-                    }
-                }
+                //for (int i = 0; i < len; i++) {
+                //    name = arr.getString(i);
+                //    value = sensors.getJSONArray(name);
+                //    if ( value.length() > 1 ) {
+                //        for( int j = 0; j < value.length(); j++) {
+                //            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                //            tv.setAutoLinkMask(0);
+                //            JSONObject item = value.getJSONObject(j);
+                //            if(!item.isNull("value")){
+                //                tv.setText(name + ": " + item.getString("value"));
+                //            } else {
+                //                tv.setText(name + ": " + value.toString());
+                //            }
+                //            vg.addView(tv);
+                //        }
+                //    }
+                //}
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             mErrorApiTitle = e.getClass().getCanonicalName();
             mErrorApiMsg = e.getLocalizedMessage();
             e.printStackTrace();
