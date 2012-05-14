@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.lang.IllegalArgumentException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,6 +76,8 @@ public class Main extends Activity {
     private static final String API_TWITTER = "twitter";
     private static final String API_ML = "ml";
     private static final String TWITTER = "https://twitter.com/#!/";
+    private static final String MAP_SEARCH = "geo:0,0?q=";
+    private static final String MAP_COORD = "geo:%s,%s?z=23&";
 
     protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
     protected static final String API_ICON = "icon";
@@ -222,7 +226,11 @@ public class Main extends Activity {
 
     private void dismissLoading() {
         if (finishApi && finishDir) {
-            dismissDialog(DIALOG_LOADING);
+            try {
+                removeDialog(DIALOG_LOADING);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 
@@ -467,6 +475,7 @@ public class Main extends Activity {
                 vg.addView(tv);
             }
             // Location
+            Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
             if (!api.isNull(API_ADDRESS)
                     || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
                 TextView title = (TextView) inflater.inflate(R.layout.title,
@@ -477,8 +486,9 @@ public class Main extends Activity {
                 if (!api.isNull(API_ADDRESS)) {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
-                    tv.setAutoLinkMask(Linkify.MAP_ADDRESSES);
+                    tv.setAutoLinkMask(0);
                     tv.setText(api.getString(API_ADDRESS));
+                    Linkify.addLinks(tv, ptn, MAP_SEARCH);
                     vg.addView(tv);
                 }
                 if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
@@ -487,6 +497,7 @@ public class Main extends Activity {
                     tv.setAutoLinkMask(0);
                     tv.setText(api.getString(API_LON) + ", "
                             + api.getString(API_LAT));
+                    Linkify.addLinks(tv, ptn, String.format(MAP_COORD, api.getString(API_LON), api.getString(API_LAT)));
                     vg.addView(tv);
                 }
             }
