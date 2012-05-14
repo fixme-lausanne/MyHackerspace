@@ -166,11 +166,20 @@ public class Widget extends AppWidgetProvider {
             try {
                 new Net(url[0], spaceOs);
             } catch (UnknownHostException e) {
-                Log.e(Main.TAG, "Try again ???");
+                e.printStackTrace();
+                cancel(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return spaceOs.toString();
+        }
+
+        @Override
+        protected void onCancelled () {
+            // Set alarm 5 seconds in the future
+            Log.i(Main.TAG, "Set alarm in 5 seconds");
+            Intent intent = getIntent(mCtxt, mId);
+            setAlarm(mCtxt, intent, mId, 5000);
         }
 
         @Override
