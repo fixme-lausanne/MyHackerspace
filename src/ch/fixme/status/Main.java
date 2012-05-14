@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -367,6 +368,9 @@ public class Main extends Activity {
             final ArrayList<String> url = new ArrayList<String>(len);
             for (int i = 0; i < len; i++) {
                 names[i] = arr.getString(i);
+            }
+            Arrays.sort(names);
+            for (int i = 0; i < len; i++) {
                 url.add(i, obj.getString(names[i]));
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main.this,
