@@ -17,6 +17,7 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -30,7 +31,7 @@ public class Net {
 
     public Net(String urlStr, OutputStream out)
             throws NoSuchAlgorithmException, KeyManagementException,
-            SSLException, IOException {
+            SSLHandshakeException, SSLException, IOException {
 
         // HTTP connection reuse which was buggy pre-froyo
         if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {

@@ -29,6 +29,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -59,6 +60,10 @@ public class Main extends Activity {
     private static final int DIALOG_ERROR = 1;
     private static final String STATE_HS = "hs";
     private static final String STATE_DIR = "dir";
+    private static final String TWITTER = "https://twitter.com/#!/";
+    private static final String MAP_SEARCH = "geo:0,0?q=";
+    private static final String MAP_COORD = "geo:%s,%s?z=23&";
+    private static final String LINK_STREAM = "";
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
@@ -75,10 +80,8 @@ public class Main extends Activity {
     private static final String API_PHONE = "phone";
     private static final String API_TWITTER = "twitter";
     private static final String API_ML = "ml";
-    private static final String API_SENSORS = "sensors";
-    private static final String TWITTER = "https://twitter.com/#!/";
-    private static final String MAP_SEARCH = "geo:0,0?q=";
-    private static final String MAP_COORD = "geo:%s,%s?z=23&";
+    private static final String API_STREAM = "stream";
+    private static final String API_CAM = "cam";
 
     protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
     protected static final String API_ICON = "icon";
@@ -547,36 +550,54 @@ public class Main extends Activity {
                     vg.addView(tv);
                 }
             }
-            // Sensors
-            if (!api.isNull(API_SENSORS)) {
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText("Sensors");
+            // Stream and cam
+            if (!api.isNull(API_STREAM) || !api.isNull(API_CAM)) {
+                TextView title = (TextView) inflater.inflate(R.layout.title, null);
+                title.setText("Stream");
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
-                JSONObject sensors = api.getJSONObject(API_SENSORS);
-                // Iterate through sensors
-                JSONArray arr = sensors.names();
-                int len = sensors.length();
-                String name;
-                String value;
-                //for (int i = 0; i < len; i++) {
-                //    name = arr.getString(i);
-                //    value = sensors.getJSONArray(name);
-                //    if ( value.length() > 1 ) {
-                //        for( int j = 0; j < value.length(); j++) {
-                //            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                //            tv.setAutoLinkMask(0);
-                //            JSONObject item = value.getJSONObject(j);
-                //            if(!item.isNull("value")){
-                //                tv.setText(name + ": " + item.getString("value"));
-                //            } else {
-                //                tv.setText(name + ": " + value.toString());
-                //            }
-                //            vg.addView(tv);
-                //        }
-                //    }
-                //}
+                // Stream
+                if (!api.isNull(API_STREAM)) {
+                    JSONObject stream = api.optJSONObject(API_STREAM);
+                    if(stream != null) {
+                        JSONArray names = stream.names();
+                        for (int i=0; i<stream.length(); i++){
+                            final String type = names.getString(i);
+                            final String url = stream.getString(type);
+                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                            tv.setText(url);
+                            tv.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setDataAndType(Uri.parse(url), type);
+                                    startActivity(i);
+                                }
+                            });
+                            vg.addView(tv);
+                        }
+                    } else {
+                        String streamStr = api.optString(API_STREAM);
+                        TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                        tv.setText(streamStr);
+                        vg.addView(tv);
+                    }
+                }
+                // Cam
+                if (!api.isNull(API_CAM)){
+                    JSONArray cam = api.optJSONArray(API_CAM);
+                    if (cam != null) {
+                        for (int i=0; i<cam.length(); i++){
+                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                            tv.setText(cam.getString(i));
+                            vg.addView(tv);
+                        }
+                    } else {
+                        String camStr = api.optString(API_CAM);
+                        TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                        tv.setText(camStr);
+                        vg.addView(tv);
+                    }
+                }
             }
         } catch (Exception e) {
             mErrorApiTitle = e.getClass().getCanonicalName();
