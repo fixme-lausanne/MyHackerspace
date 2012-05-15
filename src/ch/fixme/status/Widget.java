@@ -175,7 +175,7 @@ public class Widget extends AppWidgetProvider {
         }
 
         @Override
-        protected void onCancelled () {
+        protected void onCancelled() {
             // Set alarm 5 seconds in the future
             Log.i(Main.TAG, "Set alarm in 5 seconds");
             Intent intent = getIntent(mCtxt, mId);

@@ -63,7 +63,6 @@ public class Main extends Activity {
     private static final String TWITTER = "https://twitter.com/#!/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&";
-    private static final String LINK_STREAM = "";
 
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
@@ -501,7 +500,8 @@ public class Main extends Activity {
                     tv.setAutoLinkMask(0);
                     tv.setText(api.getString(API_LON) + ", "
                             + api.getString(API_LAT));
-                    Linkify.addLinks(tv, ptn, String.format(MAP_COORD, api.getString(API_LON), api.getString(API_LAT)));
+                    Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
+                            api.getString(API_LON), api.getString(API_LAT)));
                     vg.addView(tv);
                 }
             }
@@ -552,19 +552,21 @@ public class Main extends Activity {
             }
             // Stream and cam
             if (!api.isNull(API_STREAM) || !api.isNull(API_CAM)) {
-                TextView title = (TextView) inflater.inflate(R.layout.title, null);
+                TextView title = (TextView) inflater.inflate(R.layout.title,
+                        null);
                 title.setText("Stream");
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 // Stream
                 if (!api.isNull(API_STREAM)) {
                     JSONObject stream = api.optJSONObject(API_STREAM);
-                    if(stream != null) {
+                    if (stream != null) {
                         JSONArray names = stream.names();
-                        for (int i=0; i<stream.length(); i++){
+                        for (int i = 0; i < stream.length(); i++) {
                             final String type = names.getString(i);
                             final String url = stream.getString(type);
-                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                            TextView tv = (TextView) inflater.inflate(
+                                    R.layout.entry, null);
                             tv.setText(url);
                             tv.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
@@ -577,23 +579,26 @@ public class Main extends Activity {
                         }
                     } else {
                         String streamStr = api.optString(API_STREAM);
-                        TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                        TextView tv = (TextView) inflater.inflate(
+                                R.layout.entry, null);
                         tv.setText(streamStr);
                         vg.addView(tv);
                     }
                 }
                 // Cam
-                if (!api.isNull(API_CAM)){
+                if (!api.isNull(API_CAM)) {
                     JSONArray cam = api.optJSONArray(API_CAM);
                     if (cam != null) {
-                        for (int i=0; i<cam.length(); i++){
-                            TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                        for (int i = 0; i < cam.length(); i++) {
+                            TextView tv = (TextView) inflater.inflate(
+                                    R.layout.entry, null);
                             tv.setText(cam.getString(i));
                             vg.addView(tv);
                         }
                     } else {
                         String camStr = api.optString(API_CAM);
-                        TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+                        TextView tv = (TextView) inflater.inflate(
+                                R.layout.entry, null);
                         tv.setText(camStr);
                         vg.addView(tv);
                     }
