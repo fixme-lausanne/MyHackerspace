@@ -31,6 +31,9 @@ import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
+    // FIXME: Set interval in preferences
+    private final static long UPDATE_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15 / 6;
+
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
@@ -49,6 +52,7 @@ public class Widget extends AppWidgetProvider {
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
             edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
+            edit.remove(Main.PREF_INIT_WIDGET + widgetId);
             edit.commit();
 
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
@@ -61,6 +65,13 @@ public class Widget extends AppWidgetProvider {
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
+            // Set initialize
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(ctxt);
+            Editor edit = prefs.edit();
+            edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, false);
+            edit.commit();
+            // Update timer
             Intent intent = getIntent(ctxt, widgetId);
             setAlarm(ctxt, intent, widgetId);
             Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
@@ -80,15 +91,13 @@ public class Widget extends AppWidgetProvider {
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId,
             int delay) {
-        // FIXME: Set interval in preferences
-        long interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
         AlarmManager am = (AlarmManager) ctxt
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + delay, interval, pi);
-        Log.i(Main.TAG, "start notification every " + interval / 1000 + "s");
+                SystemClock.elapsedRealtime() + delay, UPDATE_INTERVAL, pi);
+        Log.i(Main.TAG, "start notification every " + UPDATE_INTERVAL / 1000 + "s");
     }
 
     private static class GetImage extends AsyncTask<String, Void, byte[]> {
@@ -147,6 +156,11 @@ public class Widget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         manager.updateAppWidget(widgetId, views);
         Log.i(Main.TAG, "Update widget image for id=" + widgetId);
+        // Is initialized
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
+        Editor edit = prefs.edit();
+        edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, true);
+        edit.commit();
     }
 
     private static class GetApiTask extends AsyncTask<String, Void, String> {
@@ -186,10 +200,11 @@ public class Widget extends AppWidgetProvider {
         protected void onPostExecute(String result) {
             try {
                 JSONObject api = new JSONObject(result);
-                // Update only if older than 15mn
+                // Update only if older than 15mn and not the first time
                 if (!api.isNull(Main.API_LASTCHANGE)){
-                    Long last = api.getLong(Main.API_LASTCHANGE) * 1000;
-                    if (System.currentTimeMillis() - last < AlarmManager.INTERVAL_FIFTEEN_MINUTES) {
+                    long last = api.getLong(Main.API_LASTCHANGE) * 1000;
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtxt);
+                    if (System.currentTimeMillis() - last > UPDATE_INTERVAL && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)) {
                         Log.i(Main.TAG, "Nothing to update");
                         return;
                     }
@@ -229,13 +244,14 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected void onHandleIntent(Intent intent) {
             Log.i(Main.TAG, "UpdateService started");
+            final Context ctxt = UpdateService.this;
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             SharedPreferences prefs = PreferenceManager
-                    .getDefaultSharedPreferences(UpdateService.this);
+                    .getDefaultSharedPreferences(ctxt);
             if (prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
-                new GetApiTask(getApplicationContext(), widgetId).execute(prefs
+                new GetApiTask(ctxt, widgetId).execute(prefs
                         .getString(Main.PREF_API_URL_WIDGET + widgetId,
                                 Main.API_DEFAULT));
             }

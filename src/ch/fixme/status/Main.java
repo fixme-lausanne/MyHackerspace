@@ -55,6 +55,7 @@ public class Main extends Activity {
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
+    protected static final String PREF_INIT_WIDGET = "init_widget_";
     private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_ERROR = 1;
