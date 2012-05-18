@@ -186,6 +186,13 @@ public class Widget extends AppWidgetProvider {
         protected void onPostExecute(String result) {
             try {
                 JSONObject api = new JSONObject(result);
+                // Update only if older than 15mn
+                if (!api.isNull(Main.API_LASTCHANGE)){
+                    Long last = api.getLong(Main.API_LASTCHANGE);
+                    if (System.currentTimeMillis() - last < AlarmManager.INTERVAL_FIFTEEN_MINUTES) {
+                        return;
+                    }
+                }
                 // Mandatory fields
                 String status = Main.API_ICON_CLOSED;
                 if (api.getBoolean(Main.API_STATUS)) {

@@ -67,7 +67,6 @@ public class Main extends Activity {
     private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
     private static final String API_URL = "url";
-    private static final String API_LASTCHANGE = "lastchange";
     private static final String API_STATUS_TXT = "status";
     private static final String API_DURATION = "duration";
     private static final String API_ADDRESS = "address";
@@ -88,6 +87,7 @@ public class Main extends Activity {
     protected static final String API_ICON_CLOSED = "closed";
     protected static final String API_LOGO = "logo";
     protected static final String API_STATUS = "open";
+    protected static final String API_LASTCHANGE = "lastchange";
 
     private SharedPreferences mPrefs;
     private String mResultHs;
