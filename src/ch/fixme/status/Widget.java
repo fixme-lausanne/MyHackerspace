@@ -32,7 +32,7 @@ import android.widget.RemoteViews;
 public class Widget extends AppWidgetProvider {
 
     // FIXME: Set interval in preferences
-    private final static long UPDATE_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15 / 6;
+    private final static long UPDATE_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
 
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
@@ -53,6 +53,7 @@ public class Widget extends AppWidgetProvider {
             Editor edit = prefs.edit();
             edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
             edit.remove(Main.PREF_INIT_WIDGET + widgetId);
+            edit.remove(Main.PREF_LAST_WIDGET + widgetId);
             edit.commit();
 
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
@@ -200,20 +201,25 @@ public class Widget extends AppWidgetProvider {
         protected void onPostExecute(String result) {
             try {
                 JSONObject api = new JSONObject(result);
-                // Update only if older than 15mn and not the first time
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtxt);
+                boolean statusBool = api.getBoolean(Main.API_STATUS);
+                // Update only if different than last status and not the first time
                 if (!api.isNull(Main.API_LASTCHANGE)){
                     long last = api.getLong(Main.API_LASTCHANGE) * 1000;
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtxt);
-                    if (System.currentTimeMillis() - last > UPDATE_INTERVAL && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)) {
+                    if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
+                            && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)) {
                         Log.i(Main.TAG, "Nothing to update");
                         return;
                     }
                 }
                 // Mandatory fields
                 String status = Main.API_ICON_CLOSED;
-                if (api.getBoolean(Main.API_STATUS)) {
+                if (statusBool) {
                     status = Main.API_ICON_OPEN;
                 }
+                Editor edit = prefs.edit();
+                edit.putBoolean(Main.PREF_LAST_WIDGET + mId, statusBool);
+                edit.commit();
                 // Status icon or space icon
                 if (!api.isNull(Main.API_ICON)) {
                     JSONObject status_icon = api.getJSONObject(Main.API_ICON);
