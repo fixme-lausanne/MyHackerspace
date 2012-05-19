@@ -8,6 +8,11 @@ My Hackerspace
 RELEASE NOTES
 =============
 
+1.5
+---
+
+- Only download image if there is a change of state (better battery live and reduce network usage)
+
 1.4
 ---
 
