@@ -392,7 +392,6 @@ public class Main extends Activity {
             s.setAdapter(adapter);
             s.setSelection(url.indexOf(mApiUrl));
             s.setOnItemSelectedListener(new OnItemSelectedListener() {
-                @Override
                 public void onItemSelected(AdapterView<?> adapter, View v,
                         int position, long id) {
                     Editor edit = mPrefs.edit();
@@ -411,7 +410,6 @@ public class Main extends Activity {
                     edit.commit();
                 }
 
-                @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
                 }
             });
