@@ -104,6 +104,9 @@ public class Main extends Activity {
     private boolean finishApi = false;
     private boolean finishDir = false;
 
+    private GetDirTask getDirTask;
+    private GetApiTask getApiTask;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Before onCreate for Android 1.5
@@ -119,7 +122,8 @@ public class Main extends Activity {
             finishApi = true;
             // Configure the widget
             setContentView(R.layout.main);
-            new GetDirTask().execute(API_DIRECTORY);
+            getDirTask = new GetDirTask();
+            getDirTask.execute(API_DIRECTORY);
 
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -164,8 +168,10 @@ public class Main extends Activity {
             if (data == null
                     || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
                             .containsKey(STATE_DIR))) {
-                new GetDirTask().execute(API_DIRECTORY);
-                new GetApiTask().execute(mApiUrl);
+                getDirTask = new GetDirTask();
+                getDirTask.execute(API_DIRECTORY);
+                getApiTask = new GetApiTask();
+                getApiTask.execute(mApiUrl);
             } else {
                 // Recover from saved instance
                 finishApi = true;
@@ -178,6 +184,17 @@ public class Main extends Activity {
                 populateDataDir();
             }
         }
+    }
+    
+    @Override
+    protected void onDestroy() {
+        if(getApiTask != null){
+            getApiTask.cancel(true);
+        }
+        if(getDirTask != null){
+            getDirTask.cancel(true);
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -199,26 +216,26 @@ public class Main extends Activity {
     protected Dialog onCreateDialog(int id) {
         AlertDialog dialog = null;
         switch (id) {
-            case DIALOG_LOADING:
-                dialog = new ProgressDialog(this);
-                dialog.setCancelable(false);
-                dialog.setMessage("Loading...");
-                dialog.setCancelable(true);
-                ((ProgressDialog) dialog).setIndeterminate(true);
-                break;
-            case DIALOG_ERROR:
-                if (mErrorApiMsg != null) {
-                    dialog = new AlertDialog.Builder(this)
-                            .setTitle("Error: " + mErrorApiTitle)
-                            .setMessage(mErrorApiMsg)
-                            .setNeutralButton("Ok", null).create();
-                } else if (mErrorDirMsg != null) {
-                    dialog = new AlertDialog.Builder(this)
-                            .setTitle("Error: " + mErrorDirTitle)
-                            .setMessage(mErrorDirMsg)
-                            .setNeutralButton("Ok", null).create();
-                }
-                break;
+        case DIALOG_LOADING:
+            dialog = new ProgressDialog(this);
+            dialog.setCancelable(false);
+            dialog.setMessage("Loading...");
+            dialog.setCancelable(true);
+            ((ProgressDialog) dialog).setIndeterminate(true);
+            break;
+        case DIALOG_ERROR:
+            if (mErrorApiMsg != null) {
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle("Error: " + mErrorApiTitle)
+                        .setMessage(mErrorApiMsg).setNeutralButton("Ok", null)
+                        .create();
+            } else if (mErrorDirMsg != null) {
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle("Error: " + mErrorDirTitle)
+                        .setMessage(mErrorDirMsg).setNeutralButton("Ok", null)
+                        .create();
+            }
+            break;
         }
         return dialog;
     }
@@ -402,7 +419,8 @@ public class Main extends Activity {
                     } else {
                         if (!initialize) {
                             edit.putString(PREF_API_URL, url.get(position));
-                            new GetApiTask().execute(url.get(position));
+                            getApiTask = new GetApiTask();
+                            getApiTask.execute(url.get(position));
                         } else {
                             initialize = false;
                         }
