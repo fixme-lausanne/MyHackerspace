@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -346,7 +347,10 @@ public class Main extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO: Show that the image is loading
+            ImageView img = (ImageView) findViewById(mId);
+            img.setImageResource(android.R.drawable.ic_popup_sync);
+            AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
+            anim.start();
         }
 
         @Override
