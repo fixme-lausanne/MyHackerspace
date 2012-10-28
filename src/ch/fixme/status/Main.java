@@ -431,7 +431,7 @@ public class Main extends Activity {
                 public void onNothingSelected(AdapterView<?> arg0) {
                 }
             });
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             showError();
