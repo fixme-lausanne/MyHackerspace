@@ -5,3 +5,4 @@ gen
 project.properties
 local.properties
 build.properties
+.settings
