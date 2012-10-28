@@ -99,6 +99,7 @@ public class Main extends Activity {
 
     private GetDirTask getDirTask;
     private GetApiTask getApiTask;
+    private GetImage getImageTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,6 +183,9 @@ public class Main extends Activity {
         }
         if(getDirTask != null){
             getDirTask.cancel(true);
+        }
+        if(getImageTask != null){
+            getImageTask.cancel(true);
         }
         super.onDestroy();
     }
@@ -457,7 +461,8 @@ public class Main extends Activity {
             // .getString(status));
             // }
             // } else {
-            new GetImage(R.id.space_image).execute(api.getString(API_LOGO));
+            getImageTask = new GetImage(R.id.space_image);
+            getImageTask.execute(api.getString(API_LOGO));
             // }
             // Status
             if (!api.isNull(API_STATUS_TXT)) {
