@@ -8,6 +8,13 @@ My Hackerspace
 RELEASE NOTES
 =============
 
+1.5.1
+-----
+
+- Bug fixes
+- Add a spinner when loading image
+- Faster download
+
 1.5
 ---
 
