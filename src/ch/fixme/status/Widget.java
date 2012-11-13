@@ -31,9 +31,6 @@ import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
 
-    // FIXME: Set interval in preferences
-    private final static long UPDATE_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
@@ -92,13 +89,18 @@ public class Widget extends AppWidgetProvider {
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId,
             int delay) {
+        // Get interval
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
+        long update_intervale = prefs.getLong(Prefs.KEY_CHECK_INTERVAL,
+                Prefs.DEFAULT_CHECK_INTERVAL) * 60 * 1000;
+        // Set alarm
         AlarmManager am = (AlarmManager) ctxt
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + delay, UPDATE_INTERVAL, pi);
-        Log.i(Main.TAG, "start notification every " + UPDATE_INTERVAL / 1000 + "s");
+                SystemClock.elapsedRealtime() + delay, update_interval, pi);
+        Log.i(Main.TAG, "start notification every " + update_interval / 1000 + "s");
     }
 
     private static class GetImage extends AsyncTask<String, Void, byte[]> {
