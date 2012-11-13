@@ -2,6 +2,7 @@
  * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 2, see README
  */
+package ch.fixme.status;
 
 import android.preference.PreferenceActivity;
 import android.os.Bundle;

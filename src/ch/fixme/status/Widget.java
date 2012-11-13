@@ -91,7 +91,7 @@ public class Widget extends AppWidgetProvider {
             int delay) {
         // Get interval
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
-        long update_intervale = prefs.getLong(Prefs.KEY_CHECK_INTERVAL,
+        long update_interval = prefs.getLong(Prefs.KEY_CHECK_INTERVAL,
                 Prefs.DEFAULT_CHECK_INTERVAL) * 60 * 1000;
         // Set alarm
         AlarmManager am = (AlarmManager) ctxt
