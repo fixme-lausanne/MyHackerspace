@@ -137,6 +137,13 @@ public class Main extends Activity {
                             finish();
                         }
                     });
+            findViewById(R.id.preferences).setVisibility(View.VISIBLE);
+            findViewById(R.id.preferences).setOnClickListener(
+                    new View.OnClickListener() {
+                        public void onClick(View v) {
+                            startActivity(new Intent(Main.this, Prefs.class));
+                        }
+                    });
         } else {
             // Network check
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -176,7 +183,7 @@ public class Main extends Activity {
             }
         }
     }
-    
+
     @Override
     protected void onDestroy() {
         if(getApiTask != null){
@@ -289,7 +296,7 @@ public class Main extends Activity {
     }
 
     private class GetApiTask extends AsyncTask<String, Void, String> {
-        
+
         private String mErrorTitle;
         private String mErrorMsg;
 

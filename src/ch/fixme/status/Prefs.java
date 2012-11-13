@@ -11,7 +11,7 @@ import ch.fixme.status.R;
 public class Prefs extends PreferenceActivity{
 
     public static final String KEY_CHECK_INTERVAL = "check_interval";
-    public static final int DEFAULT_CHECK_INTERVAL = 15; //15mn
+    public static final String DEFAULT_CHECK_INTERVAL = "30"; //minutes
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

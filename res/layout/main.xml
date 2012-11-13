@@ -90,6 +90,15 @@
         android:layout_marginTop="12dip"
         android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/preferences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="Prefs"
+            android:visibility="gone" />
+
         <Spinner
             android:id="@+id/choose"
             android:layout_width="0dip"

@@ -4,21 +4,12 @@
  Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
  Licensed under GNU's GPL 2, see README
 -->
-<PreferenceCategory
-    android:title="General">
 
-    <PreferenceScreen
-        android:title="General"
-        android:summary="">
-
-        <EditTextPreference
-            android:key="check_interval"
-            android:title="Check interval"
-            android:summary="Interval in minutes to check the status"
-            android:defaultValue="900"
-            android:inputType="number" />
-    </PreferenceScreen>
-
-</PreferenceCategory>
+    <EditTextPreference
+        android:key="check_interval"
+        android:title="Check interval"
+        android:summary="Interval in minutes to check the status"
+        android:defaultValue="30"
+        android:inputType="number" />
 
 </PreferenceScreen>
