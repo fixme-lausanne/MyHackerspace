@@ -148,13 +148,7 @@ public class Main extends Activity {
                         }
                     });
         } else {
-            // Network check
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo == null || !netInfo.isConnected()) {
-                showError("Network", "Network unreachable");
-                return;
-            }
+            checkNetwork();
 
             // Show current hackerspace information
             if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
@@ -247,6 +241,16 @@ public class Main extends Activity {
             break;
         }
         return dialog;
+    }
+
+    private boolean checkNetwork(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo == null || !netInfo.isConnected()) {
+            showError("Network", "Network unreachable");
+            return false;
+        }
+        return true;
     }
 
     private void showError(String title, String msg) {
