@@ -145,7 +145,8 @@ public class Main extends Activity {
                     });
         } else {
             checkNetwork();
-            showCurrentHs(intent, savedInstanceState);
+            showHsList(savedInstanceState);
+            showHsInfo(intent, savedInstanceState);
         }
     }
 
@@ -175,7 +176,8 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
-
+            checkNetwork();
+            showHsInfo(getIntent(), null);
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -212,10 +214,22 @@ public class Main extends Activity {
         return dialog;
     }
 
+    private void showHsList(Bundle savedInstanceState){
+        final Bundle data = (Bundle) getLastNonConfigurationInstance();
+        if (data == null || (savedInstanceState == null &&
+                    !savedInstanceState.containsKey(STATE_DIR))) {
+            getDirTask = new GetDirTask();
+            getDirTask.execute(API_DIRECTORY);
+        } else {
+            finishDir = true;
+            mResultDir = data.getString(STATE_DIR);
+            populateDataDir();
+        }
+    }
 
-    private void showCurrentHs(Intent intent, Bundle savedInstanceState){
-        // Show current hackerspace information
-        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+    private void showHsInfo(Intent intent, Bundle savedInstanceState){
+        // Get hackerspace api url
+        if (intent != null && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
                             + intent.getIntExtra(
@@ -225,22 +239,16 @@ public class Main extends Activity {
         } else {
             mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
         }
+        // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        if (data == null
-                || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
-                        .containsKey(STATE_DIR))) {
-            getDirTask = new GetDirTask();
-            getDirTask.execute(API_DIRECTORY);
+        if (data == null || (savedInstanceState == null &&
+                    !savedInstanceState.containsKey(STATE_HS))) {
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
         } else {
-            // Recover from saved instance
             finishApi = true;
-            finishDir = true;
             mResultHs = data.getString(STATE_HS);
-            mResultDir = data.getString(STATE_DIR);
             populateDataHs();
-            populateDataDir();
         }
     }
 
