@@ -111,9 +111,7 @@ public class Main extends Activity {
         setTheme(android.R.style.Theme_Light_NoTitleBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-
         Intent intent = getIntent();
         if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
                 .getAction())) {
@@ -149,35 +147,7 @@ public class Main extends Activity {
                     });
         } else {
             checkNetwork();
-
-            // Show current hackerspace information
-            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                mApiUrl = mPrefs.getString(
-                        PREF_API_URL_WIDGET
-                                + intent.getIntExtra(
-                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                                        AppWidgetManager.INVALID_APPWIDGET_ID),
-                        API_DEFAULT);
-            } else {
-                mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
-            }
-            final Bundle data = (Bundle) getLastNonConfigurationInstance();
-            if (data == null
-                    || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
-                            .containsKey(STATE_DIR))) {
-                getDirTask = new GetDirTask();
-                getDirTask.execute(API_DIRECTORY);
-                getApiTask = new GetApiTask();
-                getApiTask.execute(mApiUrl);
-            } else {
-                // Recover from saved instance
-                finishApi = true;
-                finishDir = true;
-                mResultHs = data.getString(STATE_HS);
-                mResultDir = data.getString(STATE_DIR);
-                populateDataHs();
-                populateDataDir();
-            }
+            showCurrentHs(intent, savedInstanceState);
         }
     }
 
@@ -241,6 +211,38 @@ public class Main extends Activity {
             break;
         }
         return dialog;
+    }
+
+
+    private void showCurrentHs(Intent intent, Bundle savedInstanceState){
+        // Show current hackerspace information
+        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            mApiUrl = mPrefs.getString(
+                    PREF_API_URL_WIDGET
+                            + intent.getIntExtra(
+                                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                    AppWidgetManager.INVALID_APPWIDGET_ID),
+                    API_DEFAULT);
+        } else {
+            mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
+        }
+        final Bundle data = (Bundle) getLastNonConfigurationInstance();
+        if (data == null
+                || !(savedInstanceState.containsKey(STATE_HS) && savedInstanceState
+                        .containsKey(STATE_DIR))) {
+            getDirTask = new GetDirTask();
+            getDirTask.execute(API_DIRECTORY);
+            getApiTask = new GetApiTask();
+            getApiTask.execute(mApiUrl);
+        } else {
+            // Recover from saved instance
+            finishApi = true;
+            finishDir = true;
+            mResultHs = data.getString(STATE_HS);
+            mResultDir = data.getString(STATE_DIR);
+            populateDataHs();
+            populateDataDir();
+        }
     }
 
     private boolean checkNetwork(){
