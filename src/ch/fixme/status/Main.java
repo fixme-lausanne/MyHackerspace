@@ -107,8 +107,6 @@ public class Main extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Before onCreate for Android 1.5
-        setTheme(android.R.style.Theme_Light_NoTitleBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
@@ -179,8 +177,9 @@ public class Main extends Activity {
         case R.id.menu_refresh:
 
             return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
-        return (super.onOptionsItemSelected(item));
     }
 
     @Override
