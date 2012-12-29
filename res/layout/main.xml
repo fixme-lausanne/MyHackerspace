@@ -52,11 +52,11 @@
         <TextView
             android:id="@+id/space_name"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_marginBottom="4dip"
             android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip"
-            android:gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
