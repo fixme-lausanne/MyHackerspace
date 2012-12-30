@@ -8,6 +8,14 @@ My Hackerspace
 RELEASE NOTES
 =============
 
+1.6
+---
+
+- Better layout in general
+- Use Holo light theme for Android >=3
+- Refresh the current hackerspace
+- Default to 15mn for the Widget
+
 1.5.1
 -----
 
