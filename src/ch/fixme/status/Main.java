@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -61,6 +62,7 @@ public class Main extends Activity {
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
+    private static final int DIALOG_LIST= 1;
     private static final String STATE_HS = "hs";
     private static final String STATE_DIR = "dir";
     private static final String TWITTER = "https://twitter.com/#!/";
@@ -128,7 +130,7 @@ public class Main extends Activity {
             findViewById(R.id.main_view).setVisibility(View.GONE);
             findViewById(R.id.scroll).setVisibility(View.GONE);
             findViewById(R.id.choose_msg).setVisibility(View.VISIBLE);
-            findViewById(R.id.choose_ok).setVisibility(View.VISIBLE);
+            findViewById(R.id.choose_container).setVisibility(View.VISIBLE);
             findViewById(R.id.choose_ok).setOnClickListener(
                     new View.OnClickListener() {
                         public void onClick(View v) {
@@ -145,7 +147,7 @@ public class Main extends Activity {
                     });
         } else {
             checkNetwork();
-            showHsList(savedInstanceState);
+            getHsList(savedInstanceState);
             showHsInfo(intent, savedInstanceState);
         }
     }
@@ -179,6 +181,9 @@ public class Main extends Activity {
             checkNetwork();
             showHsInfo(getIntent(), null);
             return true;
+        case R.id.menu_choose:
+            showDialog(DIALOG_LIST);
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -210,11 +215,59 @@ public class Main extends Activity {
             dialog.setCancelable(true);
             ((ProgressDialog) dialog).setIndeterminate(true);
             break;
+        case DIALOG_LIST:
+            return createHsDialog();
         }
         return dialog;
     }
 
-    private void showHsList(Bundle savedInstanceState){
+    private AlertDialog createHsDialog(){
+        // Construct hackerspaces list
+        try {
+            JSONObject obj = new JSONObject(mResultDir);
+            JSONArray arr = obj.names();
+            int len = obj.length();
+            String[] names = new String[len];
+            final ArrayList<String> url = new ArrayList<String>(len);
+            for (int i = 0; i < len; i++) {
+                names[i] = arr.getString(i);
+            }
+            Arrays.sort(names);
+            for (int i = 0; i < len; i++) {
+                url.add(i, obj.getString(names[i]));
+            }
+
+            // Create the dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+            builder.setTitle(R.string.choose)
+                   .setItems(names, new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int which) {
+                            Editor edit = mPrefs.edit();
+                            if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
+                                    .equals(getIntent().getAction())) {
+                                edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
+                                        url.get(which));
+                            } else {
+                                if (!initialize) {
+                                    edit.putString(PREF_API_URL, url.get(which));
+                                    getApiTask = new GetApiTask();
+                                    getApiTask.execute(url.get(which));
+                                } else {
+                                    initialize = false;
+                                }
+                            }
+                            edit.commit();
+                   }
+            });
+            return builder.create();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    private void getHsList(Bundle savedInstanceState){
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null || (savedInstanceState == null &&
                     !savedInstanceState.containsKey(STATE_DIR))) {
@@ -223,7 +276,6 @@ public class Main extends Activity {
         } else {
             finishDir = true;
             mResultDir = data.getString(STATE_DIR);
-            populateDataDir();
         }
     }
 
@@ -316,7 +368,6 @@ public class Main extends Activity {
             dismissLoading();
             if (mErrorMsg == null) {
                 mResultDir = result;
-                populateDataDir();
             } else {
                 showError(mErrorTitle, mErrorMsg);
             }
@@ -416,56 +467,6 @@ public class Main extends Activity {
             }
         }
 
-    }
-
-    private void populateDataDir() {
-        try {
-            // Construct hackerspaces list
-            Spinner s = (Spinner) findViewById(R.id.choose);
-            JSONObject obj = new JSONObject(mResultDir);
-            JSONArray arr = obj.names();
-            int len = obj.length();
-            String[] names = new String[len];
-            final ArrayList<String> url = new ArrayList<String>(len);
-            for (int i = 0; i < len; i++) {
-                names[i] = arr.getString(i);
-            }
-            Arrays.sort(names);
-            for (int i = 0; i < len; i++) {
-                url.add(i, obj.getString(names[i]));
-            }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main.this,
-                    android.R.layout.simple_spinner_item, names);
-            adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-            s.setAdapter(adapter);
-            s.setSelection(url.indexOf(mApiUrl));
-            s.setOnItemSelectedListener(new OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> adapter, View v,
-                        int position, long id) {
-                    Editor edit = mPrefs.edit();
-                    if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
-                            .equals(getIntent().getAction())) {
-                        edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
-                                url.get(position));
-                    } else {
-                        if (!initialize) {
-                            edit.putString(PREF_API_URL, url.get(position));
-                            getApiTask = new GetApiTask();
-                            getApiTask.execute(url.get(position));
-                        } else {
-                            initialize = false;
-                        }
-                    }
-                    edit.commit();
-                }
-
-                public void onNothingSelected(AdapterView<?> arg0) {
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
-        }
     }
 
     private void populateDataHs() {

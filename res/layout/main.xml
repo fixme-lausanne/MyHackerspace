@@ -69,11 +69,13 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        android:id="@+id/choose_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dip"
         android:layout_marginTop="5dip"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/preferences"
@@ -81,8 +83,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="24dip"
             android:paddingRight="24dip"
-            android:text="Prefs"
-            android:visibility="gone" />
+            android:text="Prefs" />
 
         <Spinner
             android:id="@+id/choose"
@@ -98,8 +99,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="24dip"
             android:paddingRight="24dip"
-            android:text="Ok"
-            android:visibility="gone" />
+            android:text="Ok" />
     </LinearLayout>
 
 </LinearLayout>
