@@ -99,7 +99,6 @@ public class Main extends Activity {
     private String mResultDir;
     private String mApiUrl;
     private int mAppWidgetId;
-    private boolean initialize = true;
     private boolean finishApi = false;
     private boolean finishDir = false;
 
@@ -248,13 +247,9 @@ public class Main extends Activity {
                                 edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
                                         url.get(which));
                             } else {
-                                if (!initialize) {
-                                    edit.putString(PREF_API_URL, url.get(which));
-                                    getApiTask = new GetApiTask();
-                                    getApiTask.execute(url.get(which));
-                                } else {
-                                    initialize = false;
-                                }
+                                edit.putString(PREF_API_URL, url.get(which));
+                                getApiTask = new GetApiTask();
+                                getApiTask.execute(url.get(which));
                             }
                             edit.commit();
                    }
