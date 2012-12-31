@@ -116,10 +116,11 @@ public class Main extends Activity {
                 .getAction())) {
             finishApi = true;
             // Configure the widget
+            // FIXME: Better widget selection dialog
             setContentView(R.layout.main);
             getDirTask = new GetDirTask();
             getDirTask.execute(API_DIRECTORY);
-
+            showDialog(DIALOG_LIST);
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 mAppWidgetId = extras.getInt(
