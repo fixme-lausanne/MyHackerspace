@@ -11,5 +11,11 @@
         android:id="@+id/menu_refresh"
         android:icon="@+drawable/ic_action_refresh"
         android:showAsAction="ifRoom|withText"
-        android:title="refresh"/>
+        android:title="Refresh"/>
+
+    <item
+        android:id="@+id/menu_prefs"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="never"
+        android:title="Preferences"/>
 </menu>

@@ -11,29 +11,6 @@
     android:paddingRight="8dip" >
 
     <LinearLayout
-        android:id="@+id/choose_msg"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dip"
-            android:layout_marginTop="12dip"
-            android:gravity="center_horizontal"
-            android:text="Select a hackerspace and press OK"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_marginBottom="8dip"
-            android:background="#0099CC" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/main_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -67,39 +44,5 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
-
-    <LinearLayout
-        android:id="@+id/choose_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="5dip"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/preferences"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="24dip"
-            android:paddingRight="24dip"
-            android:text="Prefs" />
-
-        <Spinner
-            android:id="@+id/choose"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawSelectorOnTop="true"
-            android:prompt="@string/choose" />
-
-        <Button
-            android:id="@+id/choose_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="24dip"
-            android:paddingRight="24dip"
-            android:text="Ok" />
-    </LinearLayout>
 
 </LinearLayout>

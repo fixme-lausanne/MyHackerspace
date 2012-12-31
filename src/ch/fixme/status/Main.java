@@ -40,13 +40,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Main extends Activity {
@@ -69,7 +65,7 @@ public class Main extends Activity {
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&";
 
-    private static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
+    public static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
     private static final String API_URL = "url";
     private static final String API_STATUS_TXT = "status";
@@ -98,7 +94,6 @@ public class Main extends Activity {
     private String mResultHs;
     private String mResultDir;
     private String mApiUrl;
-    private int mAppWidgetId;
     private boolean finishApi = false;
     private boolean finishDir = false;
 
@@ -112,44 +107,9 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         Intent intent = getIntent();
-        if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(intent
-                .getAction())) {
-            finishApi = true;
-            // Configure the widget
-            // FIXME: Better widget selection dialog
-            setContentView(R.layout.main);
-            getDirTask = new GetDirTask();
-            getDirTask.execute(API_DIRECTORY);
-            showDialog(DIALOG_LIST);
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                mAppWidgetId = extras.getInt(
-                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        AppWidgetManager.INVALID_APPWIDGET_ID);
-            }
-            findViewById(R.id.main_view).setVisibility(View.GONE);
-            findViewById(R.id.scroll).setVisibility(View.GONE);
-            findViewById(R.id.choose_msg).setVisibility(View.VISIBLE);
-            findViewById(R.id.choose_container).setVisibility(View.VISIBLE);
-            findViewById(R.id.choose_ok).setOnClickListener(
-                    new View.OnClickListener() {
-                        public void onClick(View v) {
-                            setWidgetAlarm();
-                            finish();
-                        }
-                    });
-            findViewById(R.id.preferences).setVisibility(View.VISIBLE);
-            findViewById(R.id.preferences).setOnClickListener(
-                    new View.OnClickListener() {
-                        public void onClick(View v) {
-                            startActivity(new Intent(Main.this, Prefs.class));
-                        }
-                    });
-        } else {
-            checkNetwork();
-            getHsList(savedInstanceState);
-            showHsInfo(intent, savedInstanceState);
-        }
+        checkNetwork();
+        getHsList(savedInstanceState);
+        showHsInfo(intent, savedInstanceState);
     }
 
     @Override
@@ -183,6 +143,9 @@ public class Main extends Activity {
             return true;
         case R.id.menu_choose:
             showDialog(DIALOG_LIST);
+            return true;
+        case R.id.menu_prefs:
+        	startActivity(new Intent(Main.this, Prefs.class));
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -239,19 +202,13 @@ public class Main extends Activity {
 
             // Create the dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
-            builder.setTitle(R.string.choose)
+            builder.setTitle(R.string.choose_hs)
                    .setItems(names, new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int which) {
                             Editor edit = mPrefs.edit();
-                            if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
-                                    .equals(getIntent().getAction())) {
-                                edit.putString(PREF_API_URL_WIDGET + mAppWidgetId,
-                                        url.get(which));
-                            } else {
-                                edit.putString(PREF_API_URL, url.get(which));
-                                getApiTask = new GetApiTask();
-                                getApiTask.execute(url.get(which));
-                            }
+                            edit.putString(PREF_API_URL, url.get(which));
+                            getApiTask = new GetApiTask();
+                            getApiTask.execute(url.get(which));
                             edit.commit();
                    }
             });
@@ -328,14 +285,7 @@ public class Main extends Activity {
         }
     }
 
-    private void setWidgetAlarm() {
-        Context ctxt = getApplicationContext();
-        Intent i = Widget.getIntent(ctxt, mAppWidgetId);
-        setResult(RESULT_OK, i);
-        Widget.setAlarm(ctxt, i, mAppWidgetId);
-    }
-
-    private class GetDirTask extends AsyncTask<String, Void, String> {
+    public class GetDirTask extends AsyncTask<String, Void, String> {
 
         private String mErrorTitle;
         private String mErrorMsg;

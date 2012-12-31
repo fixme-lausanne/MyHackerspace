@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+    Licensed under GNU's GPL 2, see README
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dip" >
+
+    <TextView
+        android:id="@+id/choose_txt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_hs"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <Spinner
+        android:id="@+id/choose_hs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_txt"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/choose_hs" />
+    
+    <TextView
+        android:id="@+id/choose_update_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_hs"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/choose_time" />
+    
+    <EditText
+        android:id="@+id/choose_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_update_txt"
+        android:inputType="numberDecimal"
+        android:text="@string/choose_time_default" />
+
+    <Button
+        android:id="@+id/choose_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_update"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="24dip"
+        android:paddingRight="24dip"
+        android:text="@string/ok" />
+
+</RelativeLayout>

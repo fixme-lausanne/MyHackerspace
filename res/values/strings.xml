@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="choose">Choose a hackerspace: </string>
     <string name="app_name">MyHackerspace</string>
+    <string name="ok">OK</string>
+    <string name="choose_hs">Choose an hackerspace: </string>
+    <string name="choose_time">Choose an update interval in minutes: </string>
+    <string name="choose_time_default">30</string>
 
 </resources>
