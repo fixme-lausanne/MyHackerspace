@@ -225,6 +225,7 @@ public class Main extends Activity {
             builder.setTitle(R.string.choose_hs)
                    .setItems(names, new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int which) {
+                    	    setIntent(null);
                             Editor edit = mPrefs.edit();
                             edit.putString(PREF_API_URL, url.get(which));
                             getApiTask = new GetApiTask();
