@@ -409,8 +409,10 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 ((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
                         .decodeByteArray(result, 0, result.length));
-            } else {
-                showError(mErrorTitle, mErrorMsg);
+			} else {
+				showError(mErrorTitle, mErrorMsg);
+				((ImageView) findViewById(mId))
+						.setImageResource(android.R.drawable.ic_menu_report_image);
             }
         }
 
