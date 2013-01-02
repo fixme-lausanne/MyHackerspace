@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -183,6 +184,25 @@ public class Main extends Activity {
         }
         return dialog;
     }
+
+	@Override
+	public void startActivity(Intent intent) {
+		// http://stackoverflow.com/questions/13691241/autolink-not-working-on-htc-htclinkifydispatcher
+		try {
+			/* First attempt at fixing an HTC broken by evil Apple patents. */
+			if (intent.getComponent() != null
+					&& ".HtcLinkifyDispatcherActivity".equals(intent
+							.getComponent().getShortClassName()))
+				intent.setComponent(null);
+			super.startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			/*
+			 * Probably an HTC broken by evil Apple patents. This is not
+			 * perfect, but better than crashing the whole application.
+			 */
+			super.startActivity(Intent.createChooser(intent, null));
+		}
+	}
 
     private AlertDialog createHsDialog(){
         // Construct hackerspaces list
