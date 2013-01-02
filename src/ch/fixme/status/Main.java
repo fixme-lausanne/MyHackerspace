@@ -64,7 +64,7 @@ public class Main extends Activity {
     private static final String STATE_DIR = "dir";
     private static final String TWITTER = "https://twitter.com/#!/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
-    private static final String MAP_COORD = "geo:%s,%s?z=23&";
+    private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
     public static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
     private static final String API_NAME = "space";
@@ -514,13 +514,14 @@ public class Main extends Activity {
                     vg.addView(tv);
                 }
                 if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
+                	String addr = (!api.isNull(API_ADDRESS)) ? api.getString(API_ADDRESS) : "";
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setAutoLinkMask(0);
                     tv.setText(api.getString(API_LON) + ", "
                             + api.getString(API_LAT));
                     Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            api.getString(API_LAT), api.getString(API_LON)));
+                            api.getString(API_LAT), api.getString(API_LON), addr));
                     vg.addView(tv);
                 }
             }
