@@ -520,7 +520,7 @@ public class Main extends Activity {
                     tv.setText(api.getString(API_LON) + ", "
                             + api.getString(API_LAT));
                     Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            api.getString(API_LON), api.getString(API_LAT)));
+                            api.getString(API_LAT), api.getString(API_LON)));
                     vg.addView(tv);
                 }
             }
