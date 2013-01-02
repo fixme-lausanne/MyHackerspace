@@ -15,6 +15,9 @@ RELEASE NOTES
 - Use Holo light theme for Android >=3
 - Refresh the current hackerspace
 - Default to 15mn for the Widget
+- Settings button to change the widget interval
+- Fix lat/lon link
+- Fix crash when maps/email app not found
 
 1.5.1
 -----
