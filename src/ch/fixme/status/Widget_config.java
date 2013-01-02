@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -68,7 +67,6 @@ public class Widget_config extends Activity {
 							int before, int count) {
 						String inter = s.toString();
 						if (!"".equals(inter) && !"0".equals(inter)) {
-							Log.e("TEST", "updated prout");
 							Editor edit = mPrefs.edit();
 							edit.putString(Prefs.KEY_CHECK_INTERVAL, inter);
 							edit.commit();

@@ -26,17 +26,36 @@
             android:adjustViewBounds="true"
             android:contentDescription="Logo of the hackerspace"
             android:src="@android:drawable/ic_menu_gallery" />
-
-        <TextView
-            android:id="@+id/space_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+        
+        
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical"
             android:layout_marginBottom="4dip"
             android:layout_marginLeft="4dip"
-            android:layout_marginRight="4dip"
-            android:gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:layout_marginRight="4dip" >
 
+	        <TextView
+	            android:id="@+id/space_name"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="4dip"
+	            android:gravity="center_horizontal"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:text="FIXME" />
+	        
+	        <TextView
+	            android:id="@+id/space_url"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:autoLink="web"
+	            android:gravity="center_horizontal"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:text="https://fixme.ch" />
+	        
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView

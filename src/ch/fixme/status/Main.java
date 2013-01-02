@@ -337,6 +337,7 @@ public class Main extends Activity {
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
             ((TextView) findViewById(R.id.space_name)).setText("");
+            ((TextView) findViewById(R.id.space_url)).setText("");
             ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
         }
 
@@ -442,6 +443,8 @@ public class Main extends Activity {
             }
             ((TextView) findViewById(R.id.space_name)).setText(api
                     .getString(API_NAME));
+			((TextView) findViewById(R.id.space_url)).setText(api
+					.getString(API_URL));
             // Status icon or space icon
             // if (!api.isNull(API_ICON)) {
             // JSONObject status_icon = api.getJSONObject(API_ICON);
@@ -507,12 +510,6 @@ public class Main extends Activity {
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 JSONObject contact = api.getJSONObject(API_CONTACT);
-                // URL
-                if (!api.isNull(API_URL)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                    tv.setText(api.getString(API_URL));
-                    vg.addView(tv);
-                }
                 // Phone
                 if (!contact.isNull(API_PHONE)) {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
