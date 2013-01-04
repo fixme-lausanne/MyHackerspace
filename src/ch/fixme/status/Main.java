@@ -175,7 +175,7 @@ public class Main extends Activity {
         case DIALOG_LOADING:
             dialog = new ProgressDialog(this);
             dialog.setCancelable(false);
-            dialog.setMessage("Loading...");
+            dialog.setMessage(getString(R.string.msg_loading));
             dialog.setCancelable(true);
             ((ProgressDialog) dialog).setIndeterminate(true);
             break;
@@ -281,8 +281,9 @@ public class Main extends Activity {
     private boolean checkNetwork(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo == null || !netInfo.isConnected()) {
-            showError("Network", "Network unreachable");
+		if (netInfo == null || !netInfo.isConnected()) {
+			showError(getString(R.string.error_network_title),
+					getString(R.string.error_network_msg));
             return false;
         }
         return true;
@@ -290,9 +291,11 @@ public class Main extends Activity {
 
     private void showError(String title, String msg) {
         if (title != null && msg != null) {
-            // showDialog(DIALOG_ERROR);
-            new AlertDialog.Builder(this).setTitle("Error: " + title)
-                    .setMessage(msg).setNeutralButton("Ok", null).show();
+			// showDialog(DIALOG_ERROR);
+			new AlertDialog.Builder(this)
+					.setTitle(getString(R.string.error_title) + title)
+					.setMessage(msg)
+					.setNeutralButton(getString(R.string.ok), null).show();
         }
     }
 
@@ -357,8 +360,8 @@ public class Main extends Activity {
             showDialog(DIALOG_LOADING);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
-            ((TextView) findViewById(R.id.space_name)).setText("");
-            ((TextView) findViewById(R.id.space_url)).setText("");
+            ((TextView) findViewById(R.id.space_name)).setText(getString(R.string.empty));
+            ((TextView) findViewById(R.id.space_url)).setText(getString(R.string.empty));
             ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
         }
 
@@ -450,7 +453,7 @@ public class Main extends Activity {
             scroll.removeAllViews();
             scroll.addView(vg);
             // Mandatory fields
-            String status_txt = "";
+            String status_txt;
             // String status = API_ICON_CLOSED;
             if (api.getBoolean(API_STATUS)) {
                 // status = API_ICON_OPEN;
@@ -488,13 +491,13 @@ public class Main extends Activity {
                 Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
                 SimpleDateFormat formatter = new SimpleDateFormat();
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText("Last change: " + formatter.format(date));
+                tv.setText(getString(R.string.api_lastchange) + formatter.format(date));
                 vg.addView(tv);
             }
             if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText("Duration: " + api.getString(API_DURATION)
-                        + " hour(s)");
+                tv.setText(getString(R.string.api_duration) + api.getString(API_DURATION)
+                        + getString(R.string.api_duration_hours));
                 vg.addView(tv);
             }
             // Location
@@ -503,7 +506,7 @@ public class Main extends Activity {
                     || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
                 TextView title = (TextView) inflater.inflate(R.layout.title,
                         null);
-                title.setText("Location");
+                title.setText(getString(R.string.api_location));
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 if (!api.isNull(API_ADDRESS)) {
@@ -514,8 +517,9 @@ public class Main extends Activity {
                     Linkify.addLinks(tv, ptn, MAP_SEARCH);
                     vg.addView(tv);
                 }
-                if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
-                	String addr = (!api.isNull(API_ADDRESS)) ? api.getString(API_ADDRESS) : "";
+				if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
+					String addr = (!api.isNull(API_ADDRESS)) ? api
+							.getString(API_ADDRESS) : getString(R.string.empty);
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setAutoLinkMask(0);
@@ -530,7 +534,7 @@ public class Main extends Activity {
             if (!api.isNull(API_CONTACT)) {
                 TextView title = (TextView) inflater.inflate(R.layout.title,
                         null);
-                title.setText("Contact");
+                title.setText(R.string.api_contact);
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 JSONObject contact = api.getJSONObject(API_CONTACT);
@@ -575,7 +579,7 @@ public class Main extends Activity {
             if (!api.isNull(API_STREAM) || !api.isNull(API_CAM)) {
                 TextView title = (TextView) inflater.inflate(R.layout.title,
                         null);
-                title.setText("Stream");
+                title.setText(getString(R.string.api_stream));
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
                 // Stream

@@ -91,7 +91,7 @@ public class Widget_config extends Activity {
 		case DIALOG_LOADING:
 			dialog = new ProgressDialog(this);
 			dialog.setCancelable(false);
-			dialog.setMessage("Loading...");
+			dialog.setMessage(getString(R.string.msg_loading));
 			dialog.setCancelable(true);
 			((ProgressDialog) dialog).setIndeterminate(true);
 			break;

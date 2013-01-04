@@ -2,9 +2,23 @@
 <resources>
 
     <string name="app_name">MyHackerspace</string>
+    <string name="empty"></string>
     <string name="ok">OK</string>
+    
     <string name="choose_hs">Choose an hackerspace: </string>
     <string name="choose_time">Choose an update interval in minutes: </string>
     <string name="choose_time_default">30</string>
+    
+    <string name="msg_loading">Loading…</string>
+    <string name="error_title">Error: </string>
+    <string name="error_network_title">Network</string>
+    <string name="error_network_msg">Network unreachable</string>
+    
+    <string name="api_lastchange">Last change: </string>
+    <string name="api_duration">Duration: </string>
+    <string name="api_duration_hours"> hour(s)</string>
+    <string name="api_location">Location</string>
+    <string name="api_contact">Contact</string>
+    <string name="api_stream">Stream</string>
 
 </resources>
