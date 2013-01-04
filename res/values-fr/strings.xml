@@ -3,7 +3,7 @@
     
     <string name="ui_logo">Logo du hackerspace</string>
     
-    <string name="choose_hs">Choisir un hackerspace: </string>
+    <string name="choose_hs">Choisir un hackerspace</string>
     <string name="choose_time">Choisir un interval en minutes: </string>
     
     <string name="btn_refresh">Rafraichir</string>

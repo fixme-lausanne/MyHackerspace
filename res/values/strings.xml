@@ -9,7 +9,7 @@
     <string name="ui_name">FIXME</string>
     <string name="ui_url">https://fixme.ch</string>
     
-    <string name="choose_hs">Choose an hackerspace: </string>
+    <string name="choose_hs">Choose an hackerspace</string>
     <string name="choose_time">Choose an update interval in minutes: </string>
     <string name="choose_time_default">30</string>
     
