@@ -19,7 +19,7 @@
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#0099CC"
-        android:text="Status" />
+        android:text="@string/api_status" />
 
     <View
         android:layout_width="fill_parent"

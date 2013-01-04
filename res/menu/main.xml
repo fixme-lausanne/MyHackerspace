@@ -5,17 +5,17 @@
         android:id="@+id/menu_choose"
         android:icon="@android:drawable/ic_input_get"
         android:showAsAction="ifRoom|withText"
-        android:title="Choose a hackerspace"/>
+        android:title="@string/choose_hs"/>
 
     <item
         android:id="@+id/menu_refresh"
         android:icon="@+drawable/ic_action_refresh"
         android:showAsAction="ifRoom|withText"
-        android:title="Refresh"/>
+        android:title="@string/btn_refresh"/>
 
     <item
         android:id="@+id/menu_prefs"
         android:icon="@android:drawable/ic_menu_preferences"
         android:showAsAction="never"
-        android:title="Preferences"/>
+        android:title="@string/btn_prefs"/>
 </menu>

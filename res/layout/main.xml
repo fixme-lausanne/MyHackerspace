@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
             android:adjustViewBounds="true"
-            android:contentDescription="Logo of the hackerspace"
+            android:contentDescription="@string/ui_logo"
             android:src="@android:drawable/ic_menu_gallery" />
         
         
@@ -44,7 +44,7 @@
 	            android:layout_marginBottom="4dip"
 	            android:gravity="center_horizontal"
 	            android:textAppearance="?android:attr/textAppearanceLarge"
-	            android:text="FIXME" />
+	            android:text="@string/ui_name" />
 	        
 	        <TextView
 	            android:id="@+id/space_url"
@@ -53,7 +53,7 @@
 	            android:autoLink="web"
 	            android:gravity="center_horizontal"
 	            android:textAppearance="?android:attr/textAppearanceSmall"
-	            android:text="https://fixme.ch" />
+	            android:text="@string/ui_url" />
 	        
         </LinearLayout>
     </LinearLayout>
