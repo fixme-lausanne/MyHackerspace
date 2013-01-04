@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="choose_hs">Choisir un hackerspace: </string>
+    <string name="choose_time">Choisir un interval en minutes: </string>
+    
+    <string name="msg_loading">Chargement…</string>
+    <string name="error_title">Erreur: </string>
+    <string name="error_network_title">Réseau</string>
+    <string name="error_network_msg">Réseau déconnecté</string>
+    
+    <string name="api_lastchange">Dernier changement: </string>
+    <string name="api_duration">Durée: </string>
+    <string name="api_duration_hours"> heure(s)</string>
+    <string name="api_location">Localisation</string>
+    <string name="api_contact">Contact</string>
+    <string name="api_stream">Flux</string>
+
+</resources>
