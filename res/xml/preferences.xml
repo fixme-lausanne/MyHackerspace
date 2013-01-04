@@ -7,8 +7,8 @@
 
     <EditTextPreference
         android:key="check_interval"
-        android:title="Check interval"
-        android:summary="Interval in minutes to check the status"
+        android:title="@string/prefs_interval_title"
+        android:summary="@string/prefs_interval_summary"
         android:defaultValue="30"
         android:inputType="number" />
 

@@ -21,6 +21,9 @@
     <string name="error_network_title">Network</string>
     <string name="error_network_msg">Network unreachable</string>
     
+    <string name="prefs_interval_title">Check interval</string>
+    <string name="prefs_interval_summary">Interval in minutes to check the status</string>
+    
     <string name="api_status">Status</string>
     <string name="api_lastchange">Last change: </string>
     <string name="api_duration">Duration: </string>

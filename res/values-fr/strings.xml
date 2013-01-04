@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <string name="ui_logo">Logo du hackerspace</string>
+    
     <string name="choose_hs">Choisir un hackerspace: </string>
     <string name="choose_time">Choisir un interval en minutes: </string>
+    
+    <string name="btn_refresh">Rafraichir</string>
+    <string name="btn_prefs">Préférences</string>
     
     <string name="msg_loading">Chargement…</string>
     <string name="error_title">Erreur: </string>
     <string name="error_network_title">Réseau</string>
     <string name="error_network_msg">Réseau déconnecté</string>
+    
+    <string name="prefs_interval_title">Interval de vérification</string>
+    <string name="prefs_interval_summary">Interval en minutes entre les vérifications</string>
     
     <string name="api_lastchange">Dernier changement: </string>
     <string name="api_duration">Durée: </string>
