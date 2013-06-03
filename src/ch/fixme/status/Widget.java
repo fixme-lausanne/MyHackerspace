@@ -198,7 +198,7 @@ public class Widget extends AppWidgetProvider {
 			// Set alarm 5 seconds in the future
 			Log.i(Main.TAG, "Set alarm in 5 seconds");
 			Intent intent = getIntent(mCtxt, mId);
-			setAlarm(mCtxt, intent, mId, 5000);
+			setAlarm(mCtxt, intent, mId, 1000);
 		}
 
 		@Override
