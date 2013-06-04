@@ -51,6 +51,7 @@ public class Widget extends AppWidgetProvider {
 			edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
 			edit.remove(Main.PREF_INIT_WIDGET + widgetId);
 			edit.remove(Main.PREF_LAST_WIDGET + widgetId);
+			edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
 			edit.commit();
 
 			Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
@@ -143,11 +144,16 @@ public class Widget extends AppWidgetProvider {
 			AppWidgetManager manager, Bitmap bitmap, String text) {
 		RemoteViews views = new RemoteViews(ctxt.getPackageName(),
 				R.layout.widget);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(ctxt);
+		Editor edit = prefs.edit();
 		if (bitmap != null) {
 			views.setImageViewBitmap(R.id.widget_image, bitmap);
+			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't need to force
 		} else {
 			views.setImageViewResource(R.id.widget_image,
 					android.R.drawable.ic_popup_sync);
+			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, true); // Something went wrong
 		}
 		if (text != null) {
 			views.setTextViewText(R.id.widget_status, text);
@@ -162,9 +168,6 @@ public class Widget extends AppWidgetProvider {
 		views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
 		manager.updateAppWidget(widgetId, views);
 		// Is initialized
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(ctxt);
-		Editor edit = prefs.edit();
 		edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, true);
 		edit.commit();
 	}
@@ -212,8 +215,8 @@ public class Widget extends AppWidgetProvider {
 				// time
 				if (!api.isNull(Main.API_LASTCHANGE)) {
 					if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
-							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId,
-									false)) {
+							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
+							&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId, false)) {
 						Log.i(Main.TAG, "Nothing to update");
 						return;
 					}

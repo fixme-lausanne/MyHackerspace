@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -160,6 +161,7 @@ public class Widget_config extends Activity {
 				});
 			} catch (JSONException e) {
 				e.printStackTrace();
+                Log.e(Main.TAG, result);
 			}
 
 			removeDialog(DIALOG_LOADING);
