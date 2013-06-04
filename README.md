@@ -8,6 +8,13 @@ My Hackerspace
 RELEASE NOTES
 =============
 
+1.6.1
+-----
+
+- French translation
+- Fix the widget's image not updating
+- Change to the new spaceapi url
+
 1.6
 ---
 
