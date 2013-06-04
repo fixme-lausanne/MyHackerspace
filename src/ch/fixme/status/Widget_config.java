@@ -161,6 +161,7 @@ public class Widget_config extends Activity {
 				});
 			} catch (JSONException e) {
 				e.printStackTrace();
+                Log.e(Main.TAG, Main.API_DIRECTORY);
                 Log.e(Main.TAG, result);
 			}
 

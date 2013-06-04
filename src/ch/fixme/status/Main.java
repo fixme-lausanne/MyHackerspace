@@ -67,7 +67,7 @@ public class Main extends Activity {
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
-    public static final String API_DIRECTORY = "http://openspace.slopjong.de/directory.json";
+    public static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
     private static final String API_NAME = "space";
     private static final String API_URL = "url";
     private static final String API_STATUS_TXT = "status";
