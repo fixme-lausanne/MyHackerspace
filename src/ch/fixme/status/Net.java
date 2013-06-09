@@ -26,7 +26,7 @@ import android.os.Build;
 public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-            + Build.MODEL + ") MyHackerspace/1.6";
+            + Build.MODEL + ") MyHackerspace/1.6.1";
     private static final int BUFSIZE = 2 * 1024;
 
     public Net(String urlStr, OutputStream out)

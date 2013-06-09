@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2013 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 2, see README
  */
 
@@ -7,6 +7,7 @@ package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +50,7 @@ import android.widget.TextView;
 public class Main extends Activity {
 
     // API: http://hackerspaces.nl/spaceapi/
+	// 		http://spaceapi.net
 
     protected static String TAG = "MyHackerspace";
     protected static final String PKG = "ch.fixme.status";
@@ -490,9 +492,10 @@ public class Main extends Activity {
             ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
             if (!api.isNull(API_LASTCHANGE)) {
                 Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
-                SimpleDateFormat formatter = new SimpleDateFormat();
+                DateFormat formatter = SimpleDateFormat.getDateTimeInstance();
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText(getString(R.string.api_lastchange) + formatter.format(date));
+                tv.setAutoLinkMask(0);
+                tv.setText(getString(R.string.api_lastchange) + " " + formatter.format(date));
                 vg.addView(tv);
             }
             if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {

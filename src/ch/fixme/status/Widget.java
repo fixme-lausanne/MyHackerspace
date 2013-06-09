@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2013 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 2, see README
  */
 
