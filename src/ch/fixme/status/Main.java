@@ -60,23 +60,23 @@ public class Main extends Activity {
     protected static final String PREF_INIT_WIDGET = "init_widget_";
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
+    protected static final String STATE_HS = "hs";
+    protected static final String STATE_DIR = "dir";
     private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST= 1;
-    private static final String STATE_HS = "hs";
-    private static final String STATE_DIR = "dir";
     private static final String TWITTER = "https://twitter.com/#!/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
     public static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
-    private static final String API_NAME = "space";
+    protected static final String API_NAME = "space";
+    protected static final String API_LON = "lon";
+    protected static final String API_LAT = "lat";
     private static final String API_URL = "url";
     private static final String API_STATUS_TXT = "status";
     private static final String API_DURATION = "duration";
     private static final String API_ADDRESS = "address";
-    private static final String API_LON = "lon";
-    private static final String API_LAT = "lat";
     private static final String API_CONTACT = "contact";
     private static final String API_EMAIL = "email";
     private static final String API_IRC = "irc";
@@ -150,6 +150,12 @@ public class Main extends Activity {
             return true;
         case R.id.menu_prefs:
         	startActivity(new Intent(Main.this, Prefs.class));
+            return true;
+        case R.id.menu_map:
+        	Intent intent = new Intent(Main.this, Map.class);
+        	intent.putExtra(STATE_DIR, mResultDir);
+        	intent.putExtra(STATE_HS, mApiUrl);
+        	startActivity(intent);
             return true;
         default:
             return super.onOptionsItemSelected(item);
