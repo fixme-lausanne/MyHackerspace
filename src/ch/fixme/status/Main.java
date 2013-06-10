@@ -154,8 +154,14 @@ public class Main extends Activity {
         case R.id.menu_map:
         	Intent intent = new Intent(Main.this, Map.class);
         	intent.putExtra(STATE_DIR, mResultDir);
-        	intent.putExtra(STATE_HS, mApiUrl);
-        	startActivity(intent);
+            try {
+                JSONObject api = new JSONObject(mResultHs);
+                intent.putExtra(API_LON, api.getString(API_LON));
+                intent.putExtra(API_LAT, api.getString(API_LAT));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return true;
         default:
             return super.onOptionsItemSelected(item);

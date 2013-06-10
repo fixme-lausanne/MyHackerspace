@@ -27,7 +27,6 @@ public class Map extends Activity {
 	private MapView mMapView;
 	private MyItemizedOverlay mMarkers;
 	private ArrayList<OverlayItem> mItems = new ArrayList<OverlayItem>();
-	private String mHs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,14 +35,19 @@ public class Map extends Activity {
 		mMapView.setBuiltInZoomControls(true);
         mMapView.setMultiTouchControls(true);
 		setContentView(mMapView);
-		mMapView.getController().setZoom(2);
+		mMapView.getController().setZoom(3);
 
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		if (extras.containsKey(Main.STATE_DIR)
-				&& extras.containsKey(Main.STATE_HS)) {
+				&& extras.containsKey(Main.API_LON)
+                && extras.containsKey(Main.API_LAT)) {
 			final String dir = extras.getString(Main.STATE_DIR);
-			mHs = extras.getString(Main.STATE_HS);
+			String lon = extras.getString(Main.API_LON);
+			String lat = extras.getString(Main.API_LAT);
+            GeoPoint pt = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lon));
+            mMapView.getController().animateTo(pt);
+            mMapView.getController().setZoom(7);
 			getHackerspacesMarker(dir);
 		} else {
 			Log.e(Main.TAG, "Error loading list");
@@ -116,10 +120,6 @@ public class Map extends Activity {
                         }
                         new GetImage(marker).execute(icon);
                     }
-					if (mHs.equals(mUrl)) {
-						mMapView.getController().setCenter(pt);
-						mMapView.getController().setZoom(8);
-					}
 					mMapView.invalidate();
 				}
 			} catch (JSONException e) {
