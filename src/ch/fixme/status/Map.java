@@ -32,6 +32,7 @@ public class Map extends Activity {
 		super.onCreate(savedInstanceState);
 		mMapView = new MapView(this, 256);
 		mMapView.setBuiltInZoomControls(true);
+        mMapView.setMultiTouchControls(true);
 		setContentView(mMapView);
 		mMapView.getController().setZoom(2);
 
