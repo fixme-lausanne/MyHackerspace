@@ -16,6 +16,8 @@ import org.osmdroid.views.overlay.OverlayItem;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,6 +108,14 @@ public class Map extends Activity {
 					OverlayItem marker = new OverlayItem(
 							api.getString(Main.API_NAME), "", pt);
 					mMarkers.addMarker(marker);
+                    if (!api.isNull(Main.API_ICON)) {
+					    JSONObject status_icon = api.getJSONObject(Main.API_ICON);
+                        String icon = status_icon.getString(Main.API_ICON_CLOSED);
+                        if (api.getBoolean(Main.API_STATUS)) {
+                            icon = status_icon.getString(Main.API_ICON_OPEN);
+                        }
+                        new GetImage(marker).execute(icon);
+                    }
 					if (mHs.equals(mUrl)) {
 						mMapView.getController().setCenter(pt);
 						mMapView.getController().setZoom(8);
@@ -149,6 +159,34 @@ public class Map extends Activity {
 			mItems.add(overlayItem);
 			populate();
 		}
+	}
+
+	private static class GetImage extends AsyncTask<String, Void, byte[]> {
+
+		private OverlayItem mMarker;
+
+		public GetImage(OverlayItem marker) {
+            mMarker = marker;
+		}
+
+		@Override
+		protected byte[] doInBackground(String... url) {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				Log.i(Main.TAG, "Get image from url " + url[0]);
+				new Net(url[0], os);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return os.toByteArray();
+		}
+
+		@Override
+		protected void onPostExecute(byte[] result) {
+            mMarker.setMarker(new BitmapDrawable(BitmapFactory.decodeByteArray(result, 0, result.length)));
+			//mMapView.invalidate();
+		}
+
 	}
 
 }
