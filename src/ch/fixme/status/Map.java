@@ -99,7 +99,6 @@ public class Map extends Activity {
 		protected void onPostExecute(String result) {
 			try {
 				JSONObject api = new JSONObject(result);
-				Log.i(Main.TAG, "Loaded " + api.getString(Main.API_NAME));
 				if (!api.isNull(Main.API_LAT) && !api.isNull(Main.API_LON)) {
 					GeoPoint pt = new GeoPoint(Double.parseDouble(api
 							.getString(Main.API_LAT)), Double.parseDouble(api
@@ -107,8 +106,6 @@ public class Map extends Activity {
 					OverlayItem marker = new OverlayItem(
 							api.getString(Main.API_NAME), "", pt);
 					mMarkers.addMarker(marker);
-					Log.i(Main.TAG, mUrl);
-					Log.i(Main.TAG, mHs);
 					if (mHs.equals(mUrl)) {
 						mMapView.getController().setCenter(pt);
 						mMapView.getController().setZoom(8);
