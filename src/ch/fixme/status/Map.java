@@ -46,8 +46,8 @@ public class Map extends Activity {
 			String lon = extras.getString(Main.API_LON);
 			String lat = extras.getString(Main.API_LAT);
             GeoPoint pt = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lon));
-            mMapView.getController().animateTo(pt);
             mMapView.getController().setZoom(7);
+            mMapView.getController().animateTo(pt);
 			getHackerspacesMarker(dir);
 		} else {
 			Log.e(Main.TAG, "Error loading list");
