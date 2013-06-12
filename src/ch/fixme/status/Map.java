@@ -8,60 +8,47 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.api.IMapView;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.events.MapAdapter;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.util.BoundingBoxE6;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Point;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 
 public class Map extends Activity {
 
 	private MapView mMapView;
 	private MyItemizedOverlay mMarkers;
-	private ArrayList<OverlayItem> mItems = new ArrayList<OverlayItem>();
+	private ArrayList<MyOverlayItem> mItems = new ArrayList<MyOverlayItem>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mMapView = new MapView(this, 256);
 		mMapView.setBuiltInZoomControls(true);
-        mMapView.setMultiTouchControls(true);
-        mMapView.setMapListener(new MapAdapter(){
-            public boolean onScroll(ScrollEvent event){
-                BoundingBoxE6 bb = mMapView.getBoundingBox();
-                for (OverlayItem item : mItems) {
-                    //item.getDrawable().equals(getResources().getDrawable(R.drawable.myhs))
-                    if (bb.contains(item.getPoint())){
-                        Log.e(Main.TAG, "UPDATE IMAGE");
-                    }
-                }
-                return super.onScroll(event);
-            }
-        });
+		mMapView.setMultiTouchControls(true);
 		setContentView(mMapView);
-
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		if (extras.containsKey(Main.STATE_DIR)
 				&& extras.containsKey(Main.API_LON)
-                && extras.containsKey(Main.API_LAT)) {
+				&& extras.containsKey(Main.API_LAT)) {
 			final String dir = extras.getString(Main.STATE_DIR);
 			String lon = extras.getString(Main.API_LON);
 			String lat = extras.getString(Main.API_LAT);
-            GeoPoint pt = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lon));
-            mMapView.getController().setZoom(7);
-            mMapView.getController().animateTo(pt);
+			GeoPoint pt = new GeoPoint(Double.parseDouble(lat),
+					Double.parseDouble(lon));
+			mMapView.getController().setZoom(7);
+			mMapView.getController().animateTo(pt);
 			getHackerspacesMarker(dir);
 		} else {
 			Log.e(Main.TAG, "Error loading list");
@@ -123,17 +110,26 @@ public class Map extends Activity {
 					GeoPoint pt = new GeoPoint(Double.parseDouble(api
 							.getString(Main.API_LAT)), Double.parseDouble(api
 							.getString(Main.API_LON)));
-					OverlayItem marker = new OverlayItem(
+					MyOverlayItem marker = new MyOverlayItem(
 							api.getString(Main.API_NAME), "", pt);
+					marker.api = api;
 					mMarkers.addMarker(marker);
-                    if (!api.isNull(Main.API_ICON)) {
-					    JSONObject status_icon = api.getJSONObject(Main.API_ICON);
-                        String icon = status_icon.getString(Main.API_ICON_CLOSED);
-                        if (api.getBoolean(Main.API_STATUS)) {
-                            icon = status_icon.getString(Main.API_ICON_OPEN);
-                        }
-                        //new GetImage(marker).execute(icon);
-                    }
+					if (!api.isNull(Main.API_ICON)) {
+						JSONObject status_icon = api
+								.getJSONObject(Main.API_ICON);
+						String icon = status_icon
+								.getString(Main.API_ICON_CLOSED);
+						if (api.getBoolean(Main.API_STATUS)) {
+							icon = status_icon.getString(Main.API_ICON_OPEN);
+						}
+					}
+					BoundingBoxE6 bb = mMapView.getBoundingBox();
+					for (MyOverlayItem item : mItems) {
+						if (bb.contains(item.getPoint())
+								&& item.getDrawable() == null) {
+							new GetImage(item, mMapView).execute();
+						}
+					}
 					mMapView.invalidate();
 				}
 			} catch (JSONException e) {
@@ -144,6 +140,17 @@ public class Map extends Activity {
 		@Override
 		protected void onCancelled() {
 		}
+	}
+
+	private class MyOverlayItem extends OverlayItem {
+
+		private JSONObject api;
+
+		public MyOverlayItem(String aTitle, String aDescription,
+				GeoPoint aGeoPoint) {
+			super(aTitle, aDescription, aGeoPoint);
+		}
+
 	}
 
 	private class MyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
@@ -169,26 +176,52 @@ public class Map extends Activity {
 			return false;
 		}
 
-		public void addMarker(OverlayItem overlayItem) {
+		public void addMarker(MyOverlayItem overlayItem) {
 			mItems.add(overlayItem);
 			populate();
 		}
+
+		@Override
+		public boolean onTouchEvent(MotionEvent event, MapView mapView) {
+			if (event.getAction() == MotionEvent.ACTION_UP) {
+				BoundingBoxE6 bb = mapView.getBoundingBox();
+				for (MyOverlayItem item : mItems) {
+					if (bb.contains(item.getPoint())
+							&& item.getDrawable() == null) {
+						new GetImage(item, mMapView).execute();
+					}
+				}
+			}
+			return super.onTouchEvent(event, mapView);
+		}
 	}
 
-	private static class GetImage extends AsyncTask<String, Void, byte[]> {
+	private static class GetImage extends AsyncTask<Void, Void, byte[]> {
 
-		private OverlayItem mMarker;
+		private MyOverlayItem mMarker;
+		private MapView mMapView;
 
-		public GetImage(OverlayItem marker) {
-            mMarker = marker;
+		public GetImage(MyOverlayItem marker, MapView mapView) {
+			mMarker = marker;
+			mMapView = mapView;
 		}
 
 		@Override
-		protected byte[] doInBackground(String... url) {
+		protected byte[] doInBackground(Void... unused) {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
-				Log.i(Main.TAG, "Get image from url " + url[0]);
-				new Net(url[0], os);
+				// Get URL of the image
+				if (!mMarker.api.isNull(Main.API_ICON)) {
+					JSONObject status_icon = mMarker.api
+							.getJSONObject(Main.API_ICON);
+					String icon = status_icon.getString(Main.API_ICON_CLOSED);
+					if (mMarker.api.getBoolean(Main.API_STATUS)) {
+						icon = status_icon.getString(Main.API_ICON_OPEN);
+					}
+					// Download
+					Log.i(Main.TAG, "Get image from " + icon);
+					new Net(icon, os);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -197,10 +230,11 @@ public class Map extends Activity {
 
 		@Override
 		protected void onPostExecute(byte[] result) {
-            BitmapDrawable img = new BitmapDrawable(BitmapFactory.decodeByteArray(result, 0, result.length));
-            img.setTargetDensity(240);
-            mMarker.setMarker(img);
-			//mMapView.invalidate();
+			BitmapDrawable img = new BitmapDrawable(
+					BitmapFactory.decodeByteArray(result, 0, result.length));
+			img.setTargetDensity(240);
+			mMarker.setMarker(img);
+			mMapView.invalidate();
 		}
 
 	}
