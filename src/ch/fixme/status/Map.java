@@ -12,6 +12,9 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.events.MapAdapter;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.util.BoundingBoxE6;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,6 +37,18 @@ public class Map extends Activity {
 		mMapView = new MapView(this, 256);
 		mMapView.setBuiltInZoomControls(true);
         mMapView.setMultiTouchControls(true);
+        mMapView.setMapListener(new MapAdapter(){
+            public boolean onScroll(ScrollEvent event){
+                BoundingBoxE6 bb = mMapView.getBoundingBox();
+                for (OverlayItem item : mItems) {
+                    //item.getDrawable().equals(getResources().getDrawable(R.drawable.myhs))
+                    if (bb.contains(item.getPoint())){
+                        Log.e(Main.TAG, "UPDATE IMAGE");
+                    }
+                }
+                return super.onScroll(event);
+            }
+        });
 		setContentView(mMapView);
 
 		Intent intent = getIntent();
@@ -117,7 +132,7 @@ public class Map extends Activity {
                         if (api.getBoolean(Main.API_STATUS)) {
                             icon = status_icon.getString(Main.API_ICON_OPEN);
                         }
-                        new GetImage(marker).execute(icon);
+                        //new GetImage(marker).execute(icon);
                     }
 					mMapView.invalidate();
 				}
