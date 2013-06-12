@@ -183,7 +183,9 @@ public class Map extends Activity {
 
 		@Override
 		protected void onPostExecute(byte[] result) {
-            mMarker.setMarker(new BitmapDrawable(BitmapFactory.decodeByteArray(result, 0, result.length)));
+            BitmapDrawable img = new BitmapDrawable(BitmapFactory.decodeByteArray(result, 0, result.length));
+            img.setTargetDensity(240);
+            mMarker.setMarker(img);
 			//mMapView.invalidate();
 		}
 
