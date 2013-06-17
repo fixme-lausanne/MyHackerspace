@@ -25,7 +25,7 @@
     <string name="prefs_interval_title">Check interval</string>
     <string name="prefs_interval_summary">Interval in minutes to check the status in the widget</string>
     <string name="prefs_transparent_title">Widget\' transparency</string>
-    <string name="prefs_transparent_summary">Widgets background will be transparent instead of gray.</string>
+    <string name="prefs_transparent_summary">Widgets background will be transparent instead of gray, at the next update</string>
 
     <string name="api_status">Status</string>
     <string name="api_lastchange">Last change: </string>

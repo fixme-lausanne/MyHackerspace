@@ -18,7 +18,7 @@
     <string name="prefs_interval_title">Interval de vérification</string>
     <string name="prefs_interval_summary">Interval en minutes entre les vérifications du widget</string>
     <string name="prefs_transparent_title">Transparence des widgets</string>
-    <string name="prefs_transparent_summary">Le fond des widgets sera transparent au lieu de gris</string>
+    <string name="prefs_transparent_summary">Le fond des widgets sera transparent au lieu de gris, à la prochaine mise à jour</string>
 
     <string name="api_lastchange">Dernier changement: </string>
     <string name="api_duration">Durée: </string>
