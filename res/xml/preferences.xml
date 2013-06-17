@@ -12,4 +12,10 @@
         android:defaultValue="30"
         android:inputType="number" />
 
+    <CheckBoxPreference
+        android:key="widget_transparency"
+        android:title="@string/prefs_transparent_title"
+        android:summary="@string/prefs_transparent_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>

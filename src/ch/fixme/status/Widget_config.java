@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -57,6 +58,10 @@ public class Widget_config extends Activity {
 		findViewById(R.id.choose_ok).setOnClickListener(
 				new View.OnClickListener() {
 					public void onClick(View v) {
+                        Editor edit = mPrefs.edit();
+                        edit.putBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
+                            ((CheckBox) findViewById(R.id.choose_transparency)).isChecked());
+                        edit.commit();
 						setWidgetAlarm();
 						finish();
 					}
