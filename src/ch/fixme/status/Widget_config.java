@@ -66,6 +66,8 @@ public class Widget_config extends Activity {
 						finish();
 					}
 				});
+        ((CheckBox) findViewById(R.id.choose_transparency)).setChecked(
+            mPrefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY, Prefs.DEFAULT_WIDGET_TRANSPARENCY));
 		((EditText) findViewById(R.id.choose_update))
 				.addTextChangedListener(new TextWatcher() {
 					@Override
