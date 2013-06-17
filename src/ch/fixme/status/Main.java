@@ -277,6 +277,8 @@ public class Main extends Activity {
                                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                                     AppWidgetManager.INVALID_APPWIDGET_ID),
                     API_DEFAULT);
+        } else if (intent != null && intent.hasExtra(STATE_HS)) {
+            mApiUrl = intent.getStringExtra(STATE_HS);
         } else {
             mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
         }

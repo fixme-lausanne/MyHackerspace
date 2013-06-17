@@ -111,7 +111,7 @@ public class Map extends Activity {
 							.getString(Main.API_LAT)), Double.parseDouble(api
 							.getString(Main.API_LON)));
 					MyOverlayItem marker = new MyOverlayItem(
-							api.getString(Main.API_NAME), "", pt);
+							api.getString(Main.API_NAME), mUrl, pt);
 					marker.api = api;
 					mMarkers.addMarker(marker);
 					if (!api.isNull(Main.API_ICON)) {
@@ -194,6 +194,14 @@ public class Map extends Activity {
 			}
 			return super.onTouchEvent(event, mapView);
 		}
+
+        @Override
+        protected boolean onTap(int index) {
+            Intent intent = new Intent(Map.this, Main.class);
+            intent.putExtra(Main.STATE_HS, mItems.get(index).getSnippet());
+            startActivity(intent);
+            return true;
+        }
 	}
 
 	private static class GetImage extends AsyncTask<Void, Void, byte[]> {
