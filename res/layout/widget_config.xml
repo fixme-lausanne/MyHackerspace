@@ -15,7 +15,7 @@
         android:text="@string/choose_hs"
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+
     <Spinner
         android:id="@+id/choose_hs"
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_below="@id/choose_txt"
         android:drawSelectorOnTop="true"
         android:prompt="@string/choose_hs" />
-    
+
     <TextView
         android:id="@+id/choose_update_txt"
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_below="@id/choose_hs"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/choose_time" />
-    
+
     <EditText
         android:id="@+id/choose_update"
         android:layout_width="wrap_content"
@@ -39,6 +39,13 @@
         android:layout_below="@id/choose_update_txt"
         android:inputType="numberDecimal"
         android:text="@string/choose_time_default" />
+
+    <CheckBox
+        android:id="@+id/choose_transparency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_update"
+        android:text="@string/choose_transparency" />
 
     <Button
         android:id="@+id/choose_ok"

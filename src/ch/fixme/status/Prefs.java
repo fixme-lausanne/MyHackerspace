@@ -12,6 +12,8 @@ public class Prefs extends PreferenceActivity{
 
     public static final String KEY_CHECK_INTERVAL = "check_interval";
     public static final String DEFAULT_CHECK_INTERVAL = "30"; //minutes
+    public static final String KEY_WIDGET_TRANSPARENCY = "widget_transparency";
+    public static final boolean DEFAULT_WIDGET_TRANSPARENCY = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

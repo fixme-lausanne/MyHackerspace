@@ -12,6 +12,7 @@
     <string name="choose_hs">Choose an hackerspace</string>
     <string name="choose_time">Choose an update interval in minutes: </string>
     <string name="choose_time_default">30</string>
+    <string name="choose_transparency">Widget\'s transparency</string>
 
     <string name="btn_refresh">Refresh</string>
     <string name="btn_prefs">Preferences</string>
@@ -23,6 +24,8 @@
 
     <string name="prefs_interval_title">Check interval</string>
     <string name="prefs_interval_summary">Interval in minutes to check the status in the widget</string>
+    <string name="prefs_transparent_title">Widget\' transparency</string>
+    <string name="prefs_transparent_summary">Widgets background will be transparent instead of gray.</string>
 
     <string name="api_status">Status</string>
     <string name="api_lastchange">Last change: </string>

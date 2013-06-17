@@ -147,6 +147,10 @@ public class Widget extends AppWidgetProvider {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(ctxt);
 		Editor edit = prefs.edit();
+        if (prefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY, Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
+            Log.e(Main.TAG, "Widget is transparent");
+            views.setInt(R.id.widget_image, "setBackgroundResource", 0);
+        }
 		if (bitmap != null) {
 			views.setImageViewBitmap(R.id.widget_image, bitmap);
 			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't need to force
