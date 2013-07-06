@@ -49,144 +49,146 @@ import android.widget.TextView;
 
 public class Main extends Activity {
 
-    // API: http://hackerspaces.nl/spaceapi/
-	// 		http://spaceapi.net
+	// API: http://hackerspaces.nl/spaceapi/
+	// http://spaceapi.net
 
-    protected static String TAG = "MyHackerspace";
-    protected static final String PKG = "ch.fixme.status";
-    protected static final String OPEN = "Open";
-    protected static final String CLOSED = "Closed";
-    protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
-    protected static final String PREF_INIT_WIDGET = "init_widget_";
-    protected static final String PREF_LAST_WIDGET = "last_widget_";
-    protected static final String PREF_FORCE_WIDGET = "force_widget_";
-    private static final String PREF_API_URL = "apiurl";
-    private static final int DIALOG_LOADING = 0;
-    private static final int DIALOG_LIST= 1;
-    private static final String STATE_HS = "hs";
-    private static final String STATE_DIR = "dir";
-    private static final String TWITTER = "https://twitter.com/#!/";
-    private static final String MAP_SEARCH = "geo:0,0?q=";
-    private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
+	protected static String TAG = "MyHackerspace";
+	protected static final String PKG = "ch.fixme.status";
+	protected static final String OPEN = "Open";
+	protected static final String CLOSED = "Closed";
+	protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
+	protected static final String PREF_INIT_WIDGET = "init_widget_";
+	protected static final String PREF_LAST_WIDGET = "last_widget_";
+	protected static final String PREF_FORCE_WIDGET = "force_widget_";
+	protected static final String STATE_HS = "hs";
+	protected static final String STATE_DIR = "dir";
+	private static final String PREF_API_URL = "apiurl";
+	private static final int DIALOG_LOADING = 0;
+	private static final int DIALOG_LIST = 1;
+	private static final String TWITTER = "https://twitter.com/#!/";
+	private static final String MAP_SEARCH = "geo:0,0?q=";
+	private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
-    public static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
-    private static final String API_NAME = "space";
-    private static final String API_URL = "url";
-    private static final String API_STATUS_TXT = "status";
-    private static final String API_DURATION = "duration";
-    private static final String API_ADDRESS = "address";
-    private static final String API_LON = "lon";
-    private static final String API_LAT = "lat";
-    private static final String API_CONTACT = "contact";
-    private static final String API_EMAIL = "email";
-    private static final String API_IRC = "irc";
-    private static final String API_PHONE = "phone";
-    private static final String API_TWITTER = "twitter";
-    private static final String API_ML = "ml";
-    private static final String API_STREAM = "stream";
-    private static final String API_CAM = "cam";
+	public static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
+	protected static final String API_NAME = "space";
+	protected static final String API_LON = "lon";
+	protected static final String API_LAT = "lat";
+	private static final String API_URL = "url";
+    private static final String API_LEVEL = "api";
+	private static final String API_STATE = "state";
+	private static final String API_STATE_MESSAGE = "message";
+	private static final String API_STATUS_TXT = "status";
+	private static final String API_DURATION = "duration";
+	private static final String API_ADDRESS = "address";
+	private static final String API_CONTACT = "contact";
+	private static final String API_EMAIL = "email";
+	private static final String API_IRC = "irc";
+	private static final String API_PHONE = "phone";
+	private static final String API_TWITTER = "twitter";
+	private static final String API_ML = "ml";
+	private static final String API_STREAM = "stream";
+	private static final String API_CAM = "cam";
 
-    protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
-    protected static final String API_ICON = "icon";
-    protected static final String API_ICON_OPEN = "open";
-    protected static final String API_ICON_CLOSED = "closed";
-    protected static final String API_LOGO = "logo";
-    protected static final String API_STATUS = "open";
-    protected static final String API_LASTCHANGE = "lastchange";
+	protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
+	protected static final String API_ICON = "icon";
+	protected static final String API_ICON_OPEN = "open";
+	protected static final String API_ICON_CLOSED = "closed";
+	protected static final String API_LOGO = "logo";
+	protected static final String API_STATUS = "open";
+	protected static final String API_LASTCHANGE = "lastchange";
 
-    private SharedPreferences mPrefs;
-    private String mResultHs;
-    private String mResultDir;
-    private String mApiUrl;
-    private boolean finishApi = false;
-    private boolean finishDir = false;
+	private SharedPreferences mPrefs;
+	private String mResultHs;
+	private String mResultDir;
+	private String mApiUrl;
+	private boolean finishApi = false;
+	private boolean finishDir = false;
 
-    private GetDirTask getDirTask;
-    private GetApiTask getApiTask;
-    private GetImage getImageTask;
+	private GetDirTask getDirTask;
+	private GetApiTask getApiTask;
+	private GetImage getImageTask;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        Intent intent = getIntent();
-        checkNetwork();
-        getHsList(savedInstanceState);
-        showHsInfo(intent, savedInstanceState);
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
+		Intent intent = getIntent();
+		checkNetwork();
+		getHsList(savedInstanceState);
+		showHsInfo(intent, savedInstanceState);
+	}
 
-    @Override
-    protected void onDestroy() {
-        if(getApiTask != null){
-            getApiTask.cancel(true);
-        }
-        if(getDirTask != null){
-            getDirTask.cancel(true);
-        }
-        if(getImageTask != null){
-            getImageTask.cancel(true);
-        }
-        super.onDestroy();
-    }
+	@Override
+	protected void onDestroy() {
+		if (getApiTask != null) {
+			getApiTask.cancel(true);
+		}
+		if (getDirTask != null) {
+			getDirTask.cancel(true);
+		}
+		if (getImageTask != null) {
+			getImageTask.cancel(true);
+		}
+		super.onDestroy();
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_refresh:
+			checkNetwork();
+			showHsInfo(getIntent(), null);
+			return true;
+		case R.id.menu_choose:
+			showDialog(DIALOG_LIST);
+			return true;
+		case R.id.menu_prefs:
+			startActivity(new Intent(Main.this, Prefs.class));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.menu_refresh:
-            checkNetwork();
-            showHsInfo(getIntent(), null);
-            return true;
-        case R.id.menu_choose:
-            showDialog(DIALOG_LIST);
-            return true;
-        case R.id.menu_prefs:
-        	startActivity(new Intent(Main.this, Prefs.class));
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public Bundle onRetainNonConfigurationInstance() {
+		Bundle data = new Bundle(2);
+		data.putString(STATE_HS, mResultHs);
+		data.putString(STATE_DIR, mResultDir);
+		return data;
+	}
 
-    @Override
-    public Bundle onRetainNonConfigurationInstance() {
-        Bundle data = new Bundle(2);
-        data.putString(STATE_HS, mResultHs);
-        data.putString(STATE_DIR, mResultDir);
-        return data;
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString(STATE_HS, mResultHs);
+		outState.putString(STATE_DIR, mResultDir);
+		super.onSaveInstanceState(outState);
+	}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(STATE_HS, mResultHs);
-        outState.putString(STATE_DIR, mResultDir);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog dialog = null;
-        switch (id) {
-        case DIALOG_LOADING:
-            dialog = new ProgressDialog(this);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.msg_loading));
-            dialog.setCancelable(true);
-            ((ProgressDialog) dialog).setIndeterminate(true);
-            break;
-        case DIALOG_LIST:
-            return createHsDialog();
-        }
-        return dialog;
-    }
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		AlertDialog dialog = null;
+		switch (id) {
+		case DIALOG_LOADING:
+			dialog = new ProgressDialog(this);
+			dialog.setCancelable(false);
+			dialog.setMessage(getString(R.string.msg_loading));
+			dialog.setCancelable(true);
+			((ProgressDialog) dialog).setIndeterminate(true);
+			break;
+		case DIALOG_LIST:
+			return createHsDialog();
+		}
+		return dialog;
+	}
 
 	@Override
 	public void startActivity(Intent intent) {
@@ -440,87 +442,96 @@ public class Main extends Activity {
 				showError(mErrorTitle, mErrorMsg);
 				((ImageView) findViewById(mId))
 						.setImageResource(android.R.drawable.ic_menu_report_image);
-            }
-        }
+			}
+		}
 
-    }
+	}
 
-    private void populateDataHs() {
-        try {
-            JSONObject api = new JSONObject(mResultHs);
-            // Initialize views
-            LayoutInflater inflater = getLayoutInflater();
-            LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
-                    null);
-            ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
-            scroll.removeAllViews();
-            scroll.addView(vg);
-            // Mandatory fields
-            String status_txt;
-            // String status = API_ICON_CLOSED;
-            if (api.getBoolean(API_STATUS)) {
-                // status = API_ICON_OPEN;
-                status_txt = OPEN;
-                ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_online, 0, 0, 0);
+	private void populateDataHs() {
+		try {
+			JSONObject api = new JSONObject(mResultHs);
+			// Initialize views
+			LayoutInflater inflater = getLayoutInflater();
+			LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
+					null);
+			ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
+			scroll.removeAllViews();
+			scroll.addView(vg);
+			// Mandatory fields
+			String status_txt;
+            boolean status;
+            if("0.13".equals(api.getString(API_LEVEL)) && api.has(API_STATE)){
+                status = api.getJSONObject(API_STATE).getBoolean(API_STATUS);
             } else {
-                status_txt = CLOSED;
-                ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_busy, 0, 0, 0);
+                status = api.getBoolean(API_STATUS);
             }
-            ((TextView) findViewById(R.id.space_name)).setText(api
-                    .getString(API_NAME));
+			if (status) {
+				status_txt = OPEN;
+				((TextView) findViewById(R.id.status_txt))
+						.setCompoundDrawablesWithIntrinsicBounds(
+								android.R.drawable.presence_online, 0, 0, 0);
+			} else {
+				status_txt = CLOSED;
+				((TextView) findViewById(R.id.status_txt))
+						.setCompoundDrawablesWithIntrinsicBounds(
+								android.R.drawable.presence_busy, 0, 0, 0);
+			}
+			((TextView) findViewById(R.id.space_name)).setText(api
+					.getString(API_NAME));
 			((TextView) findViewById(R.id.space_url)).setText(api
 					.getString(API_URL));
-            // Status icon or space icon
-            // if (!api.isNull(API_ICON)) {
-            // JSONObject status_icon = api.getJSONObject(API_ICON);
-            // if (!status_icon.isNull(status)) {
-            // new GetImage(R.id.space_image).execute(status_icon
-            // .getString(status));
-            // }
-            // } else {
-            getImageTask = new GetImage(R.id.space_image);
-            getImageTask.execute(api.getString(API_LOGO));
-            // }
-            // Status
-            if (!api.isNull(API_STATUS_TXT)) {
-                status_txt += ": " + api.getString(API_STATUS_TXT);
+			// Status icon or space icon
+			// if (!api.isNull(API_ICON)) {
+			// JSONObject status_icon = api.getJSONObject(API_ICON);
+			// if (!status_icon.isNull(status)) {
+			// new GetImage(R.id.space_image).execute(status_icon
+			// .getString(status));
+			// }
+			// } else {
+			getImageTask = new GetImage(R.id.space_image);
+			getImageTask.execute(api.getString(API_LOGO));
+			// }
+			// Status
+			if (!api.isNull(API_STATUS_TXT)) {
+				status_txt += ": " + api.getString(API_STATUS_TXT);
+			} else if(api.has(API_STATE) && api.getJSONObject(API_STATE).has(API_STATE_MESSAGE)) {
+                status_txt += ": " + api.getJSONObject(API_STATE).getString(API_STATE_MESSAGE);
             }
-            ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
-            if (!api.isNull(API_LASTCHANGE)) {
-                Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
-                DateFormat formatter = SimpleDateFormat.getDateTimeInstance();
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setAutoLinkMask(0);
-                tv.setText(getString(R.string.api_lastchange) + " " + formatter.format(date));
-                vg.addView(tv);
-            }
-            if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText(getString(R.string.api_duration) + api.getString(API_DURATION)
-                        + getString(R.string.api_duration_hours));
-                vg.addView(tv);
-            }
-            // Location
-            Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
-            if (!api.isNull(API_ADDRESS)
-                    || (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText(getString(R.string.api_location));
-                vg.addView(title);
-                inflater.inflate(R.layout.separator, vg);
-                if (!api.isNull(API_ADDRESS)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setAutoLinkMask(0);
-                    tv.setText(api.getString(API_ADDRESS));
-                    Linkify.addLinks(tv, ptn, MAP_SEARCH);
-                    vg.addView(tv);
-                }
+			((TextView) findViewById(R.id.status_txt)).setText(status_txt);
+			if (!api.isNull(API_LASTCHANGE)) {
+				Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
+				DateFormat formatter = SimpleDateFormat.getDateTimeInstance();
+				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+				tv.setAutoLinkMask(0);
+				tv.setText(getString(R.string.api_lastchange) + " "
+						+ formatter.format(date));
+				vg.addView(tv);
+			}
+			if (!api.isNull(API_DURATION) && status) {
+				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+				tv.setText(getString(R.string.api_duration)
+						+ api.getString(API_DURATION)
+						+ getString(R.string.api_duration_hours));
+				vg.addView(tv);
+			}
+			// Location
+			Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
+			if (!api.isNull(API_ADDRESS)
+					|| (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
+				TextView title = (TextView) inflater.inflate(R.layout.title,
+						null);
+				title.setText(getString(R.string.api_location));
+				vg.addView(title);
+				inflater.inflate(R.layout.separator, vg);
+				if (!api.isNull(API_ADDRESS)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setAutoLinkMask(0);
+					tv.setText(api.getString(API_ADDRESS));
+					Linkify.addLinks(tv, ptn, MAP_SEARCH);
+					vg.addView(tv);
+				}
+
 				if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
 					String addr = (!api.isNull(API_ADDRESS)) ? api
 							.getString(API_ADDRESS) : getString(R.string.empty);
