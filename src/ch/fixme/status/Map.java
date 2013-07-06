@@ -1,6 +1,5 @@
 package ch.fixme.status;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -16,7 +15,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -93,13 +92,12 @@ public class Map extends Activity {
 		@Override
 		protected String doInBackground(String... url) {
 			mUrl = url[0];
-			ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
 			try {
-				new Net(mUrl, spaceOs);
+				return new Net(mUrl).getString();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return spaceOs.toString();
+			return "";
 		}
 
 		@Override
@@ -195,16 +193,16 @@ public class Map extends Activity {
 			return super.onTouchEvent(event, mapView);
 		}
 
-        @Override
-        protected boolean onTap(int index) {
-            Intent intent = new Intent(Map.this, Main.class);
-            intent.putExtra(Main.STATE_HS, mItems.get(index).getSnippet());
-            startActivity(intent);
-            return true;
-        }
+		@Override
+		protected boolean onTap(int index) {
+			Intent intent = new Intent(Map.this, Main.class);
+			intent.putExtra(Main.STATE_HS, mItems.get(index).getSnippet());
+			startActivity(intent);
+			return true;
+		}
 	}
 
-	private static class GetImage extends AsyncTask<Void, Void, byte[]> {
+	private static class GetImage extends AsyncTask<Void, Void, Bitmap> {
 
 		private MyOverlayItem mMarker;
 		private MapView mMapView;
@@ -215,8 +213,7 @@ public class Map extends Activity {
 		}
 
 		@Override
-		protected byte[] doInBackground(Void... unused) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+		protected Bitmap doInBackground(Void... unused) {
 			try {
 				// Get URL of the image
 				if (!mMarker.api.isNull(Main.API_ICON)) {
@@ -228,19 +225,18 @@ public class Map extends Activity {
 					}
 					// Download
 					Log.i(Main.TAG, "Get image from " + icon);
-					new Net(icon, os);
+					return new Net(icon).getBitmap();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return os.toByteArray();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(byte[] result) {
-			BitmapDrawable img = new BitmapDrawable(
-					BitmapFactory.decodeByteArray(result, 0, result.length));
-			img.setTargetDensity(240);
+		protected void onPostExecute(Bitmap result) {
+			BitmapDrawable img = new BitmapDrawable(result);
+//			img.setTargetDensity(240);
 			mMarker.setMarker(img);
 			mMapView.invalidate();
 		}
