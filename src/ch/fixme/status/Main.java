@@ -236,7 +236,7 @@ public class Main extends Activity {
 							+ intent.getIntExtra(
 									AppWidgetManager.EXTRA_APPWIDGET_ID,
 									AppWidgetManager.INVALID_APPWIDGET_ID),
-									ParseGeneric.API_DEFAULT);
+					ParseGeneric.API_DEFAULT);
 		} else if (intent != null && intent.hasExtra(STATE_HS)) {
 			mApiUrl = intent.getStringExtra(STATE_HS);
 		} else {
@@ -422,8 +422,9 @@ public class Main extends Activity {
 
 	private void populateDataHs() {
 		try {
-			HashMap<String, Object> data = new ParseGeneric(mResultHs).getData();
-			
+			HashMap<String, Object> data = new ParseGeneric(mResultHs)
+					.getData();
+
 			// Initialize views
 			LayoutInflater inflater = getLayoutInflater();
 			LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
@@ -431,14 +432,14 @@ public class Main extends Activity {
 			ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
 			scroll.removeAllViews();
 			scroll.addView(vg);
-						
+
 			// Mandatory fields
 			((TextView) findViewById(R.id.space_name)).setText((String) data
 					.get(ParseGeneric.API_NAME));
 			((TextView) findViewById(R.id.space_url)).setText((String) data
 					.get(ParseGeneric.API_URL));
 			getImageTask = new GetImage(R.id.space_image);
-			getImageTask.execute((String)data.get(ParseGeneric.API_LOGO));
+			getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
 
 			// Status text
 			String status_txt = "";
@@ -458,7 +459,7 @@ public class Main extends Activity {
 						+ (String) data.get(ParseGeneric.API_STATUS_TXT);
 			}
 			((TextView) findViewById(R.id.status_txt)).setText(status_txt);
-			
+
 			// Status last change
 			if (data.containsKey(ParseGeneric.API_LASTCHANGE)) {
 				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
@@ -467,7 +468,7 @@ public class Main extends Activity {
 						+ (String) data.get(ParseGeneric.API_LASTCHANGE));
 				vg.addView(tv);
 			}
-			
+
 			// Status duration
 			if (data.containsKey(ParseGeneric.API_DURATION)
 					&& (Boolean) data.get(ParseGeneric.API_STATUS)) {
@@ -477,7 +478,7 @@ public class Main extends Activity {
 						+ getString(R.string.api_duration_hours));
 				vg.addView(tv);
 			}
-			
+
 			// Location
 			Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
 			if (data.containsKey(ParseGeneric.API_ADDRESS)
@@ -492,7 +493,7 @@ public class Main extends Activity {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
 					tv.setAutoLinkMask(0);
-					tv.setText((String)data.get(ParseGeneric.API_ADDRESS));
+					tv.setText((String) data.get(ParseGeneric.API_ADDRESS));
 					Linkify.addLinks(tv, ptn, MAP_SEARCH);
 					vg.addView(tv);
 				}
@@ -513,7 +514,7 @@ public class Main extends Activity {
 					vg.addView(tv);
 				}
 			}
-			
+
 			// Contact
 			if (data.containsKey(ParseGeneric.API_PHONE)
 					|| data.containsKey(ParseGeneric.API_TWITTER)
@@ -525,7 +526,7 @@ public class Main extends Activity {
 				title.setText(R.string.api_contact);
 				vg.addView(title);
 				inflater.inflate(R.layout.separator, vg);
-				
+
 				// Phone
 				if (data.containsKey(ParseGeneric.API_PHONE)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
@@ -564,9 +565,10 @@ public class Main extends Activity {
 					vg.addView(tv);
 				}
 			}
-			
+
 //			// Stream and cam
-//			if (!api.isNull(ParseGeneric.API_STREAM) || !api.isNull(ParseGeneric.API_CAM)) {
+//			if (!api.isNull(ParseGeneric.API_STREAM)
+//					|| !api.isNull(ParseGeneric.API_CAM)) {
 //				TextView title = (TextView) inflater.inflate(R.layout.title,
 //						null);
 //				title.setText(getString(R.string.api_stream));
@@ -574,7 +576,8 @@ public class Main extends Activity {
 //				inflater.inflate(R.layout.separator, vg);
 //				// Stream
 //				if (!api.isNull(ParseGeneric.API_STREAM)) {
-//					JSONObject stream = api.optJSONObject(ParseGeneric.API_STREAM);
+//					JSONObject stream = api
+//							.optJSONObject(ParseGeneric.API_STREAM);
 //					if (stream != null) {
 //						JSONArray names = stream.names();
 //						for (int i = 0; i < stream.length(); i++) {
@@ -593,7 +596,8 @@ public class Main extends Activity {
 //							vg.addView(tv);
 //						}
 //					} else {
-//						String streamStr = api.optString(ParseGeneric.API_STREAM);
+//						String streamStr = api
+//								.optString(ParseGeneric.API_STREAM);
 //						TextView tv = (TextView) inflater.inflate(
 //								R.layout.entry, null);
 //						tv.setText(streamStr);
