@@ -537,6 +537,13 @@ public class Main extends Activity {
 					tv.setText((String) data.get(ParseGeneric.API_PHONE));
 					vg.addView(tv);
 				}
+				// SIP
+				if (data.containsKey(ParseGeneric.API_SIP)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_SIP));
+					vg.addView(tv);
+				}
 				// Twitter
 				if (data.containsKey(ParseGeneric.API_TWITTER)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
@@ -545,6 +552,20 @@ public class Main extends Activity {
 							+ (String) data.get(ParseGeneric.API_TWITTER));
 					vg.addView(tv);
 				}
+				// Identica
+				if (data.containsKey(ParseGeneric.API_IDENTICA)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_IDENTICA));
+					vg.addView(tv);
+				}
+				// Foursquare
+				if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_FOURSQUARE));
+					vg.addView(tv);
+                }
 				// IRC
 				if (data.containsKey(ParseGeneric.API_IRC)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
@@ -558,6 +579,13 @@ public class Main extends Activity {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
 					tv.setText((String) data.get(ParseGeneric.API_EMAIL));
+					vg.addView(tv);
+				}
+				// Jabber
+				if (data.containsKey(ParseGeneric.API_JABBER)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_JABBER));
 					vg.addView(tv);
 				}
 				// Mailing-List
