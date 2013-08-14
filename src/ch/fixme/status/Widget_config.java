@@ -50,7 +50,7 @@ public class Widget_config extends Activity {
 		mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(Widget_config.this);
 		getDirTask = new GetDirTask();
-		getDirTask.execute(Main.API_DIRECTORY);
+		getDirTask.execute(ParseGeneric.API_DIRECTORY);
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -168,7 +168,7 @@ public class Widget_config extends Activity {
 				});
 			} catch (JSONException e) {
 				e.printStackTrace();
-                Log.e(Main.TAG, Main.API_DIRECTORY);
+                Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
                 Log.e(Main.TAG, result);
 			}
 
