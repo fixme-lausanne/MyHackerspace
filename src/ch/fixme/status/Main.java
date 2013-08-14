@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
@@ -29,6 +30,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -38,6 +40,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -470,11 +473,11 @@ public class Main extends Activity {
 			}
 
 			// Status duration
-			if (data.containsKey(ParseGeneric.API_DURATION)
+			if (data.containsKey(ParseGeneric.API_EXT_DURATION)
 					&& (Boolean) data.get(ParseGeneric.API_STATUS)) {
 				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-				tv.setText(getString(R.string.api_duration)
-						+ (String) data.get(ParseGeneric.API_DURATION)
+				tv.setText(getString(R.string.api_duration) + " "
+						+ (String) data.get(ParseGeneric.API_EXT_DURATION)
 						+ getString(R.string.api_duration_hours));
 				vg.addView(tv);
 			}
@@ -566,63 +569,46 @@ public class Main extends Activity {
 				}
 			}
 
-//			// Stream and cam
-//			if (!api.isNull(ParseGeneric.API_STREAM)
-//					|| !api.isNull(ParseGeneric.API_CAM)) {
-//				TextView title = (TextView) inflater.inflate(R.layout.title,
-//						null);
-//				title.setText(getString(R.string.api_stream));
-//				vg.addView(title);
-//				inflater.inflate(R.layout.separator, vg);
-//				// Stream
-//				if (!api.isNull(ParseGeneric.API_STREAM)) {
-//					JSONObject stream = api
-//							.optJSONObject(ParseGeneric.API_STREAM);
-//					if (stream != null) {
-//						JSONArray names = stream.names();
-//						for (int i = 0; i < stream.length(); i++) {
-//							final String type = names.getString(i);
-//							final String url = stream.getString(type);
-//							TextView tv = (TextView) inflater.inflate(
-//									R.layout.entry, null);
-//							tv.setText(url);
-//							tv.setOnClickListener(new View.OnClickListener() {
-//								public void onClick(View v) {
-//									Intent i = new Intent(Intent.ACTION_VIEW);
-//									i.setDataAndType(Uri.parse(url), type);
-//									startActivity(i);
-//								}
-//							});
-//							vg.addView(tv);
-//						}
-//					} else {
-//						String streamStr = api
-//								.optString(ParseGeneric.API_STREAM);
-//						TextView tv = (TextView) inflater.inflate(
-//								R.layout.entry, null);
-//						tv.setText(streamStr);
-//						vg.addView(tv);
-//					}
-//				}
-//				// Cam
-//				if (!api.isNull(ParseGeneric.API_CAM)) {
-//					JSONArray cam = api.optJSONArray(ParseGeneric.API_CAM);
-//					if (cam != null) {
-//						for (int i = 0; i < cam.length(); i++) {
-//							TextView tv = (TextView) inflater.inflate(
-//									R.layout.entry, null);
-//							tv.setText(cam.getString(i));
-//							vg.addView(tv);
-//						}
-//					} else {
-//						String camStr = api.optString(ParseGeneric.API_CAM);
-//						TextView tv = (TextView) inflater.inflate(
-//								R.layout.entry, null);
-//						tv.setText(camStr);
-//						vg.addView(tv);
-//					}
-//				}
-//			}
+			// Stream and cam
+			if (data.containsKey(ParseGeneric.API_STREAM)
+					|| data.containsKey(ParseGeneric.API_CAM)) {
+				TextView title = (TextView) inflater.inflate(R.layout.title,
+						null);
+				title.setText(getString(R.string.api_stream));
+				vg.addView(title);
+				inflater.inflate(R.layout.separator, vg);
+				// Stream
+				if (data.containsKey(ParseGeneric.API_STREAM)) {
+					HashMap<String, String> stream = (HashMap<String, String>) data
+							.get(ParseGeneric.API_STREAM);
+					for (Entry<String, String> entry : stream.entrySet()) {
+						final String type = entry.getKey();
+						final String url = entry.getValue();
+						TextView tv = (TextView) inflater.inflate(
+								R.layout.entry, null);
+						tv.setText(url);
+						tv.setOnClickListener(new View.OnClickListener() {
+							public void onClick(View v) {
+								Intent i = new Intent(Intent.ACTION_VIEW);
+								i.setDataAndType(Uri.parse(url), type);
+								startActivity(i);
+							}
+						});
+						vg.addView(tv);
+					}
+				}
+				// Cam
+				if (data.containsKey(ParseGeneric.API_CAM)) {
+					HashMap<String, String> cam = (HashMap<String, String>) data
+							.get(ParseGeneric.API_CAM);
+					for (String value : cam.values()) {
+						TextView tv = (TextView) inflater.inflate(
+								R.layout.entry, null);
+						tv.setText(value);
+						vg.addView(tv);
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
