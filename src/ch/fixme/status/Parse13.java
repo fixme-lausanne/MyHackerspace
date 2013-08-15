@@ -18,7 +18,7 @@ public class Parse13 extends ParseGeneric {
 	protected HashMap<String, Object> parse() throws JSONException {
 
 		// Mandatory fields
-        JSONObject state = mApi.getJSONObject(API_STATE);
+		JSONObject state = mApi.getJSONObject(API_STATE);
 		mResult.put(API_STATUS, state.getBoolean(API_STATUS));
 		mResult.put(API_NAME, mApi.getString(API_NAME));
 		mResult.put(API_URL, mApi.getString(API_URL));
@@ -44,16 +44,16 @@ public class Parse13 extends ParseGeneric {
 		}
 
 		// Location (Mandatory)
-        if (!mApi.isNull(API_LOCATION)){
-            JSONObject loc = mApi.getJSONObject(API_LOCATION);
-            if (!loc.isNull(API_LON) && !loc.isNull(API_LAT)) {
-                mResult.put(API_LON, loc.getString(API_LON));
-                mResult.put(API_LAT, loc.getString(API_LAT));
-            }
-            if (!loc.isNull(API_ADDRESS)) {
-                mResult.put(API_ADDRESS, loc.getString(API_ADDRESS));
-            }
-        }
+		if (!mApi.isNull(API_LOCATION)) {
+			JSONObject loc = mApi.getJSONObject(API_LOCATION);
+			if (!loc.isNull(API_LON) && !loc.isNull(API_LAT)) {
+				mResult.put(API_LON, loc.getString(API_LON));
+				mResult.put(API_LAT, loc.getString(API_LAT));
+			}
+			if (!loc.isNull(API_ADDRESS)) {
+				mResult.put(API_ADDRESS, loc.getString(API_ADDRESS));
+			}
+		}
 
 		// Contact
 		if (!mApi.isNull(API_CONTACT)) {

@@ -147,17 +147,23 @@ public class Widget extends AppWidgetProvider {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(ctxt);
 		Editor edit = prefs.edit();
-        if (prefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY, Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
-            Log.e(Main.TAG, "Widget is transparent");
-            views.setInt(R.id.widget_image, "setBackgroundResource", 0);
-        }
+		if (prefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
+				Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
+			Log.e(Main.TAG, "Widget is transparent");
+			views.setInt(R.id.widget_image, "setBackgroundResource", 0);
+		}
 		if (bitmap != null) {
 			views.setImageViewBitmap(R.id.widget_image, bitmap);
-			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't need to force
+			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't
+																		// need
+																		// to
+																		// force
 		} else {
 			views.setImageViewResource(R.id.widget_image,
 					android.R.drawable.ic_popup_sync);
-			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, true); // Something went wrong
+			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, true); // Something
+																		// went
+																		// wrong
 		}
 		if (text != null) {
 			views.setTextViewText(R.id.widget_status, text);
@@ -219,8 +225,10 @@ public class Widget extends AppWidgetProvider {
 				// time
 				if (!api.isNull(ParseGeneric.API_LASTCHANGE)) {
 					if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
-							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
-							&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId, false)) {
+							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId,
+									false)
+							&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
+									false)) {
 						Log.i(Main.TAG, "Nothing to update");
 						return;
 					}
@@ -235,7 +243,8 @@ public class Widget extends AppWidgetProvider {
 				edit.commit();
 				// Status icon or space icon
 				if (!api.isNull(ParseGeneric.API_ICON)) {
-					JSONObject status_icon = api.getJSONObject(ParseGeneric.API_ICON);
+					JSONObject status_icon = api
+							.getJSONObject(ParseGeneric.API_ICON);
 					if (!status_icon.isNull(status)) {
 						new GetImage(mCtxt, mId, null).execute(status_icon
 								.getString(status));

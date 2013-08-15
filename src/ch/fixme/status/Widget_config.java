@@ -58,16 +58,19 @@ public class Widget_config extends Activity {
 		findViewById(R.id.choose_ok).setOnClickListener(
 				new View.OnClickListener() {
 					public void onClick(View v) {
-                        Editor edit = mPrefs.edit();
-                        edit.putBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
-                            ((CheckBox) findViewById(R.id.choose_transparency)).isChecked());
-                        edit.commit();
+						Editor edit = mPrefs.edit();
+						edit.putBoolean(
+								Prefs.KEY_WIDGET_TRANSPARENCY,
+								((CheckBox) findViewById(R.id.choose_transparency))
+										.isChecked());
+						edit.commit();
 						setWidgetAlarm();
 						finish();
 					}
 				});
-        ((CheckBox) findViewById(R.id.choose_transparency)).setChecked(
-            mPrefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY, Prefs.DEFAULT_WIDGET_TRANSPARENCY));
+		((CheckBox) findViewById(R.id.choose_transparency)).setChecked(mPrefs
+				.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
+						Prefs.DEFAULT_WIDGET_TRANSPARENCY));
 		((EditText) findViewById(R.id.choose_update))
 				.addTextChangedListener(new TextWatcher() {
 					@Override
@@ -168,8 +171,8 @@ public class Widget_config extends Activity {
 				});
 			} catch (JSONException e) {
 				e.printStackTrace();
-                Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
-                Log.e(Main.TAG, result);
+				Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
+				Log.e(Main.TAG, result);
 			}
 
 			removeDialog(DIALOG_LOADING);

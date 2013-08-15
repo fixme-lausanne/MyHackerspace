@@ -260,161 +260,163 @@ public class Main extends Activity {
 		}
 	}
 
-    private boolean checkNetwork(){
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	private boolean checkNetwork() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if (netInfo == null || !netInfo.isConnected()) {
 			showError(getString(R.string.error_network_title),
 					getString(R.string.error_network_msg));
-            return false;
-        }
-        return true;
-    }
+			return false;
+		}
+		return true;
+	}
 
-    private void showError(String title, String msg) {
-        if (title != null && msg != null) {
+	private void showError(String title, String msg) {
+		if (title != null && msg != null) {
 			// showDialog(DIALOG_ERROR);
 			new AlertDialog.Builder(this)
 					.setTitle(getString(R.string.error_title) + title)
 					.setMessage(msg)
 					.setNeutralButton(getString(R.string.ok), null).show();
-        }
-    }
+		}
+	}
 
-    private void dismissLoading() {
-        if (finishApi && finishDir) {
-            try {
-                removeDialog(DIALOG_LOADING);
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
-    }
+	private void dismissLoading() {
+		if (finishApi && finishDir) {
+			try {
+				removeDialog(DIALOG_LOADING);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, e.getMessage());
+			}
+		}
+	}
 
-    public class GetDirTask extends AsyncTask<String, Void, String> {
+	public class GetDirTask extends AsyncTask<String, Void, String> {
 
-        private String mErrorTitle;
-        private String mErrorMsg;
+		private String mErrorTitle;
+		private String mErrorMsg;
 
-        @Override
-        protected void onPreExecute() {
-            showDialog(DIALOG_LOADING);
-        }
+		@Override
+		protected void onPreExecute() {
+			showDialog(DIALOG_LOADING);
+		}
 
-        @Override
-        protected String doInBackground(String... url) {
-            ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
-            try {
-                new Net(url[0], direcOs);
-            } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
-                e.printStackTrace();
-            }
-            return direcOs.toString();
-        }
+		@Override
+		protected String doInBackground(String... url) {
+			ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
+			try {
+				new Net(url[0], direcOs);
+			} catch (Exception e) {
+				mErrorTitle = e.getClass().getCanonicalName();
+				mErrorMsg = e.getLocalizedMessage();
+				e.printStackTrace();
+			}
+			return direcOs.toString();
+		}
 
-        @Override
-        protected void onPostExecute(String result) {
-            finishDir = true;
-            dismissLoading();
-            if (mErrorMsg == null) {
-                mResultDir = result;
-            } else {
-                showError(mErrorTitle, mErrorMsg);
-            }
-        }
+		@Override
+		protected void onPostExecute(String result) {
+			finishDir = true;
+			dismissLoading();
+			if (mErrorMsg == null) {
+				mResultDir = result;
+			} else {
+				showError(mErrorTitle, mErrorMsg);
+			}
+		}
 
-        @Override
-        protected void onCancelled() {
-            finishDir = true;
-            dismissLoading();
-        }
-    }
+		@Override
+		protected void onCancelled() {
+			finishDir = true;
+			dismissLoading();
+		}
+	}
 
-    private class GetApiTask extends AsyncTask<String, Void, String> {
+	private class GetApiTask extends AsyncTask<String, Void, String> {
 
-        private String mErrorTitle;
-        private String mErrorMsg;
+		private String mErrorTitle;
+		private String mErrorMsg;
 
-        @Override
-        protected void onPreExecute() {
-            showDialog(DIALOG_LOADING);
-            // Clean UI
-            ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
-            ((TextView) findViewById(R.id.space_name)).setText(getString(R.string.empty));
-            ((TextView) findViewById(R.id.space_url)).setText(getString(R.string.empty));
-            ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
-        }
+		@Override
+		protected void onPreExecute() {
+			showDialog(DIALOG_LOADING);
+			// Clean UI
+			((ScrollView) findViewById(R.id.scroll)).removeAllViews();
+			((TextView) findViewById(R.id.space_name))
+					.setText(getString(R.string.empty));
+			((TextView) findViewById(R.id.space_url))
+					.setText(getString(R.string.empty));
+			((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
+		}
 
-        @Override
-        protected String doInBackground(String... url) {
-            ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
-            try {
-                new Net(url[0], spaceOs);
-            } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
-                e.printStackTrace();
-            }
-            return spaceOs.toString();
-        }
+		@Override
+		protected String doInBackground(String... url) {
+			ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
+			try {
+				new Net(url[0], spaceOs);
+			} catch (Exception e) {
+				mErrorTitle = e.getClass().getCanonicalName();
+				mErrorMsg = e.getLocalizedMessage();
+				e.printStackTrace();
+			}
+			return spaceOs.toString();
+		}
 
-        @Override
-        protected void onPostExecute(String result) {
-            finishApi = true;
-            dismissLoading();
-            if (mErrorMsg == null) {
-                mResultHs = result;
-                populateDataHs();
-            } else {
-                showError(mErrorTitle, mErrorMsg);
-            }
-        }
+		@Override
+		protected void onPostExecute(String result) {
+			finishApi = true;
+			dismissLoading();
+			if (mErrorMsg == null) {
+				mResultHs = result;
+				populateDataHs();
+			} else {
+				showError(mErrorTitle, mErrorMsg);
+			}
+		}
 
-        @Override
-        protected void onCancelled() {
-            finishApi = true;
-            dismissLoading();
-        }
-    }
+		@Override
+		protected void onCancelled() {
+			finishApi = true;
+			dismissLoading();
+		}
+	}
 
-    private class GetImage extends AsyncTask<String, Void, byte[]> {
+	private class GetImage extends AsyncTask<String, Void, byte[]> {
 
-        private int mId;
-        private String mErrorTitle;
-        private String mErrorMsg;
+		private int mId;
+		private String mErrorTitle;
+		private String mErrorMsg;
 
-        public GetImage(int id) {
-            mId = id;
-        }
+		public GetImage(int id) {
+			mId = id;
+		}
 
-        @Override
-        protected void onPreExecute() {
-            ImageView img = (ImageView) findViewById(mId);
-            img.setImageResource(android.R.drawable.ic_popup_sync);
-            AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
-            anim.start();
-        }
+		@Override
+		protected void onPreExecute() {
+			ImageView img = (ImageView) findViewById(mId);
+			img.setImageResource(android.R.drawable.ic_popup_sync);
+			AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
+			anim.start();
+		}
 
-        @Override
-        protected byte[] doInBackground(String... url) {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            try {
-                new Net(url[0], os);
-            } catch (Exception e) {
-                mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
-                e.printStackTrace();
-            }
-            return os.toByteArray();
-        }
+		@Override
+		protected byte[] doInBackground(String... url) {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				new Net(url[0], os);
+			} catch (Exception e) {
+				mErrorTitle = e.getClass().getCanonicalName();
+				mErrorMsg = e.getLocalizedMessage();
+				e.printStackTrace();
+			}
+			return os.toByteArray();
+		}
 
-        @Override
-        protected void onPostExecute(byte[] result) {
-            if (mErrorMsg == null) {
-                ((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
-                        .decodeByteArray(result, 0, result.length));
+		@Override
+		protected void onPostExecute(byte[] result) {
+			if (mErrorMsg == null) {
+				((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
+						.decodeByteArray(result, 0, result.length));
 			} else {
 				showError(mErrorTitle, mErrorMsg);
 				((ImageView) findViewById(mId))
@@ -564,9 +566,10 @@ public class Main extends Activity {
 				if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
-					tv.setText(FOURSQUARE + (String) data.get(ParseGeneric.API_FOURSQUARE));
+					tv.setText(FOURSQUARE
+							+ (String) data.get(ParseGeneric.API_FOURSQUARE));
 					vg.addView(tv);
-                }
+				}
 				// IRC
 				if (data.containsKey(ParseGeneric.API_IRC)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
