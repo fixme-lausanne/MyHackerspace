@@ -5,11 +5,11 @@
 
 package ch.fixme.status;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
@@ -66,33 +66,9 @@ public class Main extends Activity {
 	private static final int DIALOG_LOADING = 0;
 	private static final int DIALOG_LIST = 1;
 	private static final String TWITTER = "https://twitter.com/#!/";
+	private static final String FOURSQUARE = "https://foursquare.com/v/";
 	private static final String MAP_SEARCH = "geo:0,0?q=";
 	private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
-
-	public static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
-	protected static final String API_NAME = "space";
-	protected static final String API_LON = "lon";
-	protected static final String API_LAT = "lat";
-	private static final String API_URL = "url";
-	private static final String API_STATUS_TXT = "status";
-	private static final String API_DURATION = "duration";
-	private static final String API_ADDRESS = "address";
-	private static final String API_CONTACT = "contact";
-	private static final String API_EMAIL = "email";
-	private static final String API_IRC = "irc";
-	private static final String API_PHONE = "phone";
-	private static final String API_TWITTER = "twitter";
-	private static final String API_ML = "ml";
-	private static final String API_STREAM = "stream";
-	private static final String API_CAM = "cam";
-
-	protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
-	protected static final String API_ICON = "icon";
-	protected static final String API_ICON_OPEN = "open";
-	protected static final String API_ICON_CLOSED = "closed";
-	protected static final String API_LOGO = "logo";
-	protected static final String API_STATUS = "open";
-	protected static final String API_LASTCHANGE = "lastchange";
 
 	private SharedPreferences mPrefs;
 	private String mResultHs;
@@ -155,8 +131,8 @@ public class Main extends Activity {
 			intent.putExtra(STATE_DIR, mResultDir);
 			try {
 				JSONObject api = new JSONObject(mResultHs);
-				intent.putExtra(API_LON, api.getString(API_LON));
-				intent.putExtra(API_LAT, api.getString(API_LAT));
+				intent.putExtra(ParseGeneric.API_LON, api.getString(ParseGeneric.API_LON));
+				intent.putExtra(ParseGeneric.API_LAT, api.getString(ParseGeneric.API_LAT));
 				startActivity(intent);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -261,7 +237,7 @@ public class Main extends Activity {
 				|| (savedInstanceState == null && !savedInstanceState
 						.containsKey(STATE_DIR))) {
 			getDirTask = new GetDirTask();
-			getDirTask.execute(API_DIRECTORY);
+			getDirTask.execute(ParseGeneric.API_DIRECTORY);
 		} else {
 			finishDir = true;
 			mResultDir = data.getString(STATE_DIR);
@@ -277,11 +253,11 @@ public class Main extends Activity {
 							+ intent.getIntExtra(
 									AppWidgetManager.EXTRA_APPWIDGET_ID,
 									AppWidgetManager.INVALID_APPWIDGET_ID),
-					API_DEFAULT);
+					ParseGeneric.API_DEFAULT);
 		} else if (intent != null && intent.hasExtra(STATE_HS)) {
 			mApiUrl = intent.getStringExtra(STATE_HS);
 		} else {
-			mApiUrl = mPrefs.getString(PREF_API_URL, API_DEFAULT);
+			mApiUrl = mPrefs.getString(PREF_API_URL, ParseGeneric.API_DEFAULT);
 		}
 		// Get Data
 		final Bundle data = (Bundle) getLastNonConfigurationInstance();
@@ -297,9 +273,9 @@ public class Main extends Activity {
 		}
 	}
 
-	private boolean checkNetwork() {
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+    private boolean checkNetwork(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if (netInfo == null || !netInfo.isConnected()) {
 			showError(getString(R.string.error_network_title),
 					getString(R.string.error_network_msg));
@@ -461,7 +437,9 @@ public class Main extends Activity {
 
 	private void populateDataHs() {
 		try {
-			JSONObject api = new JSONObject(mResultHs);
+			HashMap<String, Object> data = new ParseGeneric(mResultHs)
+					.getData();
+		
 			// Initialize views
 			LayoutInflater inflater = getLayoutInflater();
 			LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
@@ -469,11 +447,18 @@ public class Main extends Activity {
 			ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
 			scroll.removeAllViews();
 			scroll.addView(vg);
+
 			// Mandatory fields
-			String status_txt;
-			// String status = API_ICON_CLOSED;
-			if (api.getBoolean(API_STATUS)) {
-				// status = API_ICON_OPEN;
+			((TextView) findViewById(R.id.space_name)).setText((String) data
+					.get(ParseGeneric.API_NAME));
+			((TextView) findViewById(R.id.space_url)).setText((String) data
+					.get(ParseGeneric.API_URL));
+			getImageTask = new GetImage(R.id.space_image);
+			getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
+
+			// Status text
+			String status_txt = "";
+			if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
 				status_txt = OPEN;
 				((TextView) findViewById(R.id.status_txt))
 						.setCompoundDrawablesWithIntrinsicBounds(
@@ -484,168 +469,182 @@ public class Main extends Activity {
 						.setCompoundDrawablesWithIntrinsicBounds(
 								android.R.drawable.presence_busy, 0, 0, 0);
 			}
-			((TextView) findViewById(R.id.space_name)).setText(api
-					.getString(API_NAME));
-			((TextView) findViewById(R.id.space_url)).setText(api
-					.getString(API_URL));
-			// Status icon or space icon
-			// if (!api.isNull(API_ICON)) {
-			// JSONObject status_icon = api.getJSONObject(API_ICON);
-			// if (!status_icon.isNull(status)) {
-			// new GetImage(R.id.space_image).execute(status_icon
-			// .getString(status));
-			// }
-			// } else {
-			getImageTask = new GetImage(R.id.space_image);
-			getImageTask.execute(api.getString(API_LOGO));
-			// }
-			// Status
-			if (!api.isNull(API_STATUS_TXT)) {
-				status_txt += ": " + api.getString(API_STATUS_TXT);
+			if (data.containsKey(ParseGeneric.API_STATUS_TXT)) {
+				status_txt += ": "
+						+ (String) data.get(ParseGeneric.API_STATUS_TXT);
 			}
 			((TextView) findViewById(R.id.status_txt)).setText(status_txt);
-			if (!api.isNull(API_LASTCHANGE)) {
-				Date date = new Date(api.getLong(API_LASTCHANGE) * 1000);
-				DateFormat formatter = SimpleDateFormat.getDateTimeInstance();
+
+			// Status last change
+			if (data.containsKey(ParseGeneric.API_LASTCHANGE)) {
 				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
 				tv.setAutoLinkMask(0);
 				tv.setText(getString(R.string.api_lastchange) + " "
-						+ formatter.format(date));
+						+ (String) data.get(ParseGeneric.API_LASTCHANGE));
 				vg.addView(tv);
 			}
-			if (!api.isNull(API_DURATION) && api.getBoolean(API_STATUS)) {
+
+			// Status duration
+			if (data.containsKey(ParseGeneric.API_EXT_DURATION)
+					&& (Boolean) data.get(ParseGeneric.API_STATUS)) {
 				TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-				tv.setText(getString(R.string.api_duration)
-						+ api.getString(API_DURATION)
+				tv.setText(getString(R.string.api_duration) + " "
+						+ (String) data.get(ParseGeneric.API_EXT_DURATION)
 						+ getString(R.string.api_duration_hours));
 				vg.addView(tv);
 			}
+
 			// Location
 			Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
-			if (!api.isNull(API_ADDRESS)
-					|| (!api.isNull(API_LAT) && !api.isNull(API_LON))) {
+			if (data.containsKey(ParseGeneric.API_ADDRESS)
+					|| data.containsKey(ParseGeneric.API_LON)) {
 				TextView title = (TextView) inflater.inflate(R.layout.title,
 						null);
 				title.setText(getString(R.string.api_location));
 				vg.addView(title);
 				inflater.inflate(R.layout.separator, vg);
-				if (!api.isNull(API_ADDRESS)) {
+				// Address
+				if (data.containsKey(ParseGeneric.API_ADDRESS)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
 					tv.setAutoLinkMask(0);
-					tv.setText(api.getString(API_ADDRESS));
+					tv.setText((String) data.get(ParseGeneric.API_ADDRESS));
 					Linkify.addLinks(tv, ptn, MAP_SEARCH);
 					vg.addView(tv);
 				}
-				if (!api.isNull(API_LON) && !api.isNull(API_LAT)) {
-					String addr = (!api.isNull(API_ADDRESS)) ? api
-							.getString(API_ADDRESS) : getString(R.string.empty);
+				// Lon/Lat
+				if (data.containsKey(ParseGeneric.API_LON)
+						&& data.containsKey(ParseGeneric.API_LAT)) {
+					String addr = (data.containsKey(ParseGeneric.API_ADDRESS)) ? (String) data
+							.get(ParseGeneric.API_ADDRESS)
+							: getString(R.string.empty);
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
 					tv.setAutoLinkMask(0);
-					tv.setText(api.getString(API_LON) + ", "
-							+ api.getString(API_LAT));
+					tv.setText((String) data.get(ParseGeneric.API_LON) + ", "
+							+ (String) data.get(ParseGeneric.API_LAT));
 					Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-							api.getString(API_LAT), api.getString(API_LON),
-							addr));
+							(String) data.get(ParseGeneric.API_LAT),
+							(String) data.get(ParseGeneric.API_LON), addr));
 					vg.addView(tv);
 				}
 			}
+
 			// Contact
-			if (!api.isNull(API_CONTACT)) {
+			if (data.containsKey(ParseGeneric.API_PHONE)
+					|| data.containsKey(ParseGeneric.API_TWITTER)
+					|| data.containsKey(ParseGeneric.API_IRC)
+					|| data.containsKey(ParseGeneric.API_EMAIL)
+					|| data.containsKey(ParseGeneric.API_ML)) {
 				TextView title = (TextView) inflater.inflate(R.layout.title,
 						null);
 				title.setText(R.string.api_contact);
 				vg.addView(title);
 				inflater.inflate(R.layout.separator, vg);
-				JSONObject contact = api.getJSONObject(API_CONTACT);
+
 				// Phone
-				if (!contact.isNull(API_PHONE)) {
+				if (data.containsKey(ParseGeneric.API_PHONE)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
-					tv.setText(contact.getString(API_PHONE));
+					tv.setText((String) data.get(ParseGeneric.API_PHONE));
+					vg.addView(tv);
+				}
+				// SIP
+				if (data.containsKey(ParseGeneric.API_SIP)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_SIP));
 					vg.addView(tv);
 				}
 				// Twitter
-				if (!contact.isNull(API_TWITTER)) {
+				if (data.containsKey(ParseGeneric.API_TWITTER)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
-					tv.setText(TWITTER + contact.getString(API_TWITTER));
+					tv.setText(TWITTER
+							+ (String) data.get(ParseGeneric.API_TWITTER));
 					vg.addView(tv);
 				}
+				// Identica
+				if (data.containsKey(ParseGeneric.API_IDENTICA)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_IDENTICA));
+					vg.addView(tv);
+				}
+				// Foursquare
+				if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText(FOURSQUARE + (String) data.get(ParseGeneric.API_FOURSQUARE));
+					vg.addView(tv);
+                }
 				// IRC
-				if (!contact.isNull(API_IRC)) {
+				if (data.containsKey(ParseGeneric.API_IRC)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
 					tv.setAutoLinkMask(0);
-					tv.setText(contact.getString(API_IRC));
+					tv.setText((String) data.get(ParseGeneric.API_IRC));
 					vg.addView(tv);
 				}
 				// Email
-				if (!contact.isNull(API_EMAIL)) {
+				if (data.containsKey(ParseGeneric.API_EMAIL)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
-					tv.setText(contact.getString(API_EMAIL));
+					tv.setText((String) data.get(ParseGeneric.API_EMAIL));
+					vg.addView(tv);
+				}
+				// Jabber
+				if (data.containsKey(ParseGeneric.API_JABBER)) {
+					TextView tv = (TextView) inflater.inflate(R.layout.entry,
+							null);
+					tv.setText((String) data.get(ParseGeneric.API_JABBER));
 					vg.addView(tv);
 				}
 				// Mailing-List
-				if (!contact.isNull(API_ML)) {
+				if (data.containsKey(ParseGeneric.API_ML)) {
 					TextView tv = (TextView) inflater.inflate(R.layout.entry,
 							null);
-					tv.setText(contact.getString(API_ML));
+					tv.setText((String) data.get(ParseGeneric.API_ML));
 					vg.addView(tv);
 				}
 			}
+
 			// Stream and cam
-			if (!api.isNull(API_STREAM) || !api.isNull(API_CAM)) {
+			if (data.containsKey(ParseGeneric.API_STREAM)
+					|| data.containsKey(ParseGeneric.API_CAM)) {
 				TextView title = (TextView) inflater.inflate(R.layout.title,
 						null);
 				title.setText(getString(R.string.api_stream));
 				vg.addView(title);
 				inflater.inflate(R.layout.separator, vg);
 				// Stream
-				if (!api.isNull(API_STREAM)) {
-					JSONObject stream = api.optJSONObject(API_STREAM);
-					if (stream != null) {
-						JSONArray names = stream.names();
-						for (int i = 0; i < stream.length(); i++) {
-							final String type = names.getString(i);
-							final String url = stream.getString(type);
-							TextView tv = (TextView) inflater.inflate(
-									R.layout.entry, null);
-							tv.setText(url);
-							tv.setOnClickListener(new View.OnClickListener() {
-								public void onClick(View v) {
-									Intent i = new Intent(Intent.ACTION_VIEW);
-									i.setDataAndType(Uri.parse(url), type);
-									startActivity(i);
-								}
-							});
-							vg.addView(tv);
-						}
-					} else {
-						String streamStr = api.optString(API_STREAM);
+				if (data.containsKey(ParseGeneric.API_STREAM)) {
+					HashMap<String, String> stream = (HashMap<String, String>) data
+							.get(ParseGeneric.API_STREAM);
+					for (Entry<String, String> entry : stream.entrySet()) {
+						final String type = entry.getKey();
+						final String url = entry.getValue();
 						TextView tv = (TextView) inflater.inflate(
 								R.layout.entry, null);
-						tv.setText(streamStr);
+						tv.setText(url);
+						tv.setOnClickListener(new View.OnClickListener() {
+							public void onClick(View v) {
+								Intent i = new Intent(Intent.ACTION_VIEW);
+								i.setDataAndType(Uri.parse(url), type);
+								startActivity(i);
+							}
+						});
 						vg.addView(tv);
 					}
 				}
 				// Cam
-				if (!api.isNull(API_CAM)) {
-					JSONArray cam = api.optJSONArray(API_CAM);
-					if (cam != null) {
-						for (int i = 0; i < cam.length(); i++) {
-							TextView tv = (TextView) inflater.inflate(
-									R.layout.entry, null);
-							tv.setText(cam.getString(i));
-							vg.addView(tv);
-						}
-					} else {
-						String camStr = api.optString(API_CAM);
+				if (data.containsKey(ParseGeneric.API_CAM)) {
+					HashMap<String, String> cam = (HashMap<String, String>) data
+							.get(ParseGeneric.API_CAM);
+					for (String value : cam.values()) {
 						TextView tv = (TextView) inflater.inflate(
 								R.layout.entry, null);
-						tv.setText(camStr);
+						tv.setText(value);
 						vg.addView(tv);
 					}
 				}

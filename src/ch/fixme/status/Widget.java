@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -141,6 +140,10 @@ public class Widget extends AppWidgetProvider {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(ctxt);
 		Editor edit = prefs.edit();
+        if (prefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY, Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
+            Log.e(Main.TAG, "Widget is transparent");
+            views.setInt(R.id.widget_image, "setBackgroundResource", 0);
+        }
 		if (bitmap != null) {
 			views.setImageViewBitmap(R.id.widget_image, bitmap);
 			edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't need to force
@@ -200,10 +203,10 @@ public class Widget extends AppWidgetProvider {
 				JSONObject api = new JSONObject(result);
 				SharedPreferences prefs = PreferenceManager
 						.getDefaultSharedPreferences(mCtxt);
-				boolean statusBool = api.getBoolean(Main.API_STATUS);
+				boolean statusBool = api.getBoolean(ParseGeneric.API_STATUS);
 				// Update only if different than last status and not the first
 				// time
-				if (!api.isNull(Main.API_LASTCHANGE)) {
+				if (!api.isNull(ParseGeneric.API_LASTCHANGE)) {
 					if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
 							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
 							&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId, false)) {
@@ -212,27 +215,27 @@ public class Widget extends AppWidgetProvider {
 					}
 				}
 				// Mandatory fields
-				String status = Main.API_ICON_CLOSED;
+				String status = ParseGeneric.API_ICON_CLOSED;
 				if (statusBool) {
-					status = Main.API_ICON_OPEN;
+					status = ParseGeneric.API_ICON_OPEN;
 				}
 				Editor edit = prefs.edit();
 				edit.putBoolean(Main.PREF_LAST_WIDGET + mId, statusBool);
 				edit.commit();
 				// Status icon or space icon
-				if (!api.isNull(Main.API_ICON)) {
-					JSONObject status_icon = api.getJSONObject(Main.API_ICON);
+				if (!api.isNull(ParseGeneric.API_ICON)) {
+					JSONObject status_icon = api.getJSONObject(ParseGeneric.API_ICON);
 					if (!status_icon.isNull(status)) {
 						new GetImage(mCtxt, mId, null).execute(status_icon
 								.getString(status));
 					}
 				} else {
 					String status_text = Main.CLOSED;
-					if (api.getBoolean(Main.API_STATUS)) {
+					if (api.getBoolean(ParseGeneric.API_STATUS)) {
 						status_text = Main.OPEN;
 					}
 					new GetImage(mCtxt, mId, status_text).execute(api
-							.getString(Main.API_LOGO));
+							.getString(ParseGeneric.API_LOGO));
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -257,7 +260,7 @@ public class Widget extends AppWidgetProvider {
 					.getDefaultSharedPreferences(ctxt);
 			if (prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
 				String url = prefs.getString(Main.PREF_API_URL_WIDGET
-						+ widgetId, Main.API_DEFAULT);
+						+ widgetId, ParseGeneric.API_DEFAULT);
 				Log.i(Main.TAG, "Update widgetid " + widgetId + " with url "
 						+ url);
 				new GetApiTask(ctxt, widgetId).execute(url);

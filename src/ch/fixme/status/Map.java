@@ -39,11 +39,11 @@ public class Map extends Activity {
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		if (extras.containsKey(Main.STATE_DIR)
-				&& extras.containsKey(Main.API_LON)
-				&& extras.containsKey(Main.API_LAT)) {
+				&& extras.containsKey(ParseGeneric.API_LON)
+				&& extras.containsKey(ParseGeneric.API_LAT)) {
 			final String dir = extras.getString(Main.STATE_DIR);
-			String lon = extras.getString(Main.API_LON);
-			String lat = extras.getString(Main.API_LAT);
+			String lon = extras.getString(ParseGeneric.API_LON);
+			String lat = extras.getString(ParseGeneric.API_LAT);
 			GeoPoint pt = new GeoPoint(Double.parseDouble(lat),
 					Double.parseDouble(lon));
 			mMapView.getController().setZoom(7);
@@ -104,23 +104,23 @@ public class Map extends Activity {
 		protected void onPostExecute(String result) {
 			try {
 				JSONObject api = new JSONObject(result);
-				if (!api.isNull(Main.API_LAT) && !api.isNull(Main.API_LON)) {
+				if (!api.isNull(ParseGeneric.API_LAT) && !api.isNull(ParseGeneric.API_LON)) {
 					GeoPoint pt = new GeoPoint(Double.parseDouble(api
-							.getString(Main.API_LAT)), Double.parseDouble(api
-							.getString(Main.API_LON)));
+							.getString(ParseGeneric.API_LAT)), Double.parseDouble(api
+							.getString(ParseGeneric.API_LON)));
 					MyOverlayItem marker = new MyOverlayItem(
-							api.getString(Main.API_NAME), mUrl, pt);
+							api.getString(ParseGeneric.API_NAME), mUrl, pt);
 					marker.api = api;
 					mMarkers.addMarker(marker);
-					if (!api.isNull(Main.API_ICON)) {
-						JSONObject status_icon = api
-								.getJSONObject(Main.API_ICON);
-						String icon = status_icon
-								.getString(Main.API_ICON_CLOSED);
-						if (api.getBoolean(Main.API_STATUS)) {
-							icon = status_icon.getString(Main.API_ICON_OPEN);
-						}
-					}
+//					if (!api.isNull(ParseGeneric.API_ICON)) {
+//						JSONObject status_icon = api
+//								.getJSONObject(ParseGeneric.API_ICON);
+//						String icon = status_icon
+//								.getString(ParseGeneric.API_ICON_CLOSED);
+//						if (api.getBoolean(ParseGeneric.API_STATUS)) {
+//							icon = status_icon.getString(ParseGeneric.API_ICON_OPEN);
+//						}
+//					}
 					BoundingBoxE6 bb = mMapView.getBoundingBox();
 					for (MyOverlayItem item : mItems) {
 						if (bb.contains(item.getPoint())
@@ -216,12 +216,12 @@ public class Map extends Activity {
 		protected Bitmap doInBackground(Void... unused) {
 			try {
 				// Get URL of the image
-				if (!mMarker.api.isNull(Main.API_ICON)) {
+				if (!mMarker.api.isNull(ParseGeneric.API_ICON)) {
 					JSONObject status_icon = mMarker.api
-							.getJSONObject(Main.API_ICON);
-					String icon = status_icon.getString(Main.API_ICON_CLOSED);
-					if (mMarker.api.getBoolean(Main.API_STATUS)) {
-						icon = status_icon.getString(Main.API_ICON_OPEN);
+							.getJSONObject(ParseGeneric.API_ICON);
+					String icon = status_icon.getString(ParseGeneric.API_ICON_CLOSED);
+					if (mMarker.api.getBoolean(ParseGeneric.API_STATUS)) {
+						icon = status_icon.getString(ParseGeneric.API_ICON_OPEN);
 					}
 					// Download
 					Log.i(Main.TAG, "Get image from " + icon);

@@ -28,8 +28,8 @@ import android.util.Log;
 // http://android-developers.blogspot.ch/2010/07/multithreading-for-performance.html
 public class Net {
 
-	private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-			+ Build.MODEL + ") MyHackerspace/1.7";
+    private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
+            + Build.MODEL + ") MyHackerspace/1.7";
 
 	final private HttpClient client;
 	final private HttpGet getMethod;
