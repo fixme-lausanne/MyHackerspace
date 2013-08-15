@@ -24,6 +24,12 @@ public class Parse13 extends ParseGeneric {
 		mResult.put(API_URL, mApi.getString(API_URL));
 		mResult.put(API_LOGO, mApi.getString(API_LOGO));
 
+		// Status icons
+		if (!state.isNull(API_ICON)) {
+			mResult.put(API_ICON + API_ICON_OPEN, state.getString(API_ICON_OPEN));
+			mResult.put(API_ICON + API_ICON_CLOSED, state.getString(API_ICON_CLOSED));
+		}
+
 		// Status text
 		if (!state.isNull(API_STATE_MESSAGE)) {
 			mResult.put(API_STATUS_TXT, state.getString(API_STATE_MESSAGE));

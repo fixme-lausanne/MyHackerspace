@@ -7,9 +7,9 @@ package ch.fixme.status;
 
 import java.io.ByteArrayOutputStream;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -217,45 +217,44 @@ public class Widget extends AppWidgetProvider {
 		@Override
 		protected void onPostExecute(String result) {
 			try {
-				JSONObject api = new JSONObject(result);
 				SharedPreferences prefs = PreferenceManager
 						.getDefaultSharedPreferences(mCtxt);
-				boolean statusBool = api.getBoolean(ParseGeneric.API_STATUS);
+
+				HashMap<String, Object> api = new ParseGeneric(result)
+						.getData();
+				boolean statusBool = (Boolean) api.get(ParseGeneric.API_STATUS);
 				// Update only if different than last status and not the first
 				// time
-				if (!api.isNull(ParseGeneric.API_LASTCHANGE)) {
-					if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
-							&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId,
-									false)
-							&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
-									false)) {
-						Log.i(Main.TAG, "Nothing to update");
-						return;
-					}
+				if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
+						&& prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
+						&& !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
+								false)) {
+					Log.i(Main.TAG, "Nothing to update");
+					return;
 				}
+
 				// Mandatory fields
-				String status = ParseGeneric.API_ICON_CLOSED;
+				String status = ParseGeneric.API_ICON
+						+ ParseGeneric.API_ICON_CLOSED;
 				if (statusBool) {
-					status = ParseGeneric.API_ICON_OPEN;
+					status = ParseGeneric.API_ICON + ParseGeneric.API_ICON_OPEN;
 				}
 				Editor edit = prefs.edit();
 				edit.putBoolean(Main.PREF_LAST_WIDGET + mId, statusBool);
 				edit.commit();
+
 				// Status icon or space icon
-				if (!api.isNull(ParseGeneric.API_ICON)) {
-					JSONObject status_icon = api
-							.getJSONObject(ParseGeneric.API_ICON);
-					if (!status_icon.isNull(status)) {
-						new GetImage(mCtxt, mId, null).execute(status_icon
-								.getString(status));
-					}
+				if (api.containsKey(ParseGeneric.API_ICON_OPEN)
+						&& api.containsKey(ParseGeneric.API_ICON_CLOSED)) {
+					new GetImage(mCtxt, mId, null).execute((String) api
+							.get(status));
 				} else {
 					String status_text = Main.CLOSED;
-					if (api.getBoolean(ParseGeneric.API_STATUS)) {
+					if (statusBool) {
 						status_text = Main.OPEN;
 					}
-					new GetImage(mCtxt, mId, status_text).execute(api
-							.getString(ParseGeneric.API_LOGO));
+					new GetImage(mCtxt, mId, status_text).execute((String) api
+							.get(ParseGeneric.API_LOGO));
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
