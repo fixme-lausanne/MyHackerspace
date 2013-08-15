@@ -12,13 +12,7 @@
         android:icon="@+drawable/ic_action_refresh"
         android:showAsAction="ifRoom|withText"
         android:title="@string/btn_refresh"/>
-
-    <item
-        android:id="@+id/menu_map"
-        android:icon="@+drawable/ic_action_refresh"
-        android:showAsAction="ifRoom|withText"
-        android:title="MAP"/>
-
+    
     <item
         android:id="@+id/menu_prefs"
         android:icon="@android:drawable/ic_menu_preferences"
