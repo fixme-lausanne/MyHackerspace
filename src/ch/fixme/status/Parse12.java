@@ -23,6 +23,12 @@ public class Parse12 extends ParseGeneric {
 		mResult.put(API_URL, mApi.getString(API_URL));
 		mResult.put(API_LOGO, mApi.getString(API_LOGO));
 
+		// Status icons
+		JSONObject icons = mApi.getJSONObject(API_ICON);
+		mResult.put(API_ICON + API_ICON_OPEN, icons.getString(API_ICON_OPEN));
+		mResult.put(API_ICON + API_ICON_CLOSED,
+				icons.getString(API_ICON_CLOSED));
+
 		// Status text
 		if (!mApi.isNull(API_STATUS_TXT)) {
 			mResult.put(API_STATUS_TXT, mApi.getString(API_STATUS_TXT));
