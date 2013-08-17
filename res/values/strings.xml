@@ -34,5 +34,6 @@
     <string name="api_location">Location</string>
     <string name="api_contact">Contact</string>
     <string name="api_stream">Stream</string>
+    <string name="api_sensors">Sensors</string>
 
 </resources>

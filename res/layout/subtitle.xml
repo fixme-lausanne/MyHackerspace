@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+    Licensed under GNU's GPL 2, see README
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dip"
+    android:paddingTop="4dip"
+    android:textAllCaps="true"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="#0099CC" />
+

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">MyHackerspace</string>
+    <string name="empty"></string>
+    <string name="ok">OK</string>
+    
     <string name="ui_logo">Logo du hackerspace</string>
+    <string name="ui_name">FIXME</string>
+    <string name="ui_url">https://fixme.ch</string>
 
     <string name="choose_hs">Choisir un hackerspace</string>
     <string name="choose_time">Choisir un interval en minutes: </string>
+    <string name="choose_time_default">30</string>
     <string name="choose_transparency">Transparence du widget</string>
 
     <string name="btn_refresh">Rafraichir</string>
@@ -20,11 +27,13 @@
     <string name="prefs_transparent_title">Transparence des widgets</string>
     <string name="prefs_transparent_summary">Le fond des widgets sera transparent au lieu de gris, à la prochaine mise à jour</string>
 
+    <string name="api_status">Status</string>
     <string name="api_lastchange">Dernier changement: </string>
     <string name="api_duration">Durée: </string>
     <string name="api_duration_hours"> heure(s)</string>
     <string name="api_location">Localisation</string>
     <string name="api_contact">Contact</string>
     <string name="api_stream">Flux</string>
+    <string name="api_sensors">Capteurs</string>
 
 </resources>

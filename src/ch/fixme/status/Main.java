@@ -9,7 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
@@ -71,7 +73,7 @@ public class Main extends Activity {
 
 	private SharedPreferences mPrefs;
 	private String mResultHs;
-	private String mResultDir;
+	public String mResultDir;
 	private String mApiUrl;
 	private boolean finishApi = false;
 	private boolean finishDir = false;
@@ -598,6 +600,38 @@ public class Main extends Activity {
 							null);
 					tv.setText((String) data.get(ParseGeneric.API_ML));
 					vg.addView(tv);
+				}
+			}
+
+			// Sensors
+			if (data.containsKey(ParseGeneric.API_SENSORS)) {
+				// Title
+				TextView title = (TextView) inflater.inflate(R.layout.title,
+						null);
+				title.setText(getString(R.string.api_sensors));
+				vg.addView(title);
+				inflater.inflate(R.layout.separator, vg);
+
+				HashMap<String, ArrayList<String>> sensors = (HashMap<String, ArrayList<String>>) data
+						.get(ParseGeneric.API_SENSORS);
+				Set<String> names = sensors.keySet();
+				Iterator<String> it = names.iterator();
+				while (it.hasNext()) {
+					String name = it.next();
+					// Subtitle
+					TextView subtitle = (TextView) inflater.inflate(
+							R.layout.subtitle, null);
+					subtitle.setText(name.replace("_", " "));
+					vg.addView(subtitle);
+					// Sensors data
+					ArrayList<String> sensorsData = sensors.get(name);
+					for (int j = 0; j < sensorsData.size(); j++) {
+						TextView tv = (TextView) inflater.inflate(
+								R.layout.entry, null);
+						tv.setText(sensorsData.get(j));
+						tv.setAutoLinkMask(0);
+						vg.addView(tv);
+					}
 				}
 			}
 

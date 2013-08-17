@@ -3,6 +3,7 @@ package ch.fixme.status;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -26,8 +27,10 @@ public class Parse13 extends ParseGeneric {
 
 		// Status icons
 		if (!state.isNull(API_ICON)) {
-			mResult.put(API_ICON + API_ICON_OPEN, state.getString(API_ICON_OPEN));
-			mResult.put(API_ICON + API_ICON_CLOSED, state.getString(API_ICON_CLOSED));
+			JSONObject icon = state.getJSONObject(API_ICON);
+			mResult.put(API_ICON + API_ICON_OPEN, icon.getString(API_ICON_OPEN));
+			mResult.put(API_ICON + API_ICON_CLOSED,
+					icon.getString(API_ICON_CLOSED));
 		}
 
 		// Status text
@@ -101,6 +104,25 @@ public class Parse13 extends ParseGeneric {
 			if (!contact.isNull(API_ML)) {
 				mResult.put(API_ML, contact.getString(API_ML));
 			}
+		}
+
+		// Sensors
+		if (!mApi.isNull(API_SENSORS)) {
+			JSONObject sensors = mApi.getJSONObject(API_SENSORS);
+			JSONArray names = sensors.names();
+			JSONArray elem;
+			ArrayList<String> elem_value;
+			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>(
+					sensors.length());
+			for (int i = 0; i < names.length(); i++) {
+				elem = sensors.getJSONArray(names.getString(i));
+				elem_value = new ArrayList<String>();
+				for (int j = 0; j < elem.length(); j++) {
+					elem_value.add(elem.get(j).toString());
+				}
+				result.put(names.getString(i), elem_value);
+			}
+			mResult.put(API_SENSORS, result);
 		}
 
 		if (!mApi.isNull(API_STREAM) || !mApi.isNull(API_CAM)) {

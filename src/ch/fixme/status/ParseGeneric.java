@@ -34,6 +34,7 @@ public class ParseGeneric {
 	protected static final String API_ML = "ml";
 	protected static final String API_STREAM = "stream";
 	protected static final String API_CAM = "cam";
+	protected static final String API_SENSORS = "sensors";
 
 	protected static final String API_DEFAULT = "https://fixme.ch/cgi-bin/spaceapi.py";
 	protected static final String API_ICON = "icon";
