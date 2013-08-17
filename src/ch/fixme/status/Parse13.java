@@ -118,7 +118,37 @@ public class Parse13 extends ParseGeneric {
 				elem = sensors.getJSONArray(names.getString(i));
 				elem_value = new ArrayList<String>();
 				for (int j = 0; j < elem.length(); j++) {
-					elem_value.add(elem.get(j).toString());
+					try {
+						String dataString = "";
+						JSONObject obj = (JSONObject) elem.get(j);
+						if (!obj.isNull(API_VALUE)
+								&& !"".equals(obj.getString(API_VALUE))) {
+							dataString += obj.getString(API_VALUE);
+						}
+						if (!obj.isNull(API_UNIT)
+								&& !"".equals(obj.getString(API_UNIT))) {
+							dataString += " [" + obj.getString(API_UNIT) + "]";
+						}
+						if (!obj.isNull(API_NAME2)
+								&& !"".equals(obj.getString(API_NAME2))) {
+							dataString += " <" + obj.getString(API_NAME2) + ">";
+						}
+						if (!obj.isNull(API_LOCATION2)
+								&& !"".equals(obj.getString(API_LOCATION2))) {
+							dataString += " (" + obj.getString(API_LOCATION2)
+									+ ")";
+						}
+						if (!obj.isNull(API_DESCRIPTION)
+								&& !"".equals(obj.getString(API_DESCRIPTION))) {
+							dataString += ": " + obj.getString(API_DESCRIPTION);
+						}
+						if (!obj.isNull(API_MACHINES)) {
+							dataString += obj.get(API_MACHINES).toString();
+						}
+						elem_value.add(dataString);
+					} catch (Exception e) {
+						elem_value.add(elem.get(j).toString());
+					}
 				}
 				result.put(names.getString(i), elem_value);
 			}
@@ -156,5 +186,4 @@ public class Parse13 extends ParseGeneric {
 
 		return mResult;
 	}
-
 }
