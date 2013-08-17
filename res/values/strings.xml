@@ -21,6 +21,7 @@
     <string name="error_title">Error: </string>
     <string name="error_network_title">Network</string>
     <string name="error_network_msg">Network unreachable</string>
+    <string name="error_generic">\n\nCheck that your API comply to the level you declare! see http://spaceapi.net</string>
 
     <string name="prefs_interval_title">Check interval</string>
     <string name="prefs_interval_summary">Interval in minutes to check the status in the widget</string>

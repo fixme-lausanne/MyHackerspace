@@ -278,7 +278,7 @@ public class Main extends Activity {
 			// showDialog(DIALOG_ERROR);
 			new AlertDialog.Builder(this)
 					.setTitle(getString(R.string.error_title) + title)
-					.setMessage(msg)
+					.setMessage(msg+getString(R.string.error_generic))
 					.setNeutralButton(getString(R.string.ok), null).show();
 		}
 	}
