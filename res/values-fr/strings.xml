@@ -21,7 +21,7 @@
     <string name="error_title">Erreur: </string>
     <string name="error_network_title">Réseau</string>
     <string name="error_network_msg">Réseau déconnecté</string>
-    <string name="error_generic">\n\nVérifiez que votre API corresponde à la version que vous déclarez! Voir http://spaceapi.net</string>
+    <string name="error_generic">\n\nVérifiez que votre API corresponde à la version que vous déclarez!\n\nVoir http://spaceapi.net</string>
 
     <string name="prefs_interval_title">Interval de vérification</string>
     <string name="prefs_interval_summary">Interval en minutes entre les vérifications du widget</string>
