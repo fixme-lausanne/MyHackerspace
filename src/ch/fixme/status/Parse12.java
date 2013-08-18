@@ -3,11 +3,14 @@ package ch.fixme.status;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 public class Parse12 extends ParseGeneric {
 
@@ -83,6 +86,33 @@ public class Parse12 extends ParseGeneric {
 			}
 		}
 
+		// Sensors
+		if (!mApi.isNull(API_SENSORS)) {
+			JSONArray sensors = mApi.getJSONArray(API_SENSORS);
+			JSONObject elem;
+			JSONObject elem_first;
+			ArrayList<String> elem_value;
+			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>(
+					sensors.length());
+			for (int i = 0; i < sensors.length(); i++) {
+				elem = (JSONObject) sensors.get(i);
+				elem_value = new ArrayList<String>(elem.length());
+				try {
+					elem_first = elem.getJSONObject(elem.names().getString(0));
+					for (int j = 0; j < elem.length(); j++) {
+						String name = (String) elem_first.names().get(j);
+						elem_value
+								.add(name + ": " + elem_first.getString(name));
+					}
+				} catch (Exception e) {
+					Log.e(Main.TAG, e.getLocalizedMessage());
+					elem_value.add(elem.toString());
+				}
+				result.put((String) elem.names().get(0), elem_value);
+			}
+			mResult.put(API_SENSORS, result);
+		}
+
 		if (!mApi.isNull(API_STREAM) || !mApi.isNull(API_CAM)) {
 			// Stream
 			if (!mApi.isNull(API_STREAM)) {
@@ -114,5 +144,4 @@ public class Parse12 extends ParseGeneric {
 
 		return mResult;
 	}
-
 }

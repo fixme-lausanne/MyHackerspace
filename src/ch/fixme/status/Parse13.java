@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class Parse13 extends ParseGeneric {
 
 	public Parse13(JSONObject jsonObject) throws JSONException {
@@ -147,6 +149,7 @@ public class Parse13 extends ParseGeneric {
 						}
 						elem_value.add(dataString);
 					} catch (Exception e) {
+						Log.e(Main.TAG, e.getLocalizedMessage());
 						elem_value.add(elem.get(j).toString());
 					}
 				}
