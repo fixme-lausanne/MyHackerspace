@@ -29,7 +29,7 @@ import android.util.Log;
 public class Net {
 
 	private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-			+ Build.MODEL + ") MyHackerspace/1.7";
+			+ Build.MODEL + ") MyHackerspace/1.7.1";
 	final private HttpClient client;
 	final private HttpGet getMethod;
 
