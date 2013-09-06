@@ -106,7 +106,7 @@ public class Widget extends AppWidgetProvider {
 				+ "s");
 	}
 
-	private static class GetImage extends AsyncTask<String, Void, byte[]> {
+	private static class GetImage extends AsyncTask<String, Void, Bitmap> {
 
 		private int mId;
 		private Context mCtxt;
@@ -119,23 +119,20 @@ public class Widget extends AppWidgetProvider {
 		}
 
 		@Override
-		protected byte[] doInBackground(String... url) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+		protected Bitmap doInBackground(String... url) {
 			try {
 				Log.i(Main.TAG, "Get image from url " + url[0]);
-				new Net(url[0], os);
+				return new Net(url[0]).getBitmap();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return os.toByteArray();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(byte[] result) {
+		protected void onPostExecute(Bitmap result) {
 			AppWidgetManager manager = AppWidgetManager.getInstance(mCtxt);
-			updateWidget(mCtxt, mId, manager,
-					BitmapFactory.decodeByteArray(result, 0, result.length),
-					mText);
+			updateWidget(mCtxt, mId, manager, result, mText);
 		}
 
 	}
@@ -194,16 +191,12 @@ public class Widget extends AppWidgetProvider {
 
 		@Override
 		protected String doInBackground(String... url) {
-			ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
 			try {
-				new Net(url[0], spaceOs);
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-				cancel(true);
+				return new Net(url[0]).getString();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return spaceOs.toString();
+			return "";
 		}
 
 		@Override

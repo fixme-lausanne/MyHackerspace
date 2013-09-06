@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
@@ -305,15 +306,14 @@ public class Main extends Activity {
 
 		@Override
 		protected String doInBackground(String... url) {
-			ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
 			try {
-				new Net(url[0], direcOs);
+				return new Net(url[0]).getString();
 			} catch (Exception e) {
 				mErrorTitle = e.getClass().getCanonicalName();
 				mErrorMsg = e.getLocalizedMessage();
 				e.printStackTrace();
 			}
-			return direcOs.toString();
+			return "";
 		}
 
 		@Override
@@ -353,15 +353,14 @@ public class Main extends Activity {
 
 		@Override
 		protected String doInBackground(String... url) {
-			ByteArrayOutputStream spaceOs = new ByteArrayOutputStream();
 			try {
-				new Net(url[0], spaceOs);
+				return new Net(url[0]).getString();
 			} catch (Exception e) {
 				mErrorTitle = e.getClass().getCanonicalName();
 				mErrorMsg = e.getLocalizedMessage();
 				e.printStackTrace();
 			}
-			return spaceOs.toString();
+			return "";
 		}
 
 		@Override
@@ -383,7 +382,7 @@ public class Main extends Activity {
 		}
 	}
 
-	private class GetImage extends AsyncTask<String, Void, byte[]> {
+	private class GetImage extends AsyncTask<String, Void, Bitmap> {
 
 		private int mId;
 		private String mErrorTitle;
@@ -402,23 +401,21 @@ public class Main extends Activity {
 		}
 
 		@Override
-		protected byte[] doInBackground(String... url) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
+		protected Bitmap doInBackground(String... url) {
 			try {
-				new Net(url[0], os);
+				return new Net(url[0]).getBitmap();
 			} catch (Exception e) {
 				mErrorTitle = e.getClass().getCanonicalName();
 				mErrorMsg = e.getLocalizedMessage();
 				e.printStackTrace();
 			}
-			return os.toByteArray();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(byte[] result) {
+		protected void onPostExecute(Bitmap result) {
 			if (mErrorMsg == null) {
-				((ImageView) findViewById(mId)).setImageBitmap(BitmapFactory
-						.decodeByteArray(result, 0, result.length));
+				((ImageView) findViewById(mId)).setImageBitmap(result);
 			} else {
 				showError(mErrorTitle, mErrorMsg);
 				((ImageView) findViewById(mId))

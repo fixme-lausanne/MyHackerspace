@@ -126,13 +126,12 @@ public class Widget_config extends Activity {
 
 		@Override
 		protected String doInBackground(String... url) {
-			ByteArrayOutputStream direcOs = new ByteArrayOutputStream();
 			try {
-				new Net(url[0], direcOs);
+				return new Net(url[0]).getString();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return direcOs.toString();
+			return "";
 		}
 
 		@Override
