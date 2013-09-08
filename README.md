@@ -10,6 +10,10 @@ RELEASE NOTES
 
 1.7
 -----
+- Faster http requests (Use DefaultHttpClient instead of HttpURLConnection)
+
+1.7
+-----
 
 - Full support of SpaceAPI 0.13, drops mixed api definition: hackerspaces must comply to the level they declare!
 - Widget transparency preference added (by default transparency is deactivated)
