@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+    Licensed under GNU's GPL 2, see README
+-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2dip"
+    android:paddingTop="2dip"
+    android:layout_marginBottom="2dip"
+    android:layout_marginTop="2dip">
+    <ImageView
+        android:id="@+id/entry_img"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:paddingTop="8dip"
+        android:paddingRight="8dip"
+        android:paddingBottom="8dip"
+        android:src="@android:drawable/sym_contact_card"/>
+    <TextView
+        android:id="@+id/entry_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_img"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginRight="4dip"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="true"
+        android:text="20" />
+    <TextView
+        android:id="@+id/entry_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_value"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="true"
+        android:text="°C" />
+    <TextView
+        android:id="@+id/entry_properties"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_img"
+        android:layout_below="@id/entry_value"
+        android:layout_marginRight="4dip"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="true"
+        android:text="speed: 0 m/s, gust: 0 m/s" />
+    <TextView
+        android:id="@+id/entry_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_img"
+        android:layout_below="@id/entry_properties"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginRight="8dip"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="true"
+        android:text="Sensor1" />
+    <TextView
+        android:id="@+id/entry_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_name"
+        android:layout_below="@id/entry_properties"
+        android:layout_alignWithParentIfMissing="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="true"
+        android:text="Outside" />
+    <TextView
+        android:id="@+id/entry_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_img"
+        android:layout_below="@id/entry_name"
+        android:layout_alignWithParentIfMissing="true"
+        android:autoLink="all"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="true"
+        android:text="Description of the sensor" />
+    <TextView
+        android:id="@+id/entry_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/entry_img"
+        android:layout_below="@id/entry_description"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:autoLink="all"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="true"
+        android:text="{other: stuff}" />
+</RelativeLayout>

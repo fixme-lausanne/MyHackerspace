@@ -10,5 +10,6 @@
     android:paddingTop="16dip"
     android:textAllCaps="true"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textColor="#0099CC" />
+    android:textColor="#0099CC"
+    android:text="Title" />
 

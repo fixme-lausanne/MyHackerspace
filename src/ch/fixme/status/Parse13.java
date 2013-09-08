@@ -111,45 +111,58 @@ public class Parse13 extends ParseGeneric {
 			JSONObject sensors = mApi.getJSONObject(API_SENSORS);
 			JSONArray names = sensors.names();
 			JSONArray elem;
-			ArrayList<String> elem_value;
-			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>(
-					sensors.length());
+            ArrayList<HashMap<String, String>> elem_value;
+            HashMap<String, ArrayList<HashMap<String, String>>> result = new HashMap<String, ArrayList<HashMap<String, String>>>(
+                    sensors.length());
 			for (int i = 0; i < names.length(); i++) {
 				elem = sensors.getJSONArray(names.getString(i));
-				elem_value = new ArrayList<String>();
+				elem_value = new ArrayList<HashMap<String, String>>(elem.length());
 				for (int j = 0; j < elem.length(); j++) {
+                    HashMap<String, String> elem_value_map = new HashMap<String, String>();
 					try {
-						String dataString = "";
 						JSONObject obj = (JSONObject) elem.get(j);
 						if (!obj.isNull(API_VALUE)
 								&& !"".equals(obj.getString(API_VALUE))) {
-							dataString += obj.getString(API_VALUE);
+                            elem_value_map.put(API_VALUE, obj.getString(API_VALUE));
 						}
 						if (!obj.isNull(API_UNIT)
 								&& !"".equals(obj.getString(API_UNIT))) {
-							dataString += " [" + obj.getString(API_UNIT) + "]";
+                            elem_value_map.put(API_UNIT, obj.getString(API_UNIT));
 						}
 						if (!obj.isNull(API_NAME2)
 								&& !"".equals(obj.getString(API_NAME2))) {
-							dataString += " <" + obj.getString(API_NAME2) + ">";
+                            elem_value_map.put(API_NAME2, obj.getString(API_NAME2));
 						}
 						if (!obj.isNull(API_LOCATION2)
 								&& !"".equals(obj.getString(API_LOCATION2))) {
-							dataString += " (" + obj.getString(API_LOCATION2)
-									+ ")";
+                            elem_value_map.put(API_LOCATION2, obj.getString(API_LOCATION2));
 						}
 						if (!obj.isNull(API_DESCRIPTION)
 								&& !"".equals(obj.getString(API_DESCRIPTION))) {
-							dataString += ": " + obj.getString(API_DESCRIPTION);
+                            elem_value_map.put(API_DESCRIPTION, obj.getString(API_DESCRIPTION));
 						}
-						if (!obj.isNull(API_MACHINES)) {
-							dataString += obj.get(API_MACHINES).toString();
-						}
-						elem_value.add(dataString);
+                        if (!obj.isNull(API_MACHINES) && obj.getJSONArray(API_MACHINES).length() > 0) {
+                            elem_value_map.put(API_MACHINES, obj.get(API_MACHINES).toString());
+                        }
+                        if (!obj.isNull(API_NAMES) && obj.getJSONArray(API_NAMES).length() > 0) {
+                            elem_value_map.put(API_NAMES, obj.get(API_NAMES).toString());
+                        }
+                        if (!obj.isNull(API_PROPERTIES)) {
+
+                            JSONObject obj2 = obj.getJSONObject(API_PROPERTIES);
+                            String prop = "";
+                            for (int k = 0; k < obj2.length(); k++){
+                                String name = (String) obj2.names().get(k);
+                                JSONObject obj3 = obj2.getJSONObject(name);
+                                prop += name + ": " + obj3.getString(API_VALUE) + " " + obj3.getString(API_UNIT) + ", ";
+                            }
+                            elem_value_map.put(API_PROPERTIES, prop.substring(0, prop.length() - 2));
+                        }
 					} catch (Exception e) {
-						Log.e(Main.TAG, e.getLocalizedMessage());
-						elem_value.add(elem.get(j).toString());
+						Log.e(Main.TAG, e.getMessage());
+                        elem_value_map.put(API_VALUE, elem.get(j).toString());
 					}
+                    elem_value.add(elem_value_map);
 				}
 				result.put(names.getString(i), elem_value);
 			}

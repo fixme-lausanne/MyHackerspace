@@ -83,25 +83,33 @@ public class Parse12 extends ParseGeneric {
 		if (!mApi.isNull(API_SENSORS)) {
 			JSONArray sensors = mApi.getJSONArray(API_SENSORS);
 			JSONObject elem;
-			JSONObject elem_first;
-			ArrayList<String> elem_value;
-			HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>(
+            HashMap<String, ArrayList<HashMap<String, String>>> result = new HashMap<String, ArrayList<HashMap<String, String>>>(
 					sensors.length());
 			for (int i = 0; i < sensors.length(); i++) {
 				elem = (JSONObject) sensors.get(i);
-				elem_value = new ArrayList<String>(elem.length());
 				try {
-					elem_first = elem.getJSONObject(elem.names().getString(0));
 					for (int j = 0; j < elem.length(); j++) {
-						String name = (String) elem_first.names().get(j);
-						elem_value
-								.add(name + ": " + elem_first.getString(name));
+                        ArrayList<HashMap<String, String>> elem_value = new ArrayList<HashMap<String, String>>();
+                        String name = (String) elem.names().get(j);
+                        JSONObject obj = elem.getJSONObject(name);
+                        for (int k = 0; k < obj.length(); k++){
+                            String name2 = (String) obj.names().get(k);
+                            HashMap<String, String> elem_value_map = new HashMap<String, String>();
+                            elem_value_map.put(API_NAME2, name2);
+                            elem_value_map.put(API_VALUE, obj.getString(name2));
+                            elem_value.add(elem_value_map);
+                        }
+                        result.put(name, elem_value);
 					}
 				} catch (Exception e) {
 					Log.e(Main.TAG, e.getLocalizedMessage());
-					elem_value.add(elem.toString());
+                    e.printStackTrace();
+                    ArrayList<HashMap<String, String>> elem_value = new ArrayList<HashMap<String, String>>();
+                    HashMap<String, String> elem_value_map = new HashMap<String, String>();
+                    elem_value_map.put(API_VALUE, elem.toString());
+					elem_value.add(elem_value_map);
+                    result.put((String) elem.names().get(0), elem_value);
 				}
-				result.put((String) elem.names().get(0), elem_value);
 			}
 			mResult.put(API_SENSORS, result);
 		}

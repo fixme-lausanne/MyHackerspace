@@ -46,6 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -609,26 +610,62 @@ public class Main extends Activity {
 				vg.addView(title);
 				inflater.inflate(R.layout.separator, vg);
 
-				HashMap<String, ArrayList<String>> sensors = (HashMap<String, ArrayList<String>>) data
+				HashMap<String, ArrayList<HashMap<String, String>>> sensors = (HashMap<String, ArrayList<HashMap<String, String>>>) data
 						.get(ParseGeneric.API_SENSORS);
 				Set<String> names = sensors.keySet();
 				Iterator<String> it = names.iterator();
 				while (it.hasNext()) {
 					String name = it.next();
 					// Subtitle
+                    String name_title = name.toLowerCase().replace("_", " ");
+                    name_title = name_title.substring(0, 1).toUpperCase() + name_title.substring(1, name_title.length());
 					TextView subtitle = (TextView) inflater.inflate(
 							R.layout.subtitle, null);
-					subtitle.setText(name.replace("_", " "));
+					subtitle.setText(name_title);
 					vg.addView(subtitle);
 					// Sensors data
-					ArrayList<String> sensorsData = sensors.get(name);
-					for (int j = 0; j < sensorsData.size(); j++) {
-						TextView tv = (TextView) inflater.inflate(
-								R.layout.entry, null);
-						tv.setText(sensorsData.get(j));
-						tv.setAutoLinkMask(0);
-						vg.addView(tv);
-					}
+					ArrayList<HashMap<String, String>> sensorsData = sensors.get(name);
+                    for (HashMap<String, String> elem : sensorsData){
+                        RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.entry_sensor, null);
+                        if (elem.containsKey(ParseGeneric.API_VALUE)){
+                            ((TextView)rl.findViewById(R.id.entry_value)).setText(elem.get(ParseGeneric.API_VALUE));
+                        } else {
+                            rl.findViewById(R.id.entry_value).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_UNIT)){
+                            ((TextView)rl.findViewById(R.id.entry_unit)).setText(elem.get(ParseGeneric.API_UNIT));
+                        } else {
+                            rl.findViewById(R.id.entry_unit).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_NAME2)){
+                            ((TextView)rl.findViewById(R.id.entry_name)).setText(elem.get(ParseGeneric.API_NAME2));
+                        } else {
+                            rl.findViewById(R.id.entry_name).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_LOCATION2)){
+                            ((TextView)rl.findViewById(R.id.entry_location)).setText(elem.get(ParseGeneric.API_LOCATION2));
+                        } else {
+                            rl.findViewById(R.id.entry_location).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_DESCRIPTION)){
+                            ((TextView)rl.findViewById(R.id.entry_description)).setText(elem.get(ParseGeneric.API_DESCRIPTION));
+                        } else {
+                            rl.findViewById(R.id.entry_description).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_PROPERTIES)){
+                            ((TextView)rl.findViewById(R.id.entry_properties)).setText(elem.get(ParseGeneric.API_PROPERTIES));
+                        } else {
+                            rl.findViewById(R.id.entry_properties).setVisibility(View.GONE);
+                        }
+                        if (elem.containsKey(ParseGeneric.API_MACHINES)){
+                            ((TextView)rl.findViewById(R.id.entry_other)).setText(elem.get(ParseGeneric.API_MACHINES));
+                        } else if (elem.containsKey(ParseGeneric.API_NAMES)){
+                                ((TextView)rl.findViewById(R.id.entry_other)).setText(elem.get(ParseGeneric.API_NAMES));
+                        } else {
+                            rl.findViewById(R.id.entry_other).setVisibility(View.GONE);
+                        }
+                        vg.addView(rl);
+                    }
 				}
 			}
 
