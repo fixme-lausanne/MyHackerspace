@@ -48,10 +48,8 @@ public class Parse13 extends ParseGeneric {
 		}
 
 		// Duration (FIXME addition)
-		if (!mApi.isNull(API_DURATION)) {
-			mResult.put(API_EXT_DURATION, mApi.getString(API_DURATION));
-		} else if (!mApi.isNull(API_EXT_DURATION)) {
-			mResult.put(API_EXT_DURATION, mApi.getString(API_EXT_DURATION));
+		if (!state.isNull(API_EXT_DURATION)) {
+			mResult.put(API_EXT_DURATION, state.getString(API_EXT_DURATION));
 		}
 
 		// Location (Mandatory)

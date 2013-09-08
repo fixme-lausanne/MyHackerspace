@@ -44,13 +44,6 @@ public class Parse12 extends ParseGeneric {
 			mResult.put(API_LASTCHANGE, formatter.format(date));
 		}
 
-		// Duration (FIXME addition)
-		if (!mApi.isNull(API_DURATION)) {
-			mResult.put(API_EXT_DURATION, mApi.getString(API_DURATION));
-		} else if (!mApi.isNull(API_EXT_DURATION)) {
-			mResult.put(API_EXT_DURATION, mApi.getString(API_EXT_DURATION));
-		}
-
 		// Location
 		if (!mApi.isNull(API_LON) && !mApi.isNull(API_LAT)) {
 			mResult.put(API_LON, mApi.getString(API_LON));
