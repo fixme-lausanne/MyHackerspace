@@ -5,14 +5,6 @@
 
 package ch.fixme.status;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,151 +28,158 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Widget_config extends Activity {
 
-	private static final int DIALOG_LOADING = 0;
-	private SharedPreferences mPrefs;
-	private GetDirTask getDirTask;
-	private int mAppWidgetId;
+    private static final int DIALOG_LOADING = 0;
+    private SharedPreferences mPrefs;
+    private GetDirTask getDirTask;
+    private int mAppWidgetId;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.widget_config);
-		mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(Widget_config.this);
-		getDirTask = new GetDirTask();
-		getDirTask.execute(ParseGeneric.API_DIRECTORY);
-		Intent intent = getIntent();
-		Bundle extras = intent.getExtras();
-		mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-				AppWidgetManager.INVALID_APPWIDGET_ID);
-		findViewById(R.id.choose_ok).setOnClickListener(
-				new View.OnClickListener() {
-					public void onClick(View v) {
-						Editor edit = mPrefs.edit();
-						edit.putBoolean(
-								Prefs.KEY_WIDGET_TRANSPARENCY,
-								((CheckBox) findViewById(R.id.choose_transparency))
-										.isChecked());
-						edit.commit();
-						setWidgetAlarm();
-						finish();
-					}
-				});
-		((CheckBox) findViewById(R.id.choose_transparency)).setChecked(mPrefs
-				.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
-						Prefs.DEFAULT_WIDGET_TRANSPARENCY));
-		((EditText) findViewById(R.id.choose_update))
-				.addTextChangedListener(new TextWatcher() {
-					@Override
-					public void onTextChanged(CharSequence s, int start,
-							int before, int count) {
-						String inter = s.toString();
-						if (!"".equals(inter) && !"0".equals(inter)) {
-							Editor edit = mPrefs.edit();
-							edit.putString(Prefs.KEY_CHECK_INTERVAL, inter);
-							edit.commit();
-						}
-					}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.widget_config);
+        mPrefs = PreferenceManager
+                .getDefaultSharedPreferences(Widget_config.this);
+        getDirTask = new GetDirTask();
+        getDirTask.execute(ParseGeneric.API_DIRECTORY);
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
+        findViewById(R.id.choose_ok).setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Editor edit = mPrefs.edit();
+                        edit.putBoolean(
+                                Prefs.KEY_WIDGET_TRANSPARENCY,
+                                ((CheckBox) findViewById(R.id.choose_transparency))
+                                        .isChecked());
+                        edit.commit();
+                        setWidgetAlarm();
+                        finish();
+                    }
+                });
+        ((CheckBox) findViewById(R.id.choose_transparency)).setChecked(mPrefs
+                .getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
+                        Prefs.DEFAULT_WIDGET_TRANSPARENCY));
+        ((EditText) findViewById(R.id.choose_update))
+                .addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start,
+                                              int before, int count) {
+                        String inter = s.toString();
+                        if (!"".equals(inter) && !"0".equals(inter)) {
+                            Editor edit = mPrefs.edit();
+                            edit.putString(Prefs.KEY_CHECK_INTERVAL, inter);
+                            edit.commit();
+                        }
+                    }
 
-					@Override
-					public void beforeTextChanged(CharSequence s, int start,
-							int count, int after) {
-					}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start,
+                                                  int count, int after) {
+                    }
 
-					@Override
-					public void afterTextChanged(Editable s) {
-					}
-				});
-	}
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
+    }
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		AlertDialog dialog = null;
-		switch (id) {
-		case DIALOG_LOADING:
-			dialog = new ProgressDialog(this);
-			dialog.setCancelable(false);
-			dialog.setMessage(getString(R.string.msg_loading));
-			dialog.setCancelable(true);
-			((ProgressDialog) dialog).setIndeterminate(true);
-			break;
-		}
-		return dialog;
-	}
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        AlertDialog dialog = null;
+        switch (id) {
+            case DIALOG_LOADING:
+                dialog = new ProgressDialog(this);
+                dialog.setCancelable(false);
+                dialog.setMessage(getString(R.string.msg_loading));
+                dialog.setCancelable(true);
+                ((ProgressDialog) dialog).setIndeterminate(true);
+                break;
+        }
+        return dialog;
+    }
 
-	private void setWidgetAlarm() {
-		Context ctxt = getApplicationContext();
-		Intent i = Widget.getIntent(ctxt, mAppWidgetId);
-		setResult(RESULT_OK, i);
-		Widget.setAlarm(ctxt, i, mAppWidgetId);
-	}
+    private void setWidgetAlarm() {
+        Context ctxt = getApplicationContext();
+        Intent i = Widget.getIntent(ctxt, mAppWidgetId);
+        setResult(RESULT_OK, i);
+        Widget.setAlarm(ctxt, i, mAppWidgetId);
+    }
 
-	public class GetDirTask extends AsyncTask<String, Void, String> {
+    public class GetDirTask extends AsyncTask<String, Void, String> {
 
-		@Override
-		protected void onPreExecute() {
-			showDialog(DIALOG_LOADING);
-		}
+        @Override
+        protected void onPreExecute() {
+            showDialog(DIALOG_LOADING);
+        }
 
-		@Override
-		protected String doInBackground(String... url) {
-			try {
-				return new Net(url[0]).getString();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return "";
-		}
+        @Override
+        protected String doInBackground(String... url) {
+            try {
+                return new Net(url[0]).getString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
 
-		@Override
-		protected void onPostExecute(String result) {
-			// Construct hackerspaces list
-			Spinner s = (Spinner) findViewById(R.id.choose_hs);
-			try {
-				JSONObject obj = new JSONObject(result);
-				JSONArray arr = obj.names();
-				int len = obj.length();
-				String[] names = new String[len];
-				final ArrayList<String> url = new ArrayList<String>(len);
-				for (int i = 0; i < len; i++) {
-					names[i] = arr.getString(i);
-				}
-				Arrays.sort(names);
-				for (int i = 0; i < len; i++) {
-					url.add(i, obj.getString(names[i]));
-				}
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-						Widget_config.this,
-						android.R.layout.simple_spinner_item, names);
-				adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-				s.setAdapter(adapter);
-				s.setOnItemSelectedListener(new OnItemSelectedListener() {
-					public void onItemSelected(AdapterView<?> adapter, View v,
-							int position, long id) {
-						Editor edit = mPrefs.edit();
-						edit.putString(Main.PREF_API_URL_WIDGET + mAppWidgetId,
-								url.get(position));
-						edit.commit();
-					}
+        @Override
+        protected void onPostExecute(String result) {
+            // Construct hackerspaces list
+            Spinner s = (Spinner) findViewById(R.id.choose_hs);
+            try {
+                JSONObject obj = new JSONObject(result);
+                JSONArray arr = obj.names();
+                int len = obj.length();
+                String[] names = new String[len];
+                final ArrayList<String> url = new ArrayList<String>(len);
+                for (int i = 0; i < len; i++) {
+                    names[i] = arr.getString(i);
+                }
+                Arrays.sort(names);
+                for (int i = 0; i < len; i++) {
+                    url.add(i, obj.getString(names[i]));
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                        Widget_config.this,
+                        android.R.layout.simple_spinner_item, names);
+                adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+                s.setAdapter(adapter);
+                s.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> adapter, View v,
+                                               int position, long id) {
+                        Editor edit = mPrefs.edit();
+                        edit.putString(Main.PREF_API_URL_WIDGET + mAppWidgetId,
+                                url.get(position));
+                        edit.commit();
+                    }
 
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
-				Log.e(Main.TAG, result);
-			}
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
+                Log.e(Main.TAG, result);
+            }
 
-			removeDialog(DIALOG_LOADING);
-		}
+            removeDialog(DIALOG_LOADING);
+        }
 
-		@Override
-		protected void onCancelled() {
-			removeDialog(DIALOG_LOADING);
-		}
-	}
+        @Override
+        protected void onCancelled() {
+            removeDialog(DIALOG_LOADING);
+        }
+    }
 
 }
