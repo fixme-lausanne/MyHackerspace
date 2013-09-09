@@ -234,8 +234,8 @@ public class Widget extends AppWidgetProvider {
                 edit.commit();
 
                 // Status icon or space icon
-                if (api.containsKey(ParseGeneric.API_ICON_OPEN)
-                        && api.containsKey(ParseGeneric.API_ICON_CLOSED)) {
+                if (api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_OPEN)
+                        && api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_CLOSED)) {
                     new GetImage(mCtxt, mId, null).execute((String) api
                             .get(status));
                 } else {
