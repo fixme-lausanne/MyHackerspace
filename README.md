@@ -8,8 +8,15 @@ My Hackerspace
 RELEASE NOTES
 =============
 
-1.7
+1.7.2
 -----
+
+- Better layout for sensors
+- Support more fields for sensors (machines, names, properties)
+
+1.7.1
+-----
+
 - Faster http requests (Use DefaultHttpClient instead of HttpURLConnection)
 
 1.7
