@@ -1,8 +1,8 @@
 My Hackerspace
 ==============
 
-- Status of hackerspaces using the SpaceAPI: https://hackerspaces.nl/spaceapi/
-- Show basic information about the space
+- Status of hackerspaces using the [SpaceAPI](http://spaceapi.net)
+- Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
 
 RELEASE NOTES
