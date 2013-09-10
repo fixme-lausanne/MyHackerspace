@@ -215,7 +215,7 @@ public class Main extends Activity {
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage() + getString(R.string.error_generic));
             return null;
         }
     }
@@ -278,7 +278,7 @@ public class Main extends Activity {
             // showDialog(DIALOG_ERROR);
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.error_title) + title)
-                    .setMessage(msg + getString(R.string.error_generic))
+                    .setMessage(msg)
                     .setNeutralButton(getString(R.string.ok), null).show();
         }
     }
@@ -322,7 +322,7 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 mResultDir = result;
             } else {
-                showError(mErrorTitle, mErrorMsg);
+                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
             }
         }
 
@@ -370,7 +370,7 @@ public class Main extends Activity {
                 mResultHs = result;
                 populateDataHs();
             } else {
-                showError(mErrorTitle, mErrorMsg);
+                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
             }
         }
 
@@ -416,7 +416,7 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 ((ImageView) findViewById(mId)).setImageBitmap(result);
             } else {
-                showError(mErrorTitle, mErrorMsg);
+                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
                 ((ImageView) findViewById(mId))
                         .setImageResource(android.R.drawable.ic_menu_report_image);
             }
@@ -709,7 +709,7 @@ public class Main extends Activity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage() + getString(R.string.error_generic));
         }
     }
 
