@@ -194,7 +194,7 @@ public class Main extends Activity {
             for (int i = 0; i < len; i++) {
                 names[i] = arr.getString(i);
             }
-            Arrays.sort(names);
+            Arrays.sort(names, 0, len, String.CASE_INSENSITIVE_ORDER);
             for (int i = 0; i < len; i++) {
                 url.add(i, obj.getString(names[i]));
             }
