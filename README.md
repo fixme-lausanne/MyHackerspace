@@ -8,6 +8,13 @@ My Hackerspace
 RELEASE NOTES
 =============
 
+1.7.3
+-----
+
+- Fix regression with widget custom open/close logo
+- Change HTTP requests methods
+- Fix order of hackerspaces with different cases
+
 1.7.2
 -----
 
