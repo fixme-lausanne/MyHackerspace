@@ -5,8 +5,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.fixme.status"
-    android:versionCode="15"
-    android:versionName="1.7.2" >
+    android:versionCode="16"
+    android:versionName="1.7.3" >
 
     <uses-sdk
         android:minSdkVersion="3"
