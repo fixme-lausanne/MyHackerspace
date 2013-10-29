@@ -4,6 +4,7 @@ My Hackerspace
 - Status of hackerspaces using the [SpaceAPI](http://spaceapi.net)
 - Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
+- Available on [f-droid](https://f-droid.org/repository/browse/?fdid=ch.fixme.status) and [play store](https://play.google.com/store/apps/details?id=ch.fixme.status)
 
 RELEASE NOTES
 =============
@@ -12,7 +13,6 @@ RELEASE NOTES
 -----
 
 - Fix regression with widget custom open/close logo
-- Change HTTP requests methods
 - Fix order of hackerspaces with different cases
 
 1.7.2
