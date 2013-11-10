@@ -28,6 +28,9 @@ import java.util.HashMap;
 
 public class Widget extends AppWidgetProvider {
 
+    static final String WIDGET_IDS = "widget_ids";
+    static final String WIDGET_FORCE = "widget_force";
+
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
@@ -52,15 +55,20 @@ public class Widget extends AppWidgetProvider {
             edit.commit();
 
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
-        }
-        super.onReceive(ctxt, intent);
+        } else if (intent.hasExtra(WIDGET_IDS)
+                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
+            int[] ids = intent.getExtras().getIntArray(WIDGET_IDS);
+            onUpdate(ctxt, AppWidgetManager.getInstance(ctxt), ids);
+        } else
+            super.onReceive(ctxt, intent);
     }
 
     public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
-                         int[] appWidgetIds) {
+            int[] appWidgetIds) {
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
+            Intent intent = getIntent(ctxt, widgetId);
             // Set initialize
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
@@ -68,7 +76,6 @@ public class Widget extends AppWidgetProvider {
             edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, false);
             edit.commit();
             // Update timer
-            Intent intent = getIntent(ctxt, widgetId);
             setAlarm(ctxt, intent, widgetId);
             Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
         }
@@ -86,7 +93,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId,
-                                   int delay) {
+            int delay) {
         // Get interval
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(ctxt);
@@ -135,7 +142,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     protected static void updateWidget(final Context ctxt, int widgetId,
-                                       AppWidgetManager manager, Bitmap bitmap, String text) {
+            AppWidgetManager manager, Bitmap bitmap, String text) {
         RemoteViews views = new RemoteViews(ctxt.getPackageName(),
                 R.layout.widget);
         SharedPreferences prefs = PreferenceManager
@@ -145,6 +152,9 @@ public class Widget extends AppWidgetProvider {
                 Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
             Log.e(Main.TAG, "Widget is transparent");
             views.setInt(R.id.widget_image, "setBackgroundResource", 0);
+        } else {
+            views.setInt(R.id.widget_image, "setBackgroundResource",
+                    android.R.drawable.btn_default_small);
         }
         if (bitmap != null) {
             views.setImageViewBitmap(R.id.widget_image, bitmap);
@@ -218,7 +228,7 @@ public class Widget extends AppWidgetProvider {
                 if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
                         && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
                         && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
-                        false)) {
+                                false)) {
                     Log.i(Main.TAG, "Nothing to update");
                     return;
                 }
@@ -234,8 +244,10 @@ public class Widget extends AppWidgetProvider {
                 edit.commit();
 
                 // Status icon or space icon
-                if (api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_OPEN)
-                        && api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_CLOSED)) {
+                if (api.containsKey(ParseGeneric.API_ICON
+                        + ParseGeneric.API_ICON_OPEN)
+                        && api.containsKey(ParseGeneric.API_ICON
+                                + ParseGeneric.API_ICON_CLOSED)) {
                     new GetImage(mCtxt, mId, null).execute((String) api
                             .get(status));
                 } else {
