@@ -32,7 +32,6 @@ public class Prefs extends PreferenceActivity implements
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        Log.e(Main.TAG, "CLICK PREF: " + key);
         if (key.equals(KEY_WIDGET_TRANSPARENCY)
                 || key.equals(KEY_CHECK_INTERVAL)) {
             Context ctxt = getApplicationContext();

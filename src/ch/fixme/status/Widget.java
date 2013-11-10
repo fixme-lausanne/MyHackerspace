@@ -125,7 +125,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                Log.i(Main.TAG, "Get image from url " + url[0]);
+                // Log.i(Main.TAG, "Get image from url " + url[0]);
                 return new Net(url[0]).getBitmap();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -150,7 +150,6 @@ public class Widget extends AppWidgetProvider {
         Editor edit = prefs.edit();
         if (prefs.getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
                 Prefs.DEFAULT_WIDGET_TRANSPARENCY)) {
-            Log.e(Main.TAG, "Widget is transparent");
             views.setInt(R.id.widget_image, "setBackgroundResource", 0);
         } else {
             views.setInt(R.id.widget_image, "setBackgroundResource",
@@ -229,7 +228,7 @@ public class Widget extends AppWidgetProvider {
                         && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
                         && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
                                 false)) {
-                    Log.i(Main.TAG, "Nothing to update");
+                    // Log.i(Main.TAG, "Nothing to update");
                     return;
                 }
 
@@ -272,7 +271,6 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onHandleIntent(Intent intent) {
-            Log.i(Main.TAG, "UpdateService started");
             final Context ctxt = UpdateService.this;
             int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
