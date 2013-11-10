@@ -4,16 +4,11 @@
  */
 package ch.fixme.status;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.util.Log;
 
 public class Prefs extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
@@ -34,15 +29,7 @@ public class Prefs extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (key.equals(KEY_WIDGET_TRANSPARENCY)
                 || key.equals(KEY_CHECK_INTERVAL)) {
-            Context ctxt = getApplicationContext();
-            AppWidgetManager man = AppWidgetManager.getInstance(ctxt);
-            int[] ids = man.getAppWidgetIds(new ComponentName(ctxt,
-                    Widget.class));
-            Intent ui = new Intent();
-            ui.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            ui.putExtra(Widget.WIDGET_IDS, ids);
-            ui.putExtra(Widget.WIDGET_FORCE, true);
-            ctxt.sendBroadcast(ui);
+            Widget.UpdateAllWidgets(getApplicationContext());
         }
     }
 

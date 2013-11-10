@@ -10,6 +10,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,7 +55,7 @@ public class Widget extends AppWidgetProvider {
             edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
             edit.commit();
 
-            Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
+            // Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         } else if (intent.hasExtra(WIDGET_IDS)
                 && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
             int[] ids = intent.getExtras().getIntArray(WIDGET_IDS);
@@ -77,7 +78,7 @@ public class Widget extends AppWidgetProvider {
             edit.commit();
             // Update timer
             setAlarm(ctxt, intent, widgetId);
-            Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
+            // Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
         }
         super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
     }
@@ -106,8 +107,8 @@ public class Widget extends AppWidgetProvider {
         am.cancel(pi);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + delay, update_interval, pi);
-        Log.i(Main.TAG, "start notification every " + update_interval / 1000
-                + "s");
+        // Log.i(Main.TAG, "start notification every " + update_interval / 1000
+        // + "s");
     }
 
     private static class GetImage extends AsyncTask<String, Void, Bitmap> {
@@ -286,6 +287,16 @@ public class Widget extends AppWidgetProvider {
             }
             stopSelf();
         }
+    }
+
+    public static void UpdateAllWidgets(final Context ctxt) {
+        AppWidgetManager man = AppWidgetManager.getInstance(ctxt);
+        int[] ids = man.getAppWidgetIds(new ComponentName(ctxt, Widget.class));
+        Intent ui = new Intent();
+        ui.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        ui.putExtra(Widget.WIDGET_IDS, ids);
+        ui.putExtra(Widget.WIDGET_FORCE, true);
+        ctxt.sendBroadcast(ui);
     }
 
 }

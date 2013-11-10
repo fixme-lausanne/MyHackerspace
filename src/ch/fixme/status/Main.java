@@ -5,6 +5,17 @@
 
 package ch.fixme.status;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,17 +47,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 public class Main extends Activity {
 
@@ -117,18 +117,18 @@ public class Main extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_refresh:
-                checkNetwork();
-                showHsInfo(getIntent(), null);
-                return true;
-            case R.id.menu_choose:
-                showDialog(DIALOG_LIST);
-                return true;
-            case R.id.menu_prefs:
-                startActivity(new Intent(Main.this, Prefs.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_refresh:
+            checkNetwork();
+            showHsInfo(getIntent(), null);
+            return true;
+        case R.id.menu_choose:
+            showDialog(DIALOG_LIST);
+            return true;
+        case R.id.menu_prefs:
+            startActivity(new Intent(Main.this, Prefs.class));
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -151,15 +151,15 @@ public class Main extends Activity {
     protected Dialog onCreateDialog(int id) {
         AlertDialog dialog = null;
         switch (id) {
-            case DIALOG_LOADING:
-                dialog = new ProgressDialog(this);
-                dialog.setCancelable(false);
-                dialog.setMessage(getString(R.string.msg_loading));
-                dialog.setCancelable(true);
-                ((ProgressDialog) dialog).setIndeterminate(true);
-                break;
-            case DIALOG_LIST:
-                return createHsDialog();
+        case DIALOG_LOADING:
+            dialog = new ProgressDialog(this);
+            dialog.setCancelable(false);
+            dialog.setMessage(getString(R.string.msg_loading));
+            dialog.setCancelable(true);
+            ((ProgressDialog) dialog).setIndeterminate(true);
+            break;
+        case DIALOG_LIST:
+            return createHsDialog();
         }
         return dialog;
     }
@@ -171,14 +171,14 @@ public class Main extends Activity {
             /* First attempt at fixing an HTC broken by evil Apple patents. */
             if (intent.getComponent() != null
                     && ".HtcLinkifyDispatcherActivity".equals(intent
-                    .getComponent().getShortClassName()))
+                            .getComponent().getShortClassName()))
                 intent.setComponent(null);
             super.startActivity(intent);
         } catch (ActivityNotFoundException e) {
-			/*
-			 * Probably an HTC broken by evil Apple patents. This is not
-			 * perfect, but better than crashing the whole application.
-			 */
+            /*
+             * Probably an HTC broken by evil Apple patents. This is not
+             * perfect, but better than crashing the whole application.
+             */
             super.startActivity(Intent.createChooser(intent, null));
         }
     }
@@ -215,7 +215,8 @@ public class Main extends Activity {
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage() + getString(R.string.error_generic));
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
+                    + getString(R.string.error_generic));
             return null;
         }
     }
@@ -224,7 +225,7 @@ public class Main extends Activity {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null
                 || (savedInstanceState == null && !savedInstanceState
-                .containsKey(STATE_DIR))) {
+                        .containsKey(STATE_DIR))) {
             getDirTask = new GetDirTask();
             getDirTask.execute(ParseGeneric.API_DIRECTORY);
         } else {
@@ -240,8 +241,8 @@ public class Main extends Activity {
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
                             + intent.getIntExtra(
-                            AppWidgetManager.EXTRA_APPWIDGET_ID,
-                            AppWidgetManager.INVALID_APPWIDGET_ID),
+                                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                    AppWidgetManager.INVALID_APPWIDGET_ID),
                     ParseGeneric.API_DEFAULT);
         } else if (intent != null && intent.hasExtra(STATE_HS)) {
             mApiUrl = intent.getStringExtra(STATE_HS);
@@ -252,7 +253,7 @@ public class Main extends Activity {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null
                 || (savedInstanceState == null && !savedInstanceState
-                .containsKey(STATE_HS))) {
+                        .containsKey(STATE_HS))) {
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
         } else {
@@ -260,6 +261,9 @@ public class Main extends Activity {
             mResultHs = data.getString(STATE_HS);
             populateDataHs();
         }
+
+        // Update widget
+        Widget.UpdateAllWidgets(getApplicationContext());
     }
 
     private boolean checkNetwork() {
@@ -322,7 +326,8 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 mResultDir = result;
             } else {
-                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg
+                        + getString(R.string.error_generic));
             }
         }
 
@@ -370,7 +375,8 @@ public class Main extends Activity {
                 mResultHs = result;
                 populateDataHs();
             } else {
-                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg
+                        + getString(R.string.error_generic));
             }
         }
 
@@ -416,7 +422,8 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 ((ImageView) findViewById(mId)).setImageBitmap(result);
             } else {
-                showError(mErrorTitle, mErrorMsg + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg
+                        + getString(R.string.error_generic));
                 ((ImageView) findViewById(mId))
                         .setImageResource(android.R.drawable.ic_menu_report_image);
             }
@@ -616,51 +623,73 @@ public class Main extends Activity {
                     String name = it.next();
                     // Subtitle
                     String name_title = name.toLowerCase().replace("_", " ");
-                    name_title = name_title.substring(0, 1).toUpperCase() + name_title.substring(1, name_title.length());
+                    name_title = name_title.substring(0, 1).toUpperCase()
+                            + name_title.substring(1, name_title.length());
                     TextView subtitle = (TextView) inflater.inflate(
                             R.layout.subtitle, null);
                     subtitle.setText(name_title);
                     vg.addView(subtitle);
                     // Sensors data
-                    ArrayList<HashMap<String, String>> sensorsData = sensors.get(name);
+                    ArrayList<HashMap<String, String>> sensorsData = sensors
+                            .get(name);
                     for (HashMap<String, String> elem : sensorsData) {
-                        RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.entry_sensor, null);
+                        RelativeLayout rl = (RelativeLayout) inflater.inflate(
+                                R.layout.entry_sensor, null);
                         if (elem.containsKey(ParseGeneric.API_VALUE)) {
-                            ((TextView) rl.findViewById(R.id.entry_value)).setText(elem.get(ParseGeneric.API_VALUE));
+                            ((TextView) rl.findViewById(R.id.entry_value))
+                                    .setText(elem.get(ParseGeneric.API_VALUE));
                         } else {
-                            rl.findViewById(R.id.entry_value).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_value).setVisibility(
+                                    View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_UNIT)) {
-                            ((TextView) rl.findViewById(R.id.entry_unit)).setText(elem.get(ParseGeneric.API_UNIT));
+                            ((TextView) rl.findViewById(R.id.entry_unit))
+                                    .setText(elem.get(ParseGeneric.API_UNIT));
                         } else {
-                            rl.findViewById(R.id.entry_unit).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_unit).setVisibility(
+                                    View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_NAME2)) {
-                            ((TextView) rl.findViewById(R.id.entry_name)).setText(elem.get(ParseGeneric.API_NAME2));
+                            ((TextView) rl.findViewById(R.id.entry_name))
+                                    .setText(elem.get(ParseGeneric.API_NAME2));
                         } else {
-                            rl.findViewById(R.id.entry_name).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_name).setVisibility(
+                                    View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_LOCATION2)) {
-                            ((TextView) rl.findViewById(R.id.entry_location)).setText(elem.get(ParseGeneric.API_LOCATION2));
+                            ((TextView) rl.findViewById(R.id.entry_location))
+                                    .setText(elem
+                                            .get(ParseGeneric.API_LOCATION2));
                         } else {
-                            rl.findViewById(R.id.entry_location).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_location).setVisibility(
+                                    View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_DESCRIPTION)) {
-                            ((TextView) rl.findViewById(R.id.entry_description)).setText(elem.get(ParseGeneric.API_DESCRIPTION));
+                            ((TextView) rl.findViewById(R.id.entry_description))
+                                    .setText(elem
+                                            .get(ParseGeneric.API_DESCRIPTION));
                         } else {
-                            rl.findViewById(R.id.entry_description).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_description)
+                                    .setVisibility(View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_PROPERTIES)) {
-                            ((TextView) rl.findViewById(R.id.entry_properties)).setText(elem.get(ParseGeneric.API_PROPERTIES));
+                            ((TextView) rl.findViewById(R.id.entry_properties))
+                                    .setText(elem
+                                            .get(ParseGeneric.API_PROPERTIES));
                         } else {
-                            rl.findViewById(R.id.entry_properties).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_properties)
+                                    .setVisibility(View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_MACHINES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other)).setText(elem.get(ParseGeneric.API_MACHINES));
+                            ((TextView) rl.findViewById(R.id.entry_other))
+                                    .setText(elem
+                                            .get(ParseGeneric.API_MACHINES));
                         } else if (elem.containsKey(ParseGeneric.API_NAMES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other)).setText(elem.get(ParseGeneric.API_NAMES));
+                            ((TextView) rl.findViewById(R.id.entry_other))
+                                    .setText(elem.get(ParseGeneric.API_NAMES));
                         } else {
-                            rl.findViewById(R.id.entry_other).setVisibility(View.GONE);
+                            rl.findViewById(R.id.entry_other).setVisibility(
+                                    View.GONE);
                         }
                         vg.addView(rl);
                     }
@@ -709,7 +738,8 @@ public class Main extends Activity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage() + getString(R.string.error_generic));
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
+                    + getString(R.string.error_generic));
         }
     }
 
