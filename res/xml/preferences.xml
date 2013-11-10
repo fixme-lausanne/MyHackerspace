@@ -18,4 +18,10 @@
         android:summary="@string/prefs_transparent_summary"
         android:defaultValue="false" />
 
+    <CheckBoxPreference
+        android:key="widget_text"
+        android:title="@string/prefs_text_title"
+        android:summary="@string/prefs_text_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>

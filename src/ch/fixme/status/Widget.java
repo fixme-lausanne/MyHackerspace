@@ -244,19 +244,24 @@ public class Widget extends AppWidgetProvider {
                 edit.commit();
 
                 String status_text = null;
-                if (api.containsKey(ParseGeneric.API_STATUS_TXT)) {
-                    status_text = (String) api.get(ParseGeneric.API_STATUS_TXT);
+                if (prefs.getBoolean(Prefs.KEY_WIDGET_TEXT,
+                        Prefs.DEFAULT_WIDGET_TEXT)) {
+                    if (api.containsKey(ParseGeneric.API_STATUS_TXT)) {
+                        status_text = (String) api
+                                .get(ParseGeneric.API_STATUS_TXT);
+                    } else {
+                        status_text = statusBool ? Main.OPEN : Main.CLOSED;
+                    }
                 }
 
                 // Status icon or space icon
-                if (api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_OPEN)
-                        && api.containsKey(ParseGeneric.API_ICON + ParseGeneric.API_ICON_CLOSED)) {
+                if (api.containsKey(ParseGeneric.API_ICON
+                        + ParseGeneric.API_ICON_OPEN)
+                        && api.containsKey(ParseGeneric.API_ICON
+                                + ParseGeneric.API_ICON_CLOSED)) {
                     new GetImage(mCtxt, mId, status_text).execute((String) api
                             .get(status));
                 } else {
-                    if (status_text == null) {
-                        status_text = statusBool ? Main.OPEN : Main.CLOSED;
-                    }
                     new GetImage(mCtxt, mId, status_text).execute((String) api
                             .get(ParseGeneric.API_LOGO));
                 }

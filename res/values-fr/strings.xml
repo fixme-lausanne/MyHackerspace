@@ -12,7 +12,8 @@
     <string name="choose_hs">Choisir un hackerspace</string>
     <string name="choose_time">Choisir un interval en minutes: </string>
     <string name="choose_time_default">30</string>
-    <string name="choose_transparency">Transparence du widget</string>
+    <string name="choose_transparency">Transparence des widgets</string>
+    <string name="choose_text">Texte du statut sous les widgets</string>
 
     <string name="btn_refresh">Rafraichir</string>
     <string name="btn_prefs">Préférences</string>
@@ -27,6 +28,8 @@
     <string name="prefs_interval_summary">Interval en minutes entre les vérifications du widget</string>
     <string name="prefs_transparent_title">Transparence des widgets</string>
     <string name="prefs_transparent_summary">L\'image de fond des widgets sera transparente au lieu de grise</string>
+    <string name="prefs_text_title">Texte sous les widgets</string>
+    <string name="prefs_text_summary">Ajout d\'un texte du statut sour les widgets</string>
 
     <string name="api_status">Status</string>
     <string name="api_lastchange">Dernier changement: </string>

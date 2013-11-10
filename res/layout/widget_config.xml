@@ -47,6 +47,13 @@
         android:layout_below="@id/choose_update"
         android:text="@string/choose_transparency" />
 
+    <CheckBox
+        android:id="@+id/choose_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_transparency"
+        android:text="@string/choose_text" />
+
     <Button
         android:id="@+id/choose_ok"
         android:layout_width="wrap_content"

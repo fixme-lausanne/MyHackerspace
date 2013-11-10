@@ -15,8 +15,12 @@ public class Prefs extends PreferenceActivity implements
 
     public static final String KEY_CHECK_INTERVAL = "check_interval";
     public static final String DEFAULT_CHECK_INTERVAL = "30"; // minutes
+
     public static final String KEY_WIDGET_TRANSPARENCY = "widget_transparency";
     public static final boolean DEFAULT_WIDGET_TRANSPARENCY = false;
+
+    public static final String KEY_WIDGET_TEXT = "widget_text";
+    public static final boolean DEFAULT_WIDGET_TEXT = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,7 @@ public class Prefs extends PreferenceActivity implements
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (key.equals(KEY_WIDGET_TRANSPARENCY)
+        if (key.equals(KEY_WIDGET_TRANSPARENCY) || key.equals(KEY_WIDGET_TEXT)
                 || key.equals(KEY_CHECK_INTERVAL)) {
             Widget.UpdateAllWidgets(getApplicationContext());
         }
