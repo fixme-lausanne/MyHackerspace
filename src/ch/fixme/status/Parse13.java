@@ -115,7 +115,11 @@ public class Parse13 extends ParseGeneric {
             HashMap<String, ArrayList<HashMap<String, String>>> result = new HashMap<String, ArrayList<HashMap<String, String>>>(
                     sensors.length());
             for (int i = 0; i < names.length(); i++) {
-                elem = sensors.getJSONArray(names.getString(i));
+                String sensor_name = names.getString(i);
+                if (sensor_name.startsWith(API_EXT)) {
+                    continue;
+                }
+                elem = sensors.getJSONArray(sensor_name);
                 elem_value = new ArrayList<HashMap<String, String>>(elem.length());
                 for (int j = 0; j < elem.length(); j++) {
                     HashMap<String, String> elem_value_map = new HashMap<String, String>();
@@ -164,7 +168,7 @@ public class Parse13 extends ParseGeneric {
                     }
                     elem_value.add(elem_value_map);
                 }
-                result.put(names.getString(i), elem_value);
+                result.put(sensor_name, elem_value);
             }
             mResult.put(API_SENSORS, result);
         }

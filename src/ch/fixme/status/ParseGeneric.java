@@ -35,6 +35,7 @@ public class ParseGeneric {
     protected static final String API_STREAM = "stream";
     protected static final String API_CAM = "cam";
     protected static final String API_SENSORS = "sensors";
+    protected static final String API_EXT = "ext_";
 
     // Sensors
     protected static final String API_VALUE = "value";
