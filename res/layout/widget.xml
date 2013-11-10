@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/widget_status"
+        android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:background="@android:drawable/btn_default_small"
         android:contentDescription="Status image of the hackerspace"
         android:src="@android:drawable/ic_popup_sync" />
 
