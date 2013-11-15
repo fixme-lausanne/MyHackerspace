@@ -296,13 +296,13 @@ public class Widget extends AppWidgetProvider {
         }
     }
 
-    public static void UpdateAllWidgets(final Context ctxt) {
+    public static void UpdateAllWidgets(final Context ctxt, boolean force) {
         AppWidgetManager man = AppWidgetManager.getInstance(ctxt);
         int[] ids = man.getAppWidgetIds(new ComponentName(ctxt, Widget.class));
         Intent ui = new Intent();
         ui.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         ui.putExtra(Widget.WIDGET_IDS, ids);
-        ui.putExtra(Widget.WIDGET_FORCE, true);
+        ui.putExtra(Widget.WIDGET_FORCE, force);
         ctxt.sendBroadcast(ui);
     }
 

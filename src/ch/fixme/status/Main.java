@@ -263,7 +263,7 @@ public class Main extends Activity {
         }
 
         // Update widget
-        Widget.UpdateAllWidgets(getApplicationContext());
+        Widget.UpdateAllWidgets(getApplicationContext(), false);
     }
 
     private boolean checkNetwork() {

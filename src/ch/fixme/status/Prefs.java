@@ -33,7 +33,7 @@ public class Prefs extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (key.equals(KEY_WIDGET_TRANSPARENCY) || key.equals(KEY_WIDGET_TEXT)
                 || key.equals(KEY_CHECK_INTERVAL)) {
-            Widget.UpdateAllWidgets(getApplicationContext());
+            Widget.UpdateAllWidgets(getApplicationContext(), true);
         }
     }
 
