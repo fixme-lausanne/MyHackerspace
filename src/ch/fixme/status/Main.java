@@ -58,7 +58,6 @@ public class Main extends Activity {
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
-    protected static final String PREF_INIT_WIDGET = "init_widget_";
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
     protected static final String STATE_HS = "hs";

@@ -50,7 +50,6 @@ public class Widget extends AppWidgetProvider {
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
             edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
-            edit.remove(Main.PREF_INIT_WIDGET + widgetId);
             edit.remove(Main.PREF_LAST_WIDGET + widgetId);
             edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
             edit.commit();
@@ -70,12 +69,6 @@ public class Widget extends AppWidgetProvider {
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
             Intent intent = getIntent(ctxt, widgetId);
-            // Set initialize
-            SharedPreferences prefs = PreferenceManager
-                    .getDefaultSharedPreferences(ctxt);
-            Editor edit = prefs.edit();
-            edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, false);
-            edit.commit();
             // Update timer
             setAlarm(ctxt, intent, widgetId);
             // Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
@@ -175,15 +168,13 @@ public class Widget extends AppWidgetProvider {
         } else {
             views.setViewVisibility(R.id.widget_status, View.GONE);
         }
+        edit.commit();
         Intent clickIntent = new Intent(ctxt, Main.class);
         clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         PendingIntent pendingIntent = PendingIntent.getActivity(ctxt, widgetId,
                 clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_image, pendingIntent);
         manager.updateAppWidget(widgetId, views);
-        // Is initialized
-        edit.putBoolean(Main.PREF_INIT_WIDGET + widgetId, true);
-        edit.commit();
     }
 
     private static class GetApiTask extends AsyncTask<String, Void, String> {
@@ -225,8 +216,8 @@ public class Widget extends AppWidgetProvider {
                 boolean statusBool = (Boolean) api.get(ParseGeneric.API_STATUS);
                 // Update only if different than last status and not the first
                 // time
-                if (prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
-                        && prefs.getBoolean(Main.PREF_INIT_WIDGET + mId, false)
+                if (prefs.contains(Main.PREF_LAST_WIDGET + mId)
+                        && prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
                         && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
                                 false)) {
                     // Log.i(Main.TAG, "Nothing to update");
