@@ -5,6 +5,10 @@
 
 package ch.fixme.status;
 
+import java.util.HashMap;
+
+import org.json.JSONException;
+
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -22,10 +26,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-
-import org.json.JSONException;
-
-import java.util.HashMap;
 
 public class Widget extends AppWidgetProvider {
 
@@ -65,11 +65,11 @@ public class Widget extends AppWidgetProvider {
 
     public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
+        Log.i(Main.TAG, "onUpdate()");
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
             Intent intent = getIntent(ctxt, widgetId);
-            // Update timer
             setAlarm(ctxt, intent, widgetId);
             // Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
         }
@@ -123,6 +123,7 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0]).getBitmap();
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(Main.TAG, e.getMessage());
             }
             return null;
         }
@@ -193,6 +194,7 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0]).getString();
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(Main.TAG, e.getMessage());
             }
             return "";
         }
@@ -258,6 +260,7 @@ public class Widget extends AppWidgetProvider {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e(Main.TAG, e.getMessage());
             }
         }
     }

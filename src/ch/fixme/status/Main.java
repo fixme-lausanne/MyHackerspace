@@ -183,6 +183,7 @@ public class Main extends Activity {
              * Probably an HTC broken by evil Apple patents. This is not
              * perfect, but better than crashing the whole application.
              */
+            Log.e(Main.TAG, e.getMessage());
             super.startActivity(Intent.createChooser(intent, null));
         }
     }
@@ -319,6 +320,7 @@ public class Main extends Activity {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
+                Log.e(Main.TAG, e.getMessage());
             }
             return "";
         }
