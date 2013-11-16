@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">MyHackerspace</string>
-    <string name="empty">leer</string>
+    <string name="empty"></string>
     <string name="ok">OK</string>
     
     <string name="ui_logo">Logo des Hackerspaces</string>
