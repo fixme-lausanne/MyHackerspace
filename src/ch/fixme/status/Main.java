@@ -92,6 +92,11 @@ public class Main extends Activity {
         getHsList(savedInstanceState);
         showHsInfo(intent, savedInstanceState);
     }
+    
+    @Override
+    protected void onNewIntent (Intent intent){
+        showHsInfo(intent, null);
+    }
 
     @Override
     protected void onDestroy() {
