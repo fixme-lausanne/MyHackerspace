@@ -206,7 +206,7 @@ public class Main extends Activity {
             for (int i = 0; i < len; i++) {
                 names.add(arr.getString(i));
             }
-            Collections.sort(names);
+            Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
             for (int i = 0; i < len; i++) {
                 url.add(i, obj.getString(names.get(i)));
             }
