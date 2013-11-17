@@ -48,7 +48,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Widget" >
+		<receiver android:name=".Network">
+		    <intent-filter>
+		        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+		    </intent-filter>
+		</receiver>
+
+        <receiver android:name=".Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

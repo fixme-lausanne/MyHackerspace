@@ -272,11 +272,14 @@ public class Main extends Activity {
     }
 
     private boolean checkNetwork() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return checkNetwork(getApplicationContext());
+    }
+
+    protected static boolean checkNetwork(Context ctxt) {
+        ConnectivityManager cm = (ConnectivityManager) ctxt
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo == null || !netInfo.isConnected()) {
-            showError(getString(R.string.error_network_title),
-                    getString(R.string.error_network_msg));
             return false;
         }
         return true;
