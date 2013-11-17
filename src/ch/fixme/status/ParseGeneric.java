@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2013 Aubort Jean-Baptiste (Rorist)
+ * Licensed under GNU's GPL 2, see README
+ */
 package ch.fixme.status;
 
 import org.json.JSONException;
