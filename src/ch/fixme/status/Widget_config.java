@@ -71,13 +71,14 @@ public class Widget_config extends Activity {
                 .getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
                         Prefs.DEFAULT_WIDGET_TRANSPARENCY));
         ((CheckBox) findViewById(R.id.choose_text)).setChecked(mPrefs
-                .getBoolean(Prefs.KEY_WIDGET_TEXT,
-                        Prefs.DEFAULT_WIDGET_TEXT));
+                .getBoolean(Prefs.KEY_WIDGET_TEXT, Prefs.DEFAULT_WIDGET_TEXT));
+        ((EditText) findViewById(R.id.choose_update)).setText(mPrefs.getString(
+                Prefs.KEY_CHECK_INTERVAL, Prefs.DEFAULT_CHECK_INTERVAL));
         ((EditText) findViewById(R.id.choose_update))
                 .addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence s, int start,
-                                              int before, int count) {
+                            int before, int count) {
                         String inter = s.toString();
                         if (!"".equals(inter) && !"0".equals(inter)) {
                             Editor edit = mPrefs.edit();
@@ -88,7 +89,7 @@ public class Widget_config extends Activity {
 
                     @Override
                     public void beforeTextChanged(CharSequence s, int start,
-                                                  int count, int after) {
+                            int count, int after) {
                     }
 
                     @Override
@@ -101,13 +102,13 @@ public class Widget_config extends Activity {
     protected Dialog onCreateDialog(int id) {
         AlertDialog dialog = null;
         switch (id) {
-            case DIALOG_LOADING:
-                dialog = new ProgressDialog(this);
-                dialog.setCancelable(false);
-                dialog.setMessage(getString(R.string.msg_loading));
-                dialog.setCancelable(true);
-                ((ProgressDialog) dialog).setIndeterminate(true);
-                break;
+        case DIALOG_LOADING:
+            dialog = new ProgressDialog(this);
+            dialog.setCancelable(false);
+            dialog.setMessage(getString(R.string.msg_loading));
+            dialog.setCancelable(true);
+            ((ProgressDialog) dialog).setIndeterminate(true);
+            break;
         }
         return dialog;
     }
@@ -160,7 +161,7 @@ public class Widget_config extends Activity {
                 s.setAdapter(adapter);
                 s.setOnItemSelectedListener(new OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> adapter, View v,
-                                               int position, long id) {
+                            int position, long id) {
                         Editor edit = mPrefs.edit();
                         edit.putString(Main.PREF_API_URL_WIDGET + mAppWidgetId,
                                 url.get(position));
