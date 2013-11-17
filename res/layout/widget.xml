@@ -16,7 +16,7 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:background="@android:drawable/btn_default_small"
-        android:contentDescription="Status image of the hackerspace"
+        android:contentDescription="@string/ui_image_status"
         android:src="@android:drawable/ic_popup_sync" />
 
     <TextView
