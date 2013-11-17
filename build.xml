@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2009-2013 Aubort Jean-Baptiste (Rorist)
- Licensed under GNU's GPL 2, see README
+ Licensed under GNU's GPL 3, see README
 -->
 <project name="MyHackerspace" default="help">
     <property file="local.properties" />

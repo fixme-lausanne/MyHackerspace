@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 <!--
  Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
- Licensed under GNU's GPL 2, see README
+ Licensed under GNU's GPL 3, see README
 -->
 
     <EditTextPreference
