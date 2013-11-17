@@ -201,14 +201,14 @@ public class Main extends Activity {
             JSONObject obj = new JSONObject(mResultDir);
             JSONArray arr = obj.names();
             int len = obj.length();
-            ArrayList<String> names = new ArrayList<String>(len);
-            final ArrayList<String> url = new ArrayList<String>(len);
+            final ArrayList<String> names = new ArrayList<String>(len);
+            final ArrayList<String> urls = new ArrayList<String>(len);
             for (int i = 0; i < len; i++) {
                 names.add(arr.getString(i));
             }
             Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
             for (int i = 0; i < len; i++) {
-                url.add(i, obj.getString(names.get(i)));
+                urls.add(i, obj.getString(names.get(i)));
             }
 
             // Create the dialog
@@ -225,11 +225,11 @@ public class Main extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
-                    // setIntent(null);
+                    String url = urls.get(position);
                     Editor edit = mPrefs.edit();
-                    edit.putString(PREF_API_URL, url.get(position));
+                    edit.putString(PREF_API_URL, url);
                     getApiTask = new GetApiTask();
-                    getApiTask.execute(url.get(position));
+                    getApiTask.execute(url);
                     edit.commit();
                     dismissDialog(DIALOG_LIST);
                 }

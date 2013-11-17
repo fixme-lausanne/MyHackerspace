@@ -79,9 +79,8 @@ public class Net {
                     InputStream is = null;
                     try {
                         is = entity.getContent();
-                        final Bitmap bitmap = BitmapFactory
+                        return BitmapFactory
                                 .decodeStream(new FlushedInputStream(is));
-                        return bitmap;
                     } finally {
                         if (is != null) {
                             is.close();
