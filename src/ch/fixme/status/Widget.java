@@ -305,6 +305,7 @@ public class Widget extends AppWidgetProvider {
         AppWidgetManager man = AppWidgetManager.getInstance(ctxt);
         int[] ids = man.getAppWidgetIds(new ComponentName(ctxt, Widget.class));
         Intent ui = new Intent();
+        ui.setClass(ctxt, Widget.class);
         ui.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         ui.putExtra(Widget.WIDGET_IDS, ids);
         ui.putExtra(Widget.WIDGET_FORCE, force);

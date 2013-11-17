@@ -62,6 +62,9 @@ public class Widget_config extends Activity {
                                 Prefs.KEY_WIDGET_TRANSPARENCY,
                                 ((CheckBox) findViewById(R.id.choose_transparency))
                                         .isChecked());
+                        edit.putBoolean(Prefs.KEY_WIDGET_TEXT,
+                                ((CheckBox) findViewById(R.id.choose_text))
+                                        .isChecked());
                         edit.commit();
                         setWidgetAlarm();
                         finish();
