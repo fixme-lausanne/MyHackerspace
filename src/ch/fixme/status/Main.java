@@ -6,9 +6,10 @@
 package ch.fixme.status;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -23,7 +24,6 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -42,11 +42,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.woozzu.android.util.StringMatcher;
+import com.woozzu.android.widget.IndexableListView;
 
 public class Main extends Activity {
 
@@ -194,29 +201,42 @@ public class Main extends Activity {
             JSONObject obj = new JSONObject(mResultDir);
             JSONArray arr = obj.names();
             int len = obj.length();
-            String[] names = new String[len];
+            ArrayList<String> names = new ArrayList<String>(len);
             final ArrayList<String> url = new ArrayList<String>(len);
             for (int i = 0; i < len; i++) {
-                names[i] = arr.getString(i);
+                names.add(arr.getString(i));
             }
-            Arrays.sort(names, 0, len, String.CASE_INSENSITIVE_ORDER);
+            Collections.sort(names);
             for (int i = 0; i < len; i++) {
-                url.add(i, obj.getString(names[i]));
+                url.add(i, obj.getString(names.get(i)));
             }
 
             // Create the dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
-            builder.setTitle(R.string.choose_hs).setItems(names,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            setIntent(null);
-                            Editor edit = mPrefs.edit();
-                            edit.putString(PREF_API_URL, url.get(which));
-                            getApiTask = new GetApiTask();
-                            getApiTask.execute(url.get(which));
-                            edit.commit();
-                        }
-                    });
+            View view = getLayoutInflater().inflate(R.layout.hs_choose, null);
+            ContentAdapter adapter = new ContentAdapter(Main.this,
+                    android.R.layout.simple_list_item_1, names);
+
+            IndexableListView listView = (IndexableListView) view
+                    .findViewById(R.id.listview);
+            listView.setAdapter(adapter);
+            listView.setFastScrollEnabled(true);
+            listView.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                        int position, long id) {
+                    // setIntent(null);
+                    Editor edit = mPrefs.edit();
+                    edit.putString(PREF_API_URL, url.get(position));
+                    getApiTask = new GetApiTask();
+                    getApiTask.execute(url.get(position));
+                    edit.commit();
+                    dismissDialog(DIALOG_LIST);
+                }
+            });
+            builder.setView(view);
+            builder.setTitle(R.string.choose_hs);
+
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
@@ -749,6 +769,56 @@ public class Main extends Activity {
             e.printStackTrace();
             showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
                     + getString(R.string.error_generic));
+        }
+    }
+
+    // https://github.com/woozzu/IndexableListView/
+    private class ContentAdapter extends ArrayAdapter<String> implements
+            SectionIndexer {
+
+        private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        public ContentAdapter(Context context, int textViewResourceId,
+                List<String> objects) {
+            super(context, textViewResourceId, objects);
+        }
+
+        @Override
+        public int getPositionForSection(int section) {
+            // If there is no item for current section, previous section will be
+            // selected
+            for (int i = section; i >= 0; i--) {
+                for (int j = 0; j < getCount(); j++) {
+                    if (i == 0) {
+                        // For numeric section
+                        for (int k = 0; k <= 9; k++) {
+                            if (StringMatcher.match(
+                                    String.valueOf(getItem(j).charAt(0)),
+                                    String.valueOf(k)))
+                                return j;
+                        }
+                    } else {
+                        if (StringMatcher.match(
+                                String.valueOf(getItem(j).charAt(0)),
+                                String.valueOf(mSections.charAt(i))))
+                            return j;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public int getSectionForPosition(int position) {
+            return 0;
+        }
+
+        @Override
+        public Object[] getSections() {
+            String[] sections = new String[mSections.length()];
+            for (int i = 0; i < mSections.length(); i++)
+                sections[i] = String.valueOf(mSections.charAt(i));
+            return sections;
         }
     }
 
