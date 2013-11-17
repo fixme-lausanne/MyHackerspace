@@ -34,11 +34,32 @@ public class Widget extends AppWidgetProvider {
 
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
-        if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
-            // Remove widget alarm
-            int widgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (intent.hasExtra(WIDGET_IDS)
+                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
+            int[] ids = intent.getExtras().getIntArray(WIDGET_IDS);
+            // Set prefs
+            SharedPreferences prefs = PreferenceManager
+                    .getDefaultSharedPreferences(ctxt);
+            Editor edit = prefs.edit();
+            final int N = ids.length;
+            for (int i = 0; i < N; i++) {
+                edit.putBoolean(Main.PREF_FORCE_WIDGET + ids[i],
+                        intent.getBooleanExtra(Widget.WIDGET_FORCE, false));
+            }
+            edit.commit();
+            // Update
+            onUpdate(ctxt, AppWidgetManager.getInstance(ctxt), ids);
+        } else {
+            super.onReceive(ctxt, intent);
+        }
+    }
+
+    @Override
+    public void onDeleted(Context ctxt, int[] appWidgetIds) {
+        // Remove widget alarm
+        final int N = appWidgetIds.length;
+        for (int i = 0; i < N; i++) {
+            int widgetId = appWidgetIds[i];
             PendingIntent pi = PendingIntent.getService(ctxt, widgetId,
                     getIntent(ctxt, widgetId), 0);
             AlarmManager am = (AlarmManager) ctxt
@@ -54,18 +75,13 @@ public class Widget extends AppWidgetProvider {
             edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
             edit.commit();
 
-            // Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
-        } else if (intent.hasExtra(WIDGET_IDS)
-                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
-            int[] ids = intent.getExtras().getIntArray(WIDGET_IDS);
-            onUpdate(ctxt, AppWidgetManager.getInstance(ctxt), ids);
-        } else
-            super.onReceive(ctxt, intent);
+            Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
+        }
     }
 
+    @Override
     public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
-        Log.i(Main.TAG, "onUpdate()");
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
@@ -152,16 +168,12 @@ public class Widget extends AppWidgetProvider {
         }
         if (bitmap != null) {
             views.setImageViewBitmap(R.id.widget_image, bitmap);
-            edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false); // Don't
-            // need
-            // to
-            // force
+            edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, false);
         } else {
+            // Something went wrong
             views.setImageViewResource(R.id.widget_image,
                     android.R.drawable.ic_popup_sync);
-            edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, true); // Something
-            // went
-            // wrong
+            edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId, true);
         }
         if (text != null) {
             views.setTextViewText(R.id.widget_status, text);
@@ -216,8 +228,7 @@ public class Widget extends AppWidgetProvider {
                 HashMap<String, Object> api = new ParseGeneric(result)
                         .getData();
                 boolean statusBool = (Boolean) api.get(ParseGeneric.API_STATUS);
-                // Update only if different than last status and not the first
-                // time
+                // Update only if different than last status or not forced
                 if (prefs.contains(Main.PREF_LAST_WIDGET + mId)
                         && prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
                         && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
@@ -298,6 +309,7 @@ public class Widget extends AppWidgetProvider {
         ui.putExtra(Widget.WIDGET_IDS, ids);
         ui.putExtra(Widget.WIDGET_FORCE, force);
         ctxt.sendBroadcast(ui);
+        // Log.i(Main.TAG, "UpdateAllWidgets force=" + force);
     }
 
 }

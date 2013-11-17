@@ -91,9 +91,9 @@ public class Main extends Activity {
         getHsList(savedInstanceState);
         showHsInfo(intent, savedInstanceState);
     }
-    
+
     @Override
-    protected void onNewIntent (Intent intent){
+    protected void onNewIntent(Intent intent) {
         showHsInfo(intent, null);
     }
 
@@ -288,7 +288,7 @@ public class Main extends Activity {
     private void showError(String title, String msg) {
         if (title != null && msg != null) {
             // showDialog(DIALOG_ERROR);
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(Main.this)
                     .setTitle(getString(R.string.error_title) + title)
                     .setMessage(msg)
                     .setNeutralButton(getString(R.string.ok), null).show();
