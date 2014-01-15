@@ -22,26 +22,26 @@
     <string name="btn_refresh">Neu laden</string>		
     <string name="btn_prefs">Vorzug</string>
     
-    <string name="msg_loading">Ladung…</string>
+    <string name="msg_loading">Lade…</string>
     <string name="error_title">Fehler: </string>
     <string name="error_network_title">Netzwerk</string>
-    <string name="error_network_msg">Netzwerk abgeschaltet</string>
-    <string name="error_generic">\n\nNachprüfen, ob der API entspricht die version, die Sie angegeben haben!\n\nVoir http://spaceapi.net</string>
+    <string name="error_network_msg">Netzwerk deaktiviert</string>
+    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angebben wurde!\n\nsiehe http://spaceapi.net</string>
     	
-    <string name="prefs_interval_title">Zeitraum von Überprüfung</string>
-    <string name="prefs_interval_summary">IZeitraum in Minuten zwischen die Überprüfung des Wigets</string>		
-    <string name="prefs_transparent_title">Dursichtigkeit des Widgets</string>
-    <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird durchsichtig statt grau</string>		
-    <string name="prefs_text_title">Text unter die Widgets</string>
-    <string name="prefs_text_summary">Gibt einen Text des Statuts unter die Widgets hinzu</string>	
+    <string name="prefs_interval_title">Aktualisierungsintervall</string>
+    <string name="prefs_interval_summary">Zeitspanne in der das Widget auf den richtigkeit des aktuellen Status überprüft wird.</string>		
+    <string name="prefs_transparent_title">Transparanz des Widgets</string>
+    <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau</string>		
+    <string name="prefs_text_title">Widget Statustext</string>
+    <string name="prefs_text_summary">Statustext unter dem Widget hinzufügen</string>	
     	
     <string name="api_status">Status</string>
-    <string name="api_lastchange">Letzte Ladung: </string>
+        <string name="api_lastchange">Letzte Aktualisierung: </string>
     <string name="api_duration">Dauer: </string>
     <string name="api_duration_hours"> Stunde(n)</string>
-    <string name="api_location">Lokalisierung</string>
+    <string name="api_location">Location</string>
     <string name="api_contact">Kontakt</string>
-    <string name="api_stream">Flux</string>
+    <string name="api_stream">Stream</string>
     <string name="api_sensors">Sensoren</string>
 
 </resources>
