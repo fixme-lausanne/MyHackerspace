@@ -135,9 +135,8 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                // Log.i(Main.TAG, "Get image from url " + url[0]);
                 return new Net(url[0]).getBitmap();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());
             }
@@ -204,7 +203,7 @@ public class Widget extends AppWidgetProvider {
         protected String doInBackground(String... url) {
             try {
                 return new Net(url[0]).getString();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());
             }
