@@ -39,58 +39,50 @@ public class Net {
         getMethod.setHeader("User-Agent", USERAGENT);
     }
 
-    public String getString() {
-        try {
-            HttpResponse response = client.execute(getMethod);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                final HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    InputStream is = null;
-                    try {
-                        is = entity.getContent();
-                        BufferedReader r = new BufferedReader(
-                                new InputStreamReader(is));
-                        StringBuilder str = new StringBuilder();
-                        String line;
-                        while ((line = r.readLine()) != null) {
-                            str.append(line);
-                        }
-                        return str.toString();
-                    } finally {
-                        if (is != null) {
-                            is.close();
-                        }
-                        entity.consumeContent();
+    public String getString() throws Throwable {
+        HttpResponse response = client.execute(getMethod);
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            final HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream is = null;
+                try {
+                    is = entity.getContent();
+                    BufferedReader r = new BufferedReader(
+                            new InputStreamReader(is));
+                    StringBuilder str = new StringBuilder();
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        str.append(line);
                     }
+                    return str.toString();
+                } finally {
+                    if (is != null) {
+                        is.close();
+                    }
+                    entity.consumeContent();
                 }
             }
-        } catch (Throwable t) {
-            Log.e(Main.TAG, "Exception fetching data", t);
         }
-        return "";
+        return "{}";
     }
 
-    public Bitmap getBitmap() {
-        try {
-            HttpResponse response = client.execute(getMethod);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                final HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    InputStream is = null;
-                    try {
-                        is = entity.getContent();
-                        return BitmapFactory
-                                .decodeStream(new FlushedInputStream(is));
-                    } finally {
-                        if (is != null) {
-                            is.close();
-                        }
-                        entity.consumeContent();
+    public Bitmap getBitmap() throws Throwable {
+        HttpResponse response = client.execute(getMethod);
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            final HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream is = null;
+                try {
+                    is = entity.getContent();
+                    return BitmapFactory
+                            .decodeStream(new FlushedInputStream(is));
+                } finally {
+                    if (is != null) {
+                        is.close();
                     }
+                    entity.consumeContent();
                 }
             }
-        } catch (Throwable t) {
-            Log.e(Main.TAG, "Exception fetching data", t);
         }
         return null;
     }

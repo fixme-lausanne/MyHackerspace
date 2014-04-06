@@ -338,11 +338,10 @@ public class Main extends Activity {
         protected String doInBackground(String... url) {
             try {
                 return new Net(url[0]).getString();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
-                Log.e(Main.TAG, e.getMessage());
             }
             return "";
         }
@@ -386,7 +385,7 @@ public class Main extends Activity {
         protected String doInBackground(String... url) {
             try {
                 return new Net(url[0]).getString();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
@@ -435,7 +434,7 @@ public class Main extends Activity {
         protected Bitmap doInBackground(String... url) {
             try {
                 return new Net(url[0]).getBitmap();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();
                 e.printStackTrace();
