@@ -10,13 +10,8 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
+import java.net.URL;
+import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -30,65 +25,45 @@ public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
             + Build.MODEL + ") MyHackerspace/1.7.1";
-    final private HttpClient client;
-    final private HttpGet getMethod;
 
-    public Net(String urlStr) {
-        client = new DefaultHttpClient();
-        getMethod = new HttpGet(urlStr);
-        getMethod.setHeader("User-Agent", USERAGENT);
+    private HttpURLConnection mUrlConnection;
+
+    public Net(String urlStr) throws Throwable {
+        URL url = new URL(urlStr);
+        mUrlConnection = (HttpURLConnection) url.openConnection();
+        mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
     }
 
     public String getString() throws Throwable {
-        HttpResponse response = client.execute(getMethod);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            final HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream is = null;
-                try {
-                    is = entity.getContent();
-                    BufferedReader r = new BufferedReader(
-                            new InputStreamReader(is));
-                    StringBuilder str = new StringBuilder();
-                    String line;
-                    while ((line = r.readLine()) != null) {
-                        str.append(line);
-                    }
-                    return str.toString();
-                } finally {
-                    if (is != null) {
-                        is.close();
-                    }
-                    entity.consumeContent();
-                }
+        InputStream is = null;
+        try {
+            is = mUrlConnection.getInputStream();
+            BufferedReader r = new BufferedReader(new InputStreamReader(is));
+            StringBuilder str = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                str.append(line);
             }
+            return str.toString();
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            mUrlConnection.disconnect();
         }
-        return "{}";
     }
 
     public Bitmap getBitmap() throws Throwable {
-        HttpResponse response = client.execute(getMethod);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            final HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream is = null;
-                try {
-                    is = entity.getContent();
-                    return BitmapFactory
-                            .decodeStream(new FlushedInputStream(is));
-                } finally {
-                    if (is != null) {
-                        is.close();
-                    }
-                    entity.consumeContent();
-                }
+        InputStream is = null;
+        try {
+            is = mUrlConnection.getInputStream();
+            return BitmapFactory.decodeStream(new FlushedInputStream(is));
+        } finally {
+            if (is != null) {
+                is.close();
             }
+            mUrlConnection.disconnect();
         }
-        return null;
-    }
-
-    public void stop() {
-        client.getConnectionManager().shutdown();
     }
 
     static class FlushedInputStream extends FilterInputStream {
