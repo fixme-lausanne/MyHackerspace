@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLContext;
 import java.security.SecureRandom;
+//import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 
 import de.duenndns.ssl.MemorizingTrustManager;
 
@@ -37,10 +38,11 @@ public class Net {
 
     public Net(String urlStr, Context ctxt) throws Throwable {
         // register MemorizingTrustManager for HTTPS
-        MemorizingTrustManager.setKeyStoreFile("private", "sslkeys.bks");
+        //MemorizingTrustManager.setKeyStoreFile("private", "sslkeys.bks");
         SSLContext sc = SSLContext.getInstance("TLS");
         sc.init(null, MemorizingTrustManager.getInstanceList(ctxt), new SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        //HttpsURLConnection.setDefaultHostnameVerifier(new AllowAllHostnameVerifier()); // BAD, only for testing
         // Create client
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
@@ -51,14 +53,19 @@ public class Net {
         // FIXME: check mUrlConnection.getResponseCode()
         InputStream is = null;
         try {
-            is = mUrlConnection.getInputStream();
-            BufferedReader r = new BufferedReader(new InputStreamReader(is));
-            StringBuilder str = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                str.append(line);
+            mUrlConnection.connect();
+            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                is = mUrlConnection.getInputStream();
+                BufferedReader r = new BufferedReader(new InputStreamReader(is));
+                StringBuilder str = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    str.append(line);
+                }
+                return str.toString();
+            } else {
+                throw new Throwable(mUrlConnection.getResponseMessage());
             }
-            return str.toString();
         } finally {
             if (is != null) {
                 is.close();
@@ -70,8 +77,13 @@ public class Net {
     public Bitmap getBitmap() throws Throwable {
         InputStream is = null;
         try {
-            is = mUrlConnection.getInputStream();
-            return BitmapFactory.decodeStream(new FlushedInputStream(is));
+            mUrlConnection.connect();
+            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                is = mUrlConnection.getInputStream();
+                return BitmapFactory.decodeStream(new FlushedInputStream(is));
+            } else {
+                throw new Throwable(mUrlConnection.getResponseMessage());
+            }
         } finally {
             if (is != null) {
                 is.close();
