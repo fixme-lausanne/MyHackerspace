@@ -240,8 +240,7 @@ public class Main extends Activity {
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
-                    + getString(R.string.error_generic));
+            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
             return null;
         }
     }
@@ -355,8 +354,7 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 mResultDir = result;
             } else {
-                showError(mErrorTitle, mErrorMsg
-                        + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg);
             }
         }
 
@@ -404,8 +402,7 @@ public class Main extends Activity {
                 mResultHs = result;
                 populateDataHs();
             } else {
-                showError(mErrorTitle, mErrorMsg
-                        + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg);
             }
         }
 
@@ -451,8 +448,7 @@ public class Main extends Activity {
             if (mErrorMsg == null) {
                 ((ImageView) findViewById(mId)).setImageBitmap(result);
             } else {
-                showError(mErrorTitle, mErrorMsg
-                        + getString(R.string.error_generic));
+                showError(mErrorTitle, mErrorMsg);
                 ((ImageView) findViewById(mId))
                         .setImageResource(android.R.drawable.ic_menu_report_image);
             }
