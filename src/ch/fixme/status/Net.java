@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.net.ssl.SSLContext;
+import java.security.SecureRandom;
+
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
 // http://android-developers.blogspot.ch/2010/07/multithreading-for-performance.html
@@ -29,6 +32,7 @@ public class Net {
     private HttpURLConnection mUrlConnection;
 
     public Net(String urlStr) throws Throwable {
+        // Create client
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
         mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
@@ -37,14 +41,19 @@ public class Net {
     public String getString() throws Throwable {
         InputStream is = null;
         try {
-            is = mUrlConnection.getInputStream();
-            BufferedReader r = new BufferedReader(new InputStreamReader(is));
-            StringBuilder str = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                str.append(line);
+            mUrlConnection.connect();
+            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                is = mUrlConnection.getInputStream();
+                BufferedReader r = new BufferedReader(new InputStreamReader(is));
+                StringBuilder str = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    str.append(line);
+                }
+                return str.toString();
+            } else {
+                throw new Throwable(mUrlConnection.getResponseMessage());
             }
-            return str.toString();
         } finally {
             if (is != null) {
                 is.close();
@@ -56,8 +65,13 @@ public class Net {
     public Bitmap getBitmap() throws Throwable {
         InputStream is = null;
         try {
-            is = mUrlConnection.getInputStream();
-            return BitmapFactory.decodeStream(new FlushedInputStream(is));
+            mUrlConnection.connect();
+            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                is = mUrlConnection.getInputStream();
+                return BitmapFactory.decodeStream(new FlushedInputStream(is));
+            } else {
+                throw new Throwable(mUrlConnection.getResponseMessage());
+            }
         } finally {
             if (is != null) {
                 is.close();
