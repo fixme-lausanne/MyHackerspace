@@ -125,15 +125,18 @@ public class Widget_config extends Activity {
 
     public class GetDirTask extends AsyncTask<String, Void, String> {
 
+        private Context mCtxt;
+
         @Override
         protected void onPreExecute() {
+            mCtxt = getApplicationContext();
             showDialog(DIALOG_LOADING);
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0]).getString();
+                return new Net(url[0], mCtxt).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
             }

@@ -9,14 +9,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
+import android.content.Context;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import javax.net.ssl.SSLContext;
+import java.security.SecureRandom;
+
+import de.duenndns.ssl.MemorizingTrustManager;
 
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
@@ -28,13 +35,20 @@ public class Net {
 
     private HttpURLConnection mUrlConnection;
 
-    public Net(String urlStr) throws Throwable {
+    public Net(String urlStr, Context ctxt) throws Throwable {
+        // register MemorizingTrustManager for HTTPS
+        MemorizingTrustManager.setKeyStoreFile("private", "sslkeys.bks");
+        SSLContext sc = SSLContext.getInstance("TLS");
+        sc.init(null, MemorizingTrustManager.getInstanceList(ctxt), new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        // Create client
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
         mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
     }
 
     public String getString() throws Throwable {
+        // FIXME: check mUrlConnection.getResponseCode()
         InputStream is = null;
         try {
             is = mUrlConnection.getInputStream();

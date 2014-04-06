@@ -48,11 +48,11 @@
             </intent-filter>
         </activity>
 
-		<receiver android:name=".Network">
-		    <intent-filter>
-		        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-		    </intent-filter>
-		</receiver>
+        <receiver android:name=".Network">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name=".Widget">
             <intent-filter>
@@ -65,6 +65,8 @@
         </receiver>
 
         <service android:name=".Widget$UpdateService" />
+        <activity android:name="de.duenndns.ssl.MemorizingActivity" />
+
     </application>
 
 </manifest>
