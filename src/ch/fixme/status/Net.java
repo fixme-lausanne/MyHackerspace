@@ -10,11 +10,14 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
+import at.bitfire.davdroid.webdav.TlsSniSocketFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
@@ -35,6 +38,7 @@ public class Net {
 
     public Net(String urlStr) {
         client = new DefaultHttpClient();
+        client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", new TlsSniSocketFactory(), 443));
         getMethod = new HttpGet(urlStr);
         getMethod.setHeader("User-Agent", USERAGENT);
     }
