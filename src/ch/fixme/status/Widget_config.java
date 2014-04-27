@@ -134,7 +134,7 @@ public class Widget_config extends Activity {
         protected String doInBackground(String... url) {
             try {
                 return new Net(url[0]).getString();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
             return "";
