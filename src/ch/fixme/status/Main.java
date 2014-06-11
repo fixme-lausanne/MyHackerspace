@@ -64,6 +64,7 @@ public class Main extends Activity {
     protected static final String PKG = "ch.fixme.status";
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
+    protected static final String UNKNOWN = "Unknown";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
@@ -478,7 +479,12 @@ public class Main extends Activity {
 
             // Status text
             String status_txt = "";
-            if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
+            if (data.get(ParseGeneric.API_STATUS) == null) {
+                status_txt = UNKNOWN;
+                ((TextView) findViewById(R.id.status_txt))
+                        .setCompoundDrawablesWithIntrinsicBounds(
+                                android.R.drawable.presence_invisible, 0, 0, 0);
+            } else if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
                 status_txt = OPEN;
                 ((TextView) findViewById(R.id.status_txt))
                         .setCompoundDrawablesWithIntrinsicBounds(

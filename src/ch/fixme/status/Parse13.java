@@ -26,7 +26,11 @@ public class Parse13 extends ParseGeneric {
 
         // Mandatory fields
         JSONObject state = mApi.getJSONObject(API_STATE);
-        mResult.put(API_STATUS, state.getBoolean(API_STATUS));
+        if (!state.isNull(API_STATUS)){
+            mResult.put(API_STATUS, state.getBoolean(API_STATUS));
+        } else {
+            mResult.put(API_STATUS, null);
+        }
         mResult.put(API_NAME, mApi.getString(API_NAME));
         mResult.put(API_URL, mApi.getString(API_URL));
         mResult.put(API_LOGO, mApi.getString(API_LOGO));
