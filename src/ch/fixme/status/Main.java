@@ -512,6 +512,7 @@ public class Main extends Activity {
 
             // Status duration
             if (data.containsKey(ParseGeneric.API_EXT_DURATION)
+                    && data.get(ParseGeneric.API_STATUS) != null
                     && (Boolean) data.get(ParseGeneric.API_STATUS)) {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setText(getString(R.string.api_duration) + " "
