@@ -218,6 +218,7 @@ public class Main extends Activity {
         findViewById(R.id.space_name).setVisibility(visibility1);
         findViewById(R.id.space_url).setVisibility(visibility1);
         findViewById(R.id.placeholder).setVisibility(visibility2);
+        findViewById(R.id.main_wrapper).invalidate();
     }
 
     private AlertDialog createHsDialog() {

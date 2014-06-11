@@ -4,11 +4,20 @@
     Licensed under GNU's GPL 3, see README
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_wrapper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:paddingLeft="8dip"
     android:paddingRight="8dip" >
+
+    <TextView
+        android:id="@+id/placeholder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/choose_hs" />
 
     <LinearLayout
         android:id="@+id/main_view"
@@ -17,14 +26,6 @@
         android:layout_marginTop="8dip"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/placeholder"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/choose_hs" />
 
         <ImageView
             android:id="@+id/space_image"
