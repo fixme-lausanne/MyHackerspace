@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 public class Widget extends AppWidgetProvider {
 
@@ -139,6 +140,7 @@ public class Widget extends AppWidgetProvider {
             } catch (Throwable e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());
+                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
             }
             return null;
         }
@@ -206,6 +208,7 @@ public class Widget extends AppWidgetProvider {
             } catch (Throwable e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());
+                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
             }
             return "";
         }
@@ -271,6 +274,7 @@ public class Widget extends AppWidgetProvider {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());
+                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
             }
         }
     }
