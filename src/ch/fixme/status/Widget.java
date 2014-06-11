@@ -204,7 +204,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0]).getString();
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
                 Log.e(Main.TAG, e.getMessage());

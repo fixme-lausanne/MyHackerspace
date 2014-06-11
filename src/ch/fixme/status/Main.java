@@ -96,6 +96,7 @@ public class Main extends Activity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         Intent intent = getIntent();
         checkNetwork();
+        Net.setCache(getApplicationContext());
         getHsList(savedInstanceState);
         showHsInfo(intent, savedInstanceState);
     }
@@ -385,7 +386,7 @@ public class Main extends Activity {
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0]).getString();
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage();

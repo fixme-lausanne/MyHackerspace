@@ -5,6 +5,7 @@
 
 package ch.fixme.status;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.util.Log;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,10 +34,15 @@ public class Net {
     private HttpURLConnection mUrlConnection;
 
     public Net(String urlStr) throws Throwable {
+        this(urlStr, true);
+    }
+
+    public Net(String urlStr, boolean useCache) throws Throwable {
         // Create client
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
         mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
+        mUrlConnection.setUseCaches(useCache);
         Log.v(Main.TAG, "fetching " + urlStr);
     }
 
@@ -78,6 +85,19 @@ public class Net {
                 is.close();
             }
             mUrlConnection.disconnect();
+        }
+    }
+
+    public static void setCache(Context ctxt) {
+        try {
+            File httpCacheDir = new File(ctxt.getCacheDir(), "http");
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            // Use reflection for Android < 4.0
+            Class.forName("android.net.http.HttpResponseCache")
+                .getMethod("install", File.class, long.class)
+                .invoke(null, httpCacheDir, httpCacheSize);
+        } catch (Exception e) {
+            Log.e(Main.TAG, e.getMessage());
         }
     }
 
