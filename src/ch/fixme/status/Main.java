@@ -399,11 +399,7 @@ public class Main extends Activity {
             showDialog(DIALOG_LOADING);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
-            ((TextView) findViewById(R.id.space_name))
-                    .setText(getString(R.string.empty));
-            ((TextView) findViewById(R.id.space_url))
-                    .setText(getString(R.string.empty));
-            ((ImageView) findViewById(R.id.space_image)).setImageBitmap(null);
+            setViewVisibility(false);
         }
 
         @Override
@@ -426,6 +422,7 @@ public class Main extends Activity {
                 mResultHs = result;
                 populateDataHs();
             } else {
+                setViewVisibility(false);
                 showError(mErrorTitle, mErrorMsg);
             }
         }
@@ -795,6 +792,7 @@ public class Main extends Activity {
             setViewVisibility(true);
         } catch (Exception e) {
             e.printStackTrace();
+            setViewVisibility(false);
             showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
                     + getString(R.string.error_generic));
         }
