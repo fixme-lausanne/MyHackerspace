@@ -6,6 +6,11 @@ My Hackerspace
 - Status widget, multiple widgets supported
 - Available on [f-droid](https://f-droid.org/repository/browse/?fdid=ch.fixme.status) and [play store](https://play.google.com/store/apps/details?id=ch.fixme.status)
 
+TODO
+====
+
+- Auto recognize field types in the API (array, obj, string, etc)
+
 RELEASE NOTES
 =============
 

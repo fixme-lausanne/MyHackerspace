@@ -124,7 +124,7 @@ public class Parse13 extends ParseGeneric {
                     sensors.length());
             for (int i = 0; i < names.length(); i++) {
                 String sensor_name = names.getString(i);
-                if (sensor_name.startsWith(API_EXT)) {
+                if (sensor_name.startsWith(API_EXT) || sensor_name.startsWith(API_RADIATION)) {
                     continue;
                 }
                 elem = sensors.getJSONArray(sensor_name);
