@@ -52,7 +52,7 @@ public class ParseGeneric {
     protected static final String API_PROPERTIES = "properties";
 
     // State
-    protected static final String API_DEFAULT = "https://62.220.135.248/status.json";
+    protected static final String API_DEFAULT = "https://fixme.ch/status.json";
     protected static final String API_ICON = "icon";
     protected static final String API_ICON_OPEN = "open";
     protected static final String API_ICON_CLOSED = "closed";

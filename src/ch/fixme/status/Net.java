@@ -36,6 +36,7 @@ public class Net {
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
         mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
+        Log.v(Main.TAG, "fetching " + urlStr);
     }
 
     public String getString() throws Throwable {
