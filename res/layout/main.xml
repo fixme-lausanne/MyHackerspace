@@ -18,8 +18,17 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
+        <TextView
+            android:id="@+id/placeholder"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/choose_hs" />
+
         <ImageView
             android:id="@+id/space_image"
+            android:visibility="gone"
             android:layout_width="96sp"
             android:layout_height="wrap_content"
             android:layout_margin="4dip"
@@ -38,6 +47,7 @@
 
             <TextView
                 android:id="@+id/space_name"
+                android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dip"
@@ -47,6 +57,7 @@
 
             <TextView
                 android:id="@+id/space_url"
+                android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
@@ -55,6 +66,7 @@
                 android:text="@string/ui_url" />
 
         </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView

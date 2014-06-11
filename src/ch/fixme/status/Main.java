@@ -99,6 +99,11 @@ public class Main extends Activity {
             Net.setCache(getApplicationContext());
             getHsList(savedInstanceState);
             showHsInfo(intent, savedInstanceState);
+            // Views visibility
+            findViewById(R.id.space_image).setVisibility(View.VISIBLE);
+            findViewById(R.id.space_name).setVisibility(View.VISIBLE);
+            findViewById(R.id.space_url).setVisibility(View.VISIBLE);
+            findViewById(R.id.placeholder).setVisibility(View.GONE);
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
