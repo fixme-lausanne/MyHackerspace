@@ -95,10 +95,14 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         Intent intent = getIntent();
-        checkNetwork();
-        Net.setCache(getApplicationContext());
-        getHsList(savedInstanceState);
-        showHsInfo(intent, savedInstanceState);
+        if (checkNetwork()) {
+            Net.setCache(getApplicationContext());
+            getHsList(savedInstanceState);
+            showHsInfo(intent, savedInstanceState);
+        } else {
+            showError(getString(R.string.error_title) + getString(R.string.error_network_title),
+                    getString(R.string.error_network_msg));
+        }
     }
 
     @Override
@@ -131,8 +135,12 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
-            checkNetwork();
-            showHsInfo(getIntent(), null);
+            if (checkNetwork()){
+                showHsInfo(getIntent(), null);
+            } else {
+                showError(getString(R.string.error_title) + getString(R.string.error_network_title),
+                        getString(R.string.error_network_msg));
+            }
             return true;
         case R.id.menu_choose:
             showDialog(DIALOG_LIST);

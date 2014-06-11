@@ -293,7 +293,7 @@ public class Widget extends AppWidgetProvider {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
-            if (prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
+            if (Main.checkNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
                 String url = prefs.getString(Main.PREF_API_URL_WIDGET
                         + widgetId, ParseGeneric.API_DEFAULT);
                 Log.i(Main.TAG, "Update widgetid " + widgetId + " with url "
