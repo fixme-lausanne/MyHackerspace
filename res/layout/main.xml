@@ -26,35 +26,34 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/ui_logo"
             android:src="@android:drawable/ic_menu_gallery" />
-        
-        
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center_horizontal"
-	        android:orientation="vertical"
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:layout_marginBottom="4dip"
             android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip" >
 
-	        <TextView
-	            android:id="@+id/space_name"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginBottom="4dip"
-	            android:gravity="center_horizontal"
-	            android:textAppearance="?android:attr/textAppearanceLarge"
-	            android:text="@string/ui_name" />
-	        
-	        <TextView
-	            android:id="@+id/space_url"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:autoLink="web"
-	            android:gravity="center_horizontal"
-	            android:textAppearance="?android:attr/textAppearanceSmall"
-	            android:text="@string/ui_url" />
-	        
+            <TextView
+                android:id="@+id/space_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dip"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/ui_name" />
+
+            <TextView
+                android:id="@+id/space_url"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/ui_url" />
+
         </LinearLayout>
     </LinearLayout>
 
