@@ -95,15 +95,11 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         Intent intent = getIntent();
+        setViewVisibility(false);
         if (checkNetwork()) {
             Net.setCache(getApplicationContext());
             getHsList(savedInstanceState);
             showHsInfo(intent, savedInstanceState);
-            // Views visibility
-            findViewById(R.id.space_image).setVisibility(View.VISIBLE);
-            findViewById(R.id.space_name).setVisibility(View.VISIBLE);
-            findViewById(R.id.space_url).setVisibility(View.VISIBLE);
-            findViewById(R.id.placeholder).setVisibility(View.GONE);
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
@@ -208,6 +204,20 @@ public class Main extends Activity {
             Log.e(Main.TAG, e.getMessage());
             super.startActivity(Intent.createChooser(intent, null));
         }
+    }
+
+    private void setViewVisibility(boolean show) {
+        int visibility1 = View.GONE;
+        int visibility2 = View.VISIBLE;
+        if (show) {
+            visibility1 = View.VISIBLE;
+            visibility2 = View.GONE;
+        }
+        // Views visibility
+        findViewById(R.id.space_image).setVisibility(visibility1);
+        findViewById(R.id.space_name).setVisibility(visibility1);
+        findViewById(R.id.space_url).setVisibility(visibility1);
+        findViewById(R.id.placeholder).setVisibility(visibility2);
     }
 
     private AlertDialog createHsDialog() {
@@ -472,6 +482,7 @@ public class Main extends Activity {
 
     private void populateDataHs() {
         try {
+            setViewVisibility(false);
             HashMap<String, Object> data = new ParseGeneric(mResultHs)
                     .getData();
 
@@ -781,6 +792,7 @@ public class Main extends Activity {
                     }
                 }
             }
+            setViewVisibility(true);
         } catch (Exception e) {
             e.printStackTrace();
             showError(e.getClass().getCanonicalName(), e.getLocalizedMessage()
