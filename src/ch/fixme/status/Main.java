@@ -355,7 +355,7 @@ public class Main extends Activity {
                 return new Net(url[0]).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorMsg = e.getLocalizedMessage() + " " + url[0];
                 e.printStackTrace();
             }
             return "";
@@ -402,7 +402,7 @@ public class Main extends Activity {
                 return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorMsg = e.getLocalizedMessage() + " " + url[0];
                 e.printStackTrace();
             }
             return "";
@@ -451,7 +451,7 @@ public class Main extends Activity {
                 return new Net(url[0]).getBitmap();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
-                mErrorMsg = e.getLocalizedMessage();
+                mErrorMsg = e.getLocalizedMessage() + " " + url[0];
                 e.printStackTrace();
             }
             return null;
