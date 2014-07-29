@@ -31,9 +31,9 @@ Licensed under GNU's GPL 3, see README
     <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe http://spaceapi.net</string>
             
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
-    <string name="prefs_interval_summary">Zeitspanne in der das Widget auf den richtigkeit des aktuellen Status überprüft wird.</string>                
-    <string name="prefs_transparent_title">Transparanz des Widgets</string>
-    <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau</string>                
+    <string name="prefs_interval_summary">Zeitspanne in der das Widget auf richtigkeit des aktuellen Status überprüft wird.</string>                
+    <string name="prefs_transparent_title">transparentes Widget</string>
+    <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau dargestellt.</string>                
     <string name="prefs_text_title">Widget Statustext</string>
     <string name="prefs_text_summary">Statustext unter dem Widget hinzufügen</string>        
             
