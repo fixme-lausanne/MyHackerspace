@@ -14,6 +14,16 @@ TODO
 RELEASE NOTES
 =============
 
+1.7.4
+---
+
+- German translation (thanks to Lokke and Phervieux)
+- Better hs list with alphabetical index
+- Better errors messages
+- Caching for http requests (images, hs directory)
+- Add status message to the widget (thanks Fpletz)
+- Fix bugs: widget updates, ignore ext fields, click from widget
+
 1.7.3
 -----
 
