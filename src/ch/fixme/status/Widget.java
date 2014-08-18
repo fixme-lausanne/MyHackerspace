@@ -139,8 +139,8 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0]).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
-                Log.e(Main.TAG, e.getMessage());
-                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
+                String msg = e.getMessage();
+                printMessage(mCtxt, msg);
             }
             return null;
         }
@@ -207,8 +207,8 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
-                Log.e(Main.TAG, e.getMessage());
-                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
+                String msg = e.getMessage();
+                printMessage(mCtxt, msg);
             }
             return "";
         }
@@ -273,8 +273,8 @@ public class Widget extends AppWidgetProvider {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e(Main.TAG, e.getMessage());
-                Toast.makeText(mCtxt, e.getMessage(), Toast.LENGTH_SHORT);
+                String msg = e.getMessage();
+                printMessage(mCtxt, msg);
             }
         }
     }
@@ -314,6 +314,14 @@ public class Widget extends AppWidgetProvider {
         ui.putExtra(Widget.WIDGET_FORCE, force);
         ctxt.sendBroadcast(ui);
         // Log.i(Main.TAG, "UpdateAllWidgets force=" + force);
+    }
+
+    private static void printMessage(final Context ctxt, String msg){
+        if(msg == null){
+            return;
+        }
+        Log.e(Main.TAG, msg);
+        Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT);
     }
 
 }
