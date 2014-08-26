@@ -29,7 +29,7 @@ import java.security.SecureRandom;
 public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-            + Build.MODEL + ") MyHackerspace/1.7.4";
+            + Build.MODEL + ") MyHackerspace/1.7.4.1";
 
     private HttpURLConnection mUrlConnection;
 

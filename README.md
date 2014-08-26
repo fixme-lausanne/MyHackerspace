@@ -14,6 +14,11 @@ TODO
 RELEASE NOTES
 =============
 
+1.7.4.1
+-------
+
+- Fix crash when there's no error message
+
 1.7.4
 ---
 
