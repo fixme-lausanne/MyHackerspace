@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/widget_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_above="@+id/widget_status"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
