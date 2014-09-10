@@ -266,8 +266,7 @@ public class Main extends Activity {
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
-            showError(e.getClass().getCanonicalName(), e.getLocalizedMessage());
-            return null;
+            return showError(e.getClass().getCanonicalName(), e.getLocalizedMessage(), true);
         }
     }
 
@@ -331,13 +330,22 @@ public class Main extends Activity {
     }
 
     private void showError(String title, String msg) {
+        showError(title, msg, false);
+    }
+
+    private AlertDialog showError(String title, String msg, boolean ret) {
         if (title != null && msg != null) {
-            // showDialog(DIALOG_ERROR);
-            new AlertDialog.Builder(Main.this)
+            AlertDialog dialog = new AlertDialog.Builder(Main.this)
                     .setTitle(getString(R.string.error_title) + title)
                     .setMessage(msg)
-                    .setNeutralButton(getString(R.string.ok), null).show();
+                    .setNeutralButton(getString(R.string.ok), null).create();
+            if (ret) {
+                return dialog;
+            } else {
+                dialog.show();
+            }
         }
+        return null;
     }
 
     private void dismissLoading() {
