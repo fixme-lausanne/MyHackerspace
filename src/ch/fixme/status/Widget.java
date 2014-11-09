@@ -35,21 +35,27 @@ public class Widget extends AppWidgetProvider {
 
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
-        if (intent.hasExtra(WIDGET_IDS)
-                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
-            int[] ids = intent.getExtras().getIntArray(WIDGET_IDS);
+        if ((intent.hasExtra(WIDGET_IDS)
+                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) ||
+                Intent.ACTION_BOOT_COMPLETED.equals(action)) {
+            // Get all widgets ids
+            AppWidgetManager manager = AppWidgetManager.getInstance(ctxt);
+            int[] ids = manager.getAppWidgetIds(new ComponentName(ctxt, Widget.class));
             // Set prefs
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
             final int N = ids.length;
             for (int i = 0; i < N; i++) {
-                edit.putBoolean(Main.PREF_FORCE_WIDGET + ids[i],
+                final int widgetId = ids[i];
+                // Set force to false by default
+                edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId,
                         intent.getBooleanExtra(Widget.WIDGET_FORCE, false));
+                // Start alarm
+                Intent newIntent = getIntent(ctxt, widgetId);
+                setAlarm(ctxt, newIntent, widgetId);
             }
             edit.commit();
-            // Update
-            onUpdate(ctxt, AppWidgetManager.getInstance(ctxt), ids);
         } else {
             super.onReceive(ctxt, intent);
         }
@@ -78,19 +84,6 @@ public class Widget extends AppWidgetProvider {
 
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         }
-    }
-
-    @Override
-    public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager,
-            int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            int widgetId = appWidgetIds[i];
-            Intent intent = getIntent(ctxt, widgetId);
-            setAlarm(ctxt, intent, widgetId);
-            // Log.i(Main.TAG, "Update widget alarm for id=" + widgetId);
-        }
-        super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
     }
 
     protected static Intent getIntent(Context ctxt, int widgetId) {
