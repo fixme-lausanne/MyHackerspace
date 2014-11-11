@@ -63,10 +63,10 @@ public class Widget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context ctxt, int[] appWidgetIds) {
-        // Remove widget alarm
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
             int widgetId = appWidgetIds[i];
+            // Remove widget alarm
             PendingIntent pi = PendingIntent.getService(ctxt, widgetId,
                     getIntent(ctxt, widgetId), 0);
             AlarmManager am = (AlarmManager) ctxt
@@ -314,7 +314,7 @@ public class Widget extends AppWidgetProvider {
             return;
         }
         Log.e(Main.TAG, msg);
-        Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT);
+        Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT).show();
     }
 
 }
