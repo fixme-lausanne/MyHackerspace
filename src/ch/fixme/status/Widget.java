@@ -129,7 +129,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                return new Net(url[0]).getBitmap();
+                return new Net(url[0], mCtxt).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
                 String msg = e.getMessage();
@@ -197,7 +197,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0], false).getString();
+                return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
                 String msg = e.getMessage();

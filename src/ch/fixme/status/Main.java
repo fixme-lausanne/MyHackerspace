@@ -362,16 +362,18 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
+        private Context mCtxt;
 
         @Override
         protected void onPreExecute() {
+            mCtxt = getApplicationContext();
             showDialog(DIALOG_LOADING);
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0]).getString();
+                return new Net(url[0], mCtxt).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -402,9 +404,11 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
+        private Context mCtxt;
 
         @Override
         protected void onPreExecute() {
+            mCtxt = getApplicationContext();
             showDialog(DIALOG_LOADING);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
@@ -414,7 +418,7 @@ public class Main extends Activity {
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0], false).getString();
+                return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -448,6 +452,7 @@ public class Main extends Activity {
         private int mId;
         private String mErrorTitle;
         private String mErrorMsg;
+        private Context mCtxt;
 
         public GetImage(int id) {
             mId = id;
@@ -455,6 +460,7 @@ public class Main extends Activity {
 
         @Override
         protected void onPreExecute() {
+            mCtxt = getApplicationContext();
             ImageView img = (ImageView) findViewById(mId);
             img.setImageResource(android.R.drawable.ic_popup_sync);
             AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
@@ -464,7 +470,7 @@ public class Main extends Activity {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                return new Net(url[0]).getBitmap();
+                return new Net(url[0], mCtxt).getBitmap();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];

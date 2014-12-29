@@ -20,8 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLContext;
 import java.security.SecureRandom;
+
+import de.duenndns.ssl.MemorizingTrustManager;
 
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
@@ -32,12 +36,22 @@ public class Net {
             + Build.MODEL + ") MyHackerspace/1.7.4.1";
 
     private HttpURLConnection mUrlConnection;
+    private Context mCtxt;
 
-    public Net(String urlStr) throws Throwable {
-        this(urlStr, true);
+    public Net(String urlStr, Context ctxt) throws Throwable {
+        this(urlStr, true, ctxt);
     }
 
-    public Net(String urlStr, boolean useCache) throws Throwable {
+    public Net(String urlStr, boolean useCache, Context ctxt) throws Throwable {
+        mCtxt = ctxt;
+        // register MemorizingTrustManager for HTTPS
+        SSLContext sc = SSLContext.getInstance("TLS");
+        MemorizingTrustManager mtm = new MemorizingTrustManager(mCtxt);
+        sc.init(null, new X509TrustManager[] { mtm }, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier(
+            mtm.wrapHostnameVerifier(HttpsURLConnection.getDefaultHostnameVerifier()));
+
         // Create client
         URL url = new URL(urlStr);
         mUrlConnection = (HttpURLConnection) url.openConnection();
