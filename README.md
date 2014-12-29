@@ -6,6 +6,22 @@ My Hackerspace
 - Status widget, multiple widgets supported
 - Available on [f-droid](https://f-droid.org/repository/browse/?fdid=ch.fixme.status) and [play store](https://play.google.com/store/apps/details?id=ch.fixme.status)
 
+HOW TO COMPILE
+=============
+
+- Get the sources
+
+    git clone https://github.com/fixme-lausanne/MyHackerspace.git
+
+- Update submodules
+
+    cd MyHackerspace
+    git submodule update --init
+
+- Create the APK
+
+    ant debug
+
 TODO
 ====
 
