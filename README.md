@@ -22,6 +22,13 @@ HOW TO COMPILE
 
     ant debug
 
+- SDK properties
+
+    SDK_LEVEL='android-17' #change this to the sdk level you have installed
+    android update project -p . -t $SDK_LEVEL
+    cd libs/MemorizingTrustManager/
+    android update project --subprojects -p . -t $SDK_LEVEL
+
 TODO
 ====
 
