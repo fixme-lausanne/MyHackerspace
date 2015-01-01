@@ -93,7 +93,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId) {
-        setAlarm(ctxt, i, widgetId, 0);
+        setAlarm(ctxt, i, widgetId, 200);
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId,
@@ -108,7 +108,7 @@ public class Widget extends AppWidgetProvider {
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + delay, update_interval, pi);
         // Log.i(Main.TAG, "start notification every " + update_interval / 1000
         // + "s");
@@ -209,7 +209,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected void onCancelled() {
             // Set alarm 5 seconds in the future
-            Log.i(Main.TAG, "Set alarm in 5 seconds");
+            Log.i(Main.TAG, "Set alarm in 1 seconds");
             Intent intent = getIntent(mCtxt, mId);
             setAlarm(mCtxt, intent, mId, 1000);
         }
