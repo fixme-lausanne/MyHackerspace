@@ -108,7 +108,7 @@ public class Widget extends AppWidgetProvider {
                 .getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME,
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + delay, update_interval, pi);
         // Log.i(Main.TAG, "start notification every " + update_interval / 1000
         // + "s");
