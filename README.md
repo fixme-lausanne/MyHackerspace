@@ -11,23 +11,26 @@ HOW TO COMPILE
 
 - Get the sources
 
+```bash
     git clone https://github.com/fixme-lausanne/MyHackerspace.git
-
-- Update submodules
-
     cd MyHackerspace
     git submodule update --init
-
-- Create the APK
-
-    ant debug
+```
 
 - SDK properties
 
+```bash
     SDK_LEVEL='android-17' #change this to the sdk level you have installed
     android update project -p . -t $SDK_LEVEL
     cd libs/MemorizingTrustManager/
     android update project --subprojects -p . -t $SDK_LEVEL
+```
+
+- Create the APK
+
+```bash
+    ant debug
+```
 
 TODO
 ====
