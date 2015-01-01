@@ -3,14 +3,34 @@
     Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
     Licensed under GNU's GPL 3, see README
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabhost"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@android:color/white">
-		<com.woozzu.android.widget.IndexableListView
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent" 
-			android:id="@+id/listview"
-			android:cacheColorHint="#FFFFFFFF" />
-</LinearLayout>
+	android:layout_height="fill_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/white">
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1">
+            <com.woozzu.android.widget.IndexableListView
+                android:id="@+id/listview1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="#FFFFFFFF" />
+            <com.woozzu.android.widget.IndexableListView
+                android:id="@+id/listview2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="#FFFFFFFF" />
+        </FrameLayout>
+    </LinearLayout>
+</TabHost>

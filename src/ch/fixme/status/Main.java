@@ -42,6 +42,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TabHost;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -244,7 +245,7 @@ public class Main extends Activity {
                     android.R.layout.simple_list_item_1, names);
 
             IndexableListView listView = (IndexableListView) view
-                    .findViewById(R.id.listview);
+                    .findViewById(R.id.listview1);
             listView.setAdapter(adapter);
             listView.setFastScrollEnabled(true);
             listView.setOnItemClickListener(new OnItemClickListener() {
@@ -262,6 +263,13 @@ public class Main extends Activity {
             });
             builder.setView(view);
             builder.setTitle(R.string.choose_hs);
+
+            // Tabs
+            TabHost tabHost = (TabHost)view.findViewById(R.id.tabhost);
+            tabHost.setup();
+            tabHost.setCurrentTab(0);
+            tabHost.addTab(tabHost.newTabSpec("tab_all").setIndicator("All spaces").setContent(R.id.listview1));
+            tabHost.addTab(tabHost.newTabSpec("tab_fav").setIndicator("Favorites").setContent(R.id.listview2));
 
             return builder.create();
         } catch (Exception e) {
