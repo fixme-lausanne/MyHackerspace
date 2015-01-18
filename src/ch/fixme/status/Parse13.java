@@ -72,6 +72,17 @@ public class Parse13 extends ParseGeneric {
             }
         }
 
+	// FIXME
+	// si on a des events
+	if(!mApi.isNull(API_EVENT)) {
+	    JSONArray events = mApi.getJSONArray(API_EVENT);
+	    for(int i=0; i < events.length(); i++){
+		// get a single event, which is a JSON object
+		JSONObject event = events.getJSONObject(i);
+		mResult.put(API_EVENT, events.toString()); // add a 
+	    }
+	}
+
         // Contact
         if (!mApi.isNull(API_CONTACT)) {
             JSONObject contact = mApi.getJSONObject(API_CONTACT);
@@ -181,8 +192,8 @@ public class Parse13 extends ParseGeneric {
             mResult.put(API_SENSORS, result);
         }
 
+        // Stream
         if (!mApi.isNull(API_STREAM) || !mApi.isNull(API_CAM)) {
-            // Stream
             if (!mApi.isNull(API_STREAM)) {
                 JSONObject stream = mApi.optJSONObject(API_STREAM);
                 if (stream != null) {

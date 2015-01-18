@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+   <!-- Drop shadow, to define as background on layouts  -->
+   <item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#10303030"/>
+	    </shape>
+    </item>
+   <item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#20CCCCCC"/>
+	    </shape>
+    </item>
+  <item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#40CCCCCC"/>
+	</shape>
+    </item>
+     <item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#60CCCCCC"/>
+	</shape>
+	</item>
+	
+	<item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#80CCCCCC"/>
+	</shape>
+	</item> 
+       
+       	<item>
+	<shape>
+	    <padding android:bottom="1dp"/>
+	    <solid android:color="#a0CCCCCC"/>
+	</shape>
+    </item>
+
+    <item>
+	<shape>
+	    <solid android:color="@color/white"/>
+	 </shape>
+    </item>
+</layer-list>

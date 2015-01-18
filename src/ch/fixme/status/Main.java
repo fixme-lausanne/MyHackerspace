@@ -278,6 +278,51 @@ public class Main extends Activity {
         }
     }
 
+
+    private void addEventsEntry(LinearLayout targetLayout, HashMap<String, Object> datas)
+    {
+	String key = "events"; // retrieve the events from the hashmap
+	String values = datas.get(key).toString(); // gotta catch them all
+	LayoutInflater inflater = getLayoutInflater();
+	TextView tv = (TextView) inflater.inflate(R.layout.event, null);
+	
+	addEntry(targetLayout, values, tv); // and then add this thing
+    }
+    
+    private void addRegularEntry(LinearLayout targetLayout, String strEntry)
+    {
+	LayoutInflater inflater = getLayoutInflater();
+	TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+
+	addEntry(targetLayout, strEntry, tv);
+    }
+
+    private void addEntry(LinearLayout targetLayout, String strEntry, TextView tv)
+    {
+	tv.setText(strEntry);
+	targetLayout.addView(tv);
+    }
+
+    /* Name: addAllEntryFromData
+     * Goal: add views to layouts from a given set of data
+     * Param: targetLayout -> where we want to add the stuff
+     *        Datas -> hashmap containing the source of the data
+     *        filter -> filters out the kind of data we want
+     *        viewType -> specify the kind of view to add to our layout TODO
+     */
+    private void addAllEntryFromData(LinearLayout targetLayout,  HashMap<String, Object> datas)
+    {
+	for(HashMap.Entry<String, Object> entry: datas.entrySet())
+	{
+	    
+            LayoutInflater inflater = getLayoutInflater();
+	    String str = "Key: " + entry.getKey() + " Value:" + entry.getValue();
+	    TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+	    tv.setText(str);	    
+	    targetLayout.addView(tv);
+	}
+    }
+
     private void getHsList(Bundle savedInstanceState) {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null
@@ -521,52 +566,30 @@ public class Main extends Activity {
                     .get(ParseGeneric.API_URL));
             getImageTask = new GetImage(R.id.space_image);
             getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
-
-            // Status text
+	    
+            
+	    
+	    // Status text
             String status_txt = "";
             if (data.get(ParseGeneric.API_STATUS) == null) {
                 status_txt = UNKNOWN;
-                ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_invisible, 0, 0, 0);
             } else if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
-                status_txt = OPEN;
-                ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_online, 0, 0, 0);
+              ((TextView) findViewById(R.id.status_txt)).setBackgroundResource(R.drawable.label_open); 
+             
+	      ((TextView) findViewById(R.id.status_txt)).setTextColor(getResources().getColor(R.color.green));
+	      status_txt = OPEN;
             } else {
-                status_txt = CLOSED;
-                ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_busy, 0, 0, 0);
+		((TextView) findViewById(R.id.status_txt)).setBackgroundResource(R.drawable.label_closed); 
+               	((TextView) findViewById(R.id.status_txt)).setTextColor(getResources().getColor(R.color.red));
+		status_txt = CLOSED;
             }
             if (data.containsKey(ParseGeneric.API_STATUS_TXT)) {
                 status_txt += ": "
                         + (String) data.get(ParseGeneric.API_STATUS_TXT);
             }
             ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
-
-            // Status last change
-            if (data.containsKey(ParseGeneric.API_LASTCHANGE)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setAutoLinkMask(0);
-                tv.setText(getString(R.string.api_lastchange) + " "
-                        + (String) data.get(ParseGeneric.API_LASTCHANGE));
-                vg.addView(tv);
-            }
-
-            // Status duration
-            if (data.containsKey(ParseGeneric.API_EXT_DURATION)
-                    && data.get(ParseGeneric.API_STATUS) != null
-                    && (Boolean) data.get(ParseGeneric.API_STATUS)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText(getString(R.string.api_duration) + " "
-                        + (String) data.get(ParseGeneric.API_EXT_DURATION)
-                        + getString(R.string.api_duration_hours));
-                vg.addView(tv);
-            }
-
-            // Location
+            
+	    // Location
             Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
             if (data.containsKey(ParseGeneric.API_ADDRESS)
                     || data.containsKey(ParseGeneric.API_LON)) {
@@ -614,75 +637,50 @@ public class Main extends Activity {
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
 
+
+		// Events
+		if (data.containsKey(ParseGeneric.API_EVENT)){
+		    addEventsEntry(vg, data);
+		}
                 // Phone
                 if (data.containsKey(ParseGeneric.API_PHONE)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_PHONE));
-                    vg.addView(tv);
+                    addRegularEntry(vg, (String)data.get(ParseGeneric.API_PHONE));
                 }
                 // SIP
                 if (data.containsKey(ParseGeneric.API_SIP)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_SIP));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_SIP));
                 }
                 // Twitter
                 if (data.containsKey(ParseGeneric.API_TWITTER)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText(TWITTER
-                            + (String) data.get(ParseGeneric.API_TWITTER));
-                    vg.addView(tv);
-                }
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_TWITTER));
+		}
                 // Identica
                 if (data.containsKey(ParseGeneric.API_IDENTICA)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_IDENTICA));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_IDENTICA));
                 }
                 // Foursquare
                 if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText(FOURSQUARE
-                            + (String) data.get(ParseGeneric.API_FOURSQUARE));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_FOURSQUARE));
                 }
                 // IRC
                 if (data.containsKey(ParseGeneric.API_IRC)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setAutoLinkMask(0);
-                    tv.setText((String) data.get(ParseGeneric.API_IRC));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_IRC));
                 }
                 // Email
                 if (data.containsKey(ParseGeneric.API_EMAIL)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_EMAIL));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_EMAIL));
                 }
                 // Jabber
                 if (data.containsKey(ParseGeneric.API_JABBER)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_JABBER));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_JABBER));
                 }
                 // Mailing-List
                 if (data.containsKey(ParseGeneric.API_ML)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_ML));
-                    vg.addView(tv);
+		    addRegularEntry(vg, (String) data.get(ParseGeneric.API_ML));
                 }
             }
 
-            // Sensors
+	    // Sensors
             if (data.containsKey(ParseGeneric.API_SENSORS)) {
                 // Title
                 TextView title = (TextView) inflater.inflate(R.layout.title,

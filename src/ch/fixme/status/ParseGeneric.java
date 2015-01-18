@@ -16,6 +16,7 @@ public class ParseGeneric {
     protected static final String API_DIRECTORY = "http://spaceapi.net/directory.json";
     protected static final String API_NAME = "space";
     protected static final String API_LON = "lon";
+    protected static final String API_EVENT = "events";
     protected static final String API_LOCATION = "location";
     protected static final String API_LAT = "lat";
     protected static final String API_URL = "url";

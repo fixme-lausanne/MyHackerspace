@@ -8,9 +8,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip" >
-
+    >
     <TextView
         android:id="@+id/placeholder"
         android:layout_width="fill_parent"
@@ -18,21 +16,21 @@
         android:gravity="center_horizontal|center_vertical"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/choose_hs" />
-
     <LinearLayout
         android:id="@+id/main_view"
         android:layout_width="fill_parent"
+	android:layout_margin="0dip"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dip"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
-
+        android:gravity="left"
+	android:orientation="horizontal"
+    	android:background="@drawable/drop_shadow" 
+	>
         <ImageView
             android:id="@+id/space_image"
             android:visibility="gone"
-            android:layout_width="96sp"
-            android:layout_height="wrap_content"
             android:layout_margin="4dip"
+	    android:layout_width="72sp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/ui_logo"
             android:src="@android:drawable/ic_menu_gallery" />
@@ -40,40 +38,45 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="left"
             android:orientation="vertical"
-            android:layout_marginBottom="4dip"
-            android:layout_marginLeft="4dip"
-            android:layout_marginRight="4dip" >
-
+            >
             <TextView
-                android:id="@+id/space_name"
+     	        android:id="@+id/space_name"
                 android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dip"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/ui_name" />
 
-            <TextView
+	    <TextView
+		android:layout_marginBottom="4dip"
                 android:id="@+id/space_url"
                 android:visibility="gone"
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
                 android:autoLink="web"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/ui_url" />
 
-        </LinearLayout>
-
-    </LinearLayout>
-
+	    <TextView
+		android:id="@+id/status_txt"
+		android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+		android:autoLink="web"
+		android:gravity="left"
+		android:drawableLeft="@android:drawable/presence_online"
+		android:padding="4dip"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/ui_url"/> 
+	</LinearLayout>
+   </LinearLayout>
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
-
 </LinearLayout>
