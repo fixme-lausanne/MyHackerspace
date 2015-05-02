@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2013 Aubort Jean-Baptiste (Rorist)
+    Licensed under GNU's GPL 3, see README
+-->
+<resources>
+
+    <string name="app_name">MyHackerspace</string>
+    <string name="empty"></string>
+    <string name="ok">OK</string>
+
+    <string name="ui_logo">Logo van de hackerspace</string>
+    <string name="ui_name">FIXME</string>
+    <string name="ui_url">https://fixme.ch</string>
+    <string name="ui_image_status">Status logo van de hackerspace</string>
+
+    <string name="choose_hs">Kies een hackerspace</string>
+    <string name="choose_time">Kies een update tijd in minuten: </string>
+    <string name="choose_time_default">30</string>
+    <string name="choose_transparency">Widget\'s transparency</string>
+    <string name="choose_text">Widget\'s tekst</string>
+
+    <string name="btn_refresh">Update</string>
+    <string name="btn_prefs">Instellingen</string>
+
+    <string name="msg_loading">Laden…</string>
+    <string name="error_title">Fout: </string>
+    <string name="error_network_title">Netwerk</string>
+    <string name="error_network_msg">Netwerk niet bereikbaar</string>
+    <string name="error_generic">\n\nKijk of uw API gelijk is aan het level dat u gebruikt!\n\nZie http://spaceapi.net</string>
+
+    <string name="prefs_interval_title">Update tijd</string>
+    <string name="prefs_interval_summary">Update tijd in minuten voor het updaten van de widget</string>
+    <string name="prefs_transparent_title">Widget achtergrond transparantie</string>
+    <string name="prefs_transparent_summary">Widgets achtergrond zal transparant zijn inplaats van grijs</string>
+    <string name="prefs_text_title">Widget status tekst</string>
+    <string name="prefs_text_summary">Voeg tekst toe aan de widget</string>
+
+    <string name="api_status">Status</string>
+    <string name="api_lastchange">Laatste update: </string>
+    <string name="api_duration">Duur: </string>
+    <string name="api_duration_hours"> u(u)r(en)</string>
+    <string name="api_location">Locatie</string>
+    <string name="api_contact">Kontakt</string>
+    <string name="api_stream">Stream</string>
+    <string name="api_sensors">Sensoren</string>
+
+</resources>
