@@ -201,7 +201,7 @@ public class Widget extends AppWidgetProvider {
             } catch (Throwable e) {
                 e.printStackTrace();
                 String msg = e.getMessage();
-                printMessage(mCtxt, msg);
+		Log.e(Main.TAG, msg);
             }
             return "";
         }
