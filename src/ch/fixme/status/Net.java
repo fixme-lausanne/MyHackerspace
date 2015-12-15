@@ -54,10 +54,27 @@ public class Net {
 
         // Create client
         URL url = new URL(urlStr);
-        mUrlConnection = (HttpURLConnection) url.openConnection();
-        mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
-        mUrlConnection.setUseCaches(useCache);
-        Log.v(Main.TAG, "fetching " + urlStr);
+
+        // HttpsURLConnection does not support redirect with protocol switch,
+        // so we take care of that here:
+        boolean redirect = false;
+        do {
+           mUrlConnection = (HttpURLConnection) url.openConnection();
+           mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
+           mUrlConnection.setUseCaches(useCache);
+           Log.v(Main.TAG, "fetching " + urlStr);
+
+           if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
+               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM
+               || mUrlConnection.getResponseCode() == HTTP_TEMPORARY_REDIRECT
+               || mUrlConnection.getResponseCode() == HTTP_PERMANENT_REDIRECT) {
+
+               location = mUrlConnection.getHeaderField("Location");
+
+          } else {
+            redirect = false;
+          }
+       } while(redirect);
     }
 
     public String getString() throws Throwable {
