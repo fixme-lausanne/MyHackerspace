@@ -102,7 +102,8 @@ public class Main extends Activity {
             getHsList(savedInstanceState);
             showHsInfo(intent, savedInstanceState);
         } else {
-            showError(getString(R.string.error_title) + getString(R.string.error_network_title),
+            showError(getString(R.string.error_title) + 
+                    getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
         }
     }
@@ -140,7 +141,8 @@ public class Main extends Activity {
             if (checkNetwork()){
                 showHsInfo(getIntent(), null);
             } else {
-                showError(getString(R.string.error_title) + getString(R.string.error_network_title),
+                showError(getString(R.string.error_title) +
+                        getString(R.string.error_network_title),
                         getString(R.string.error_network_msg));
             }
             return true;
@@ -268,13 +270,16 @@ public class Main extends Activity {
             TabHost tabHost = (TabHost)view.findViewById(R.id.tabhost);
             tabHost.setup();
             tabHost.setCurrentTab(0);
-            tabHost.addTab(tabHost.newTabSpec("tab_all").setIndicator("All spaces").setContent(R.id.listview1));
-            tabHost.addTab(tabHost.newTabSpec("tab_fav").setIndicator("Favorites").setContent(R.id.listview2));
+            tabHost.addTab(tabHost.newTabSpec("tab_all").
+                    setIndicator("All spaces").setContent(R.id.listview1));
+            tabHost.addTab(tabHost.newTabSpec("tab_fav").
+                    setIndicator("Favorites").setContent(R.id.listview2));
 
             return builder.create();
         } catch (Exception e) {
             e.printStackTrace();
-            return showError(e.getClass().getCanonicalName(), e.getLocalizedMessage(), true);
+            return showError(e.getClass().getCanonicalName(),
+                    e.getLocalizedMessage(), true);
         }
     }
 
@@ -587,9 +592,9 @@ public class Main extends Activity {
                 // Lon/Lat
                 if (data.containsKey(ParseGeneric.API_LON)
                         && data.containsKey(ParseGeneric.API_LAT)) {
-                    String addr = (data.containsKey(ParseGeneric.API_ADDRESS)) ? (String) data
-                            .get(ParseGeneric.API_ADDRESS)
-                            : getString(R.string.empty);
+                    String addr = (data.containsKey(ParseGeneric.API_ADDRESS))
+                        ? (String) data.get(ParseGeneric.API_ADDRESS)
+                        : getString(R.string.empty);
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setAutoLinkMask(0);
@@ -691,7 +696,8 @@ public class Main extends Activity {
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
 
-                HashMap<String, ArrayList<HashMap<String, String>>> sensors = (HashMap<String, ArrayList<HashMap<String, String>>>) data
+                HashMap<String, ArrayList<HashMap<String, String>>> sensors =
+                    (HashMap<String, ArrayList<HashMap<String, String>>>) data
                         .get(ParseGeneric.API_SENSORS);
                 Set<String> names = sensors.keySet();
                 Iterator<String> it = names.iterator();
