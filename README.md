@@ -9,6 +9,14 @@ My Hackerspace
 HOW TO COMPILE
 =============
 
+- Install dependencies
+
+```bash
+    apt-get install openjdk-7-jdk ant git
+```
+
+* Also install android SDK at https://d.android.com
+
 - Get the sources
 
 ```bash
