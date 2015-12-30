@@ -14,7 +14,8 @@
         android:id="@+id/hs_list_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/btn_star"/>
+        android:src="@drawable/star_off"
+        android:background="#00ffffff" />
     <TextView
         android:id="@+id/hs_list_text"
         android:layout_width="fill_parent"
