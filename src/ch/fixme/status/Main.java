@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2015 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 3, see README
  */
 
@@ -50,10 +50,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.woozzu.android.util.StringMatcher;
 import com.woozzu.android.widget.IndexableListView;
 
 public class Main extends Activity {
@@ -240,12 +238,10 @@ public class Main extends Activity {
                 urls.add(i, obj.getString(names.get(i)));
             }
 
-            // Create the dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+            // List all hackerspaces
             View view = getLayoutInflater().inflate(R.layout.hs_choose, null);
-            ContentAdapter adapter = new ContentAdapter(Main.this,
+            ListHackerspace adapter = new ListHackerspace(Main.this,
                     R.layout.hs_list, R.id.hs_list_text, names);
-
             IndexableListView listView = (IndexableListView) view
                     .findViewById(R.id.listview1);
             listView.setAdapter(adapter);
@@ -263,6 +259,11 @@ public class Main extends Activity {
                     dismissDialog(DIALOG_LIST);
                 }
             });
+
+            // List favorites
+
+            // Create the dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
             builder.setView(view);
             builder.setTitle(R.string.choose_hs);
 
@@ -827,54 +828,5 @@ public class Main extends Activity {
         }
     }
 
-    // https://github.com/woozzu/IndexableListView/
-    private class ContentAdapter extends ArrayAdapter<String> implements
-            SectionIndexer {
-
-        private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        public ContentAdapter(Context context, int resource, int textViewResourceId,
-                List<String> objects) {
-            super(context, resource, textViewResourceId, objects);
-        }
-
-        @Override
-        public int getPositionForSection(int section) {
-            // If there is no item for current section, previous section will be
-            // selected
-            for (int i = section; i >= 0; i--) {
-                for (int j = 0; j < getCount(); j++) {
-                    if (i == 0) {
-                        // For numeric section
-                        for (int k = 0; k <= 9; k++) {
-                            if (StringMatcher.match(
-                                    String.valueOf(getItem(j).charAt(0)),
-                                    String.valueOf(k)))
-                                return j;
-                        }
-                    } else {
-                        if (StringMatcher.match(
-                                String.valueOf(getItem(j).charAt(0)),
-                                String.valueOf(mSections.charAt(i))))
-                            return j;
-                    }
-                }
-            }
-            return 0;
-        }
-
-        @Override
-        public int getSectionForPosition(int position) {
-            return 0;
-        }
-
-        @Override
-        public Object[] getSections() {
-            String[] sections = new String[mSections.length()];
-            for (int i = 0; i < mSections.length(); i++)
-                sections[i] = String.valueOf(mSections.charAt(i));
-            return sections;
-        }
-    }
 
 }
