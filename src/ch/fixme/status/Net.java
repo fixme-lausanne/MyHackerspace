@@ -58,6 +58,7 @@ public class Net {
         // HttpsURLConnection does not support redirect with protocol switch,
         // so we take care of that here:
         boolean redirect = false;
+        int redirect_limt = 10;
         do {
            mUrlConnection = (HttpURLConnection) url.openConnection();
            mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
@@ -70,11 +71,12 @@ public class Net {
                || mUrlConnection.getResponseCode() == HTTP_PERMANENT_REDIRECT) {
 
                location = mUrlConnection.getHeaderField("Location");
+               redirect_limt -= 1;
 
           } else {
             redirect = false;
           }
-       } while(redirect);
+       } while(redirect && redirect_limt > 0);
     }
 
     public String getString() throws Throwable {
