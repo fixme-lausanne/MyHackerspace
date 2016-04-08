@@ -119,6 +119,7 @@ public class Widget extends AppWidgetProvider {
         private int mId;
         private Context mCtxt;
         private String mText;
+        private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
             mCtxt = ctxt;
@@ -132,8 +133,8 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0], mCtxt).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
-                String msg = e.getMessage();
-                printMessage(mCtxt, msg);
+                mError = e.getMessage();
+                cancel(true);
             }
             return null;
         }
@@ -142,6 +143,13 @@ public class Widget extends AppWidgetProvider {
         protected void onPostExecute(Bitmap result) {
             AppWidgetManager manager = AppWidgetManager.getInstance(mCtxt);
             updateWidget(mCtxt, mId, manager, result, mText);
+        }
+
+        @Override
+        protected void onCancelled () {
+        if (mError != null) {
+                printMessage(mCtxt, mError);
+            }
         }
 
     }
@@ -188,6 +196,7 @@ public class Widget extends AppWidgetProvider {
 
         private int mId;
         private Context mCtxt;
+        private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {
             mCtxt = ctxt;
@@ -201,7 +210,8 @@ public class Widget extends AppWidgetProvider {
             } catch (Throwable e) {
                 e.printStackTrace();
                 String msg = e.getMessage();
-                printMessage(mCtxt, msg);
+                mError = e.getMessage();
+                cancel(true);
             }
             return "";
         }
@@ -212,6 +222,9 @@ public class Widget extends AppWidgetProvider {
             Log.i(Main.TAG, "Set alarm in 1 seconds");
             Intent intent = getIntent(mCtxt, mId);
             setAlarm(mCtxt, intent, mId, 1000);
+            if (mError != null) {
+                printMessage(mCtxt, mError);
+            }
         }
 
         @Override
