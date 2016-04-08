@@ -69,9 +69,9 @@ public class Main extends Activity {
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
     protected static final String STATE_HS = "hs";
     protected static final String STATE_DIR = "dir";
-    private static final String PREF_API_URL = "apiurl";
-    private static final int DIALOG_LOADING = 0;
-    private static final int DIALOG_LIST = 1;
+    protected static final String PREF_API_URL = "apiurl";
+    protected static final int DIALOG_LOADING = 0;
+    protected static final int DIALOG_LIST = 1;
     private static final String TWITTER = "https://twitter.com/#!/";
     private static final String FOURSQUARE = "https://foursquare.com/v/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
@@ -241,26 +241,12 @@ public class Main extends Activity {
             // List all hackerspaces
             View view = getLayoutInflater().inflate(R.layout.hs_choose, null);
             ListHackerspace adapter = new ListHackerspace(Main.this,
-                    R.layout.hs_list, R.id.hs_list_text, names);
+                    R.layout.hs_list, R.id.hs_list_text, names, urls);
             IndexableListView listView = (IndexableListView) view
                     .findViewById(R.id.listview1);
             listView.setAdapter(adapter);
             listView.setFastScrollEnabled(true);
-            listView.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                        int position, long id) {
-                    String url = urls.get(position);
-                    Editor edit = mPrefs.edit();
-                    edit.putString(PREF_API_URL, url);
-                    getApiTask = new GetApiTask();
-                    getApiTask.execute(url);
-                    edit.commit();
-                    dismissDialog(DIALOG_LIST);
-                }
-            });
-
-            // List favorites
+            listView.setItemsCanFocus(true);
 
             // Create the dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
@@ -414,7 +400,7 @@ public class Main extends Activity {
         }
     }
 
-    private class GetApiTask extends AsyncTask<String, Void, String> {
+    protected class GetApiTask extends AsyncTask<String, Void, String> {
 
         private String mErrorTitle;
         private String mErrorMsg;

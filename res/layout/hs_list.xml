@@ -9,16 +9,20 @@
     android:layout_height="wrap_content"
     android:paddingLeft="6dip"
     android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight">
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:focusable="false">
+    <!--
     <ImageButton
         android:id="@+id/hs_list_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/star_off"
         android:background="#00ffffff" />
+    -->
     <TextView
         android:id="@+id/hs_list_text"
-        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </LinearLayout>
