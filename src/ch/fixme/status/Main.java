@@ -301,7 +301,7 @@ public class Main extends Activity {
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null
-                || (savedInstanceState == null && !savedInstanceState
+                || (savedInstanceState != null && !savedInstanceState
                         .containsKey(STATE_HS))) {
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
