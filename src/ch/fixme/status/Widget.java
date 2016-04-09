@@ -147,7 +147,7 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onCancelled () {
-        if (mError != null) {
+            if (mError != null) {
                 printMessage(mCtxt, mError);
             }
         }
