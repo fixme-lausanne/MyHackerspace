@@ -38,11 +38,11 @@ public class Net {
     private HttpURLConnection mUrlConnection;
     private Context mCtxt;
 
-    public Net(String urlStr, Context ctxt) throws Throwable {
+    public Net(String urlStr, final Context ctxt) throws Throwable {
         this(urlStr, true, ctxt);
     }
 
-    public Net(String urlStr, boolean useCache, Context ctxt) throws Throwable {
+    public Net(String urlStr, boolean useCache, final Context ctxt) throws Throwable {
         mCtxt = ctxt;
         // register MemorizingTrustManager for HTTPS
         SSLContext sc = SSLContext.getInstance("TLS");
@@ -73,8 +73,11 @@ public class Net {
                     str.append(line);
                 }
                 return str.toString();
+            } else if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+                String newUrl = mUrlConnection.getHeaderField("Location");
+                return new Net(newUrl, mCtxt).getString();
             } else {
-                throw new Throwable(mUrlConnection.getResponseMessage());
+                throw new Throwable(mUrlConnection.getResponseCode() + ": " + mUrlConnection.getResponseMessage());
             }
         } finally {
             if (is != null) {
@@ -91,8 +94,11 @@ public class Net {
             if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
                 is = mUrlConnection.getInputStream();
                 return BitmapFactory.decodeStream(new FlushedInputStream(is));
+            } else if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+                String newUrl = mUrlConnection.getHeaderField("Location");
+                return new Net(newUrl, mCtxt).getBitmap();
             } else {
-                throw new Throwable(mUrlConnection.getResponseMessage());
+                throw new Throwable(mUrlConnection.getResponseCode() + ": " + mUrlConnection.getResponseMessage());
             }
         } finally {
             if (is != null) {
