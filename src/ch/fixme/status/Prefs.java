@@ -32,7 +32,6 @@ public class Prefs extends PreferenceActivity implements
     }
 
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        Toast.makeText(getApplicationContext(), key + " updated!", Toast.LENGTH_SHORT).show(); // FIXME String
         if (key.equals(KEY_WIDGET_TRANSPARENCY) || key.equals(KEY_WIDGET_TEXT)
                 || key.equals(KEY_CHECK_INTERVAL)) {
             Widget.UpdateAllWidgets(getApplicationContext(), true);
