@@ -223,6 +223,9 @@ public class Main extends Activity {
 
     private AlertDialog createHsDialog() {
         // Construct hackerspaces list
+        if (mResultDir == null){
+            return null;
+        }
         try {
             JSONObject obj = new JSONObject(mResultDir);
             JSONArray arr = obj.names();
