@@ -107,7 +107,6 @@ public class Widget_config extends Activity {
         switch (id) {
         case DIALOG_LOADING:
             dialog = new ProgressDialog(this);
-            dialog.setCancelable(false);
             dialog.setMessage(getString(R.string.msg_loading));
             dialog.setCancelable(true);
             ((ProgressDialog) dialog).setIndeterminate(true);
