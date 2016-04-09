@@ -64,7 +64,8 @@ public class Net {
         InputStream is = null;
         try {
             mUrlConnection.connect();
-            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+            int responseCode = mUrlConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 is = mUrlConnection.getInputStream();
                 BufferedReader r = new BufferedReader(new InputStreamReader(is));
                 StringBuilder str = new StringBuilder();
@@ -73,7 +74,8 @@ public class Net {
                     str.append(line);
                 }
                 return str.toString();
-            } else if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+            } else if(responseCode == HttpURLConnection.HTTP_MOVED_PERM || 
+                    responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                 String newUrl = mUrlConnection.getHeaderField("Location");
                 return new Net(newUrl, mCtxt).getString();
             } else {
@@ -91,10 +93,12 @@ public class Net {
         InputStream is = null;
         try {
             mUrlConnection.connect();
-            if (mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
+            int responseCode = mUrlConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 is = mUrlConnection.getInputStream();
                 return BitmapFactory.decodeStream(new FlushedInputStream(is));
-            } else if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+            } else if(responseCode == HttpURLConnection.HTTP_MOVED_PERM || 
+                    responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                 String newUrl = mUrlConnection.getHeaderField("Location");
                 return new Net(newUrl, mCtxt).getBitmap();
             } else {
