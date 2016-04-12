@@ -14,8 +14,10 @@ public class Network extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctxt, Intent intent) {
         if (Main.checkNetwork(ctxt)) {
-            Log.i(Main.TAG, "Update widget on network change");
+            Log.i(Main.TAG, "Update widget on " + intent.getAction());
             Widget.UpdateAllWidgets(ctxt, true);
+        } else {
+            Log.e(Main.TAG, "Network not ready on " + intent.getAction());
         }
     }
 
