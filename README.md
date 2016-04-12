@@ -36,6 +36,7 @@ TODO
 ====
 
 - Auto recognize field types in the API (array, obj, string, etc)
+- Integrate woozzu library as 3rd party
 
 RELEASE NOTES
 =============
