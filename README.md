@@ -6,6 +6,8 @@ My Hackerspace
 - Status widget, multiple widgets supported
 - Available on [f-droid](https://f-droid.org/repository/browse/?fdid=ch.fixme.status) and [play store](https://play.google.com/store/apps/details?id=ch.fixme.status)
 
+Master branch: [![Build Status](https://travis-ci.org/fixme-lausanne/MyHackerspace.svg?branch=master)](https://travis-ci.org/fixme-lausanne/MyHackerspace)
+
 HOW TO COMPILE
 =============
 
