@@ -43,6 +43,15 @@ TODO
 RELEASE NOTES
 =============
 
+1.8
+---
+
+- Supports invalid SSL certificates
+- Allow widget to be resized
+- Add Dutch translation
+- Fix http to https redirection
+- General fixes
+
 1.7.4.1
 -------
 
