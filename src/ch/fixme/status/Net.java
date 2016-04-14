@@ -66,11 +66,10 @@ public class Net {
            Log.v(Main.TAG, "fetching " + urlStr);
 
            if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
-               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM
-               || mUrlConnection.getResponseCode() == HTTP_TEMPORARY_REDIRECT
-               || mUrlConnection.getResponseCode() == HTTP_PERMANENT_REDIRECT) {
+               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
+               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
 
-               location = mUrlConnection.getHeaderField("Location");
+               String location = mUrlConnection.getHeaderField("Location");
                redirect_limt -= 1;
 
           } else {
