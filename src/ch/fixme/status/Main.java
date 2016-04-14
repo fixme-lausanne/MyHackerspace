@@ -244,7 +244,7 @@ public class Main extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
             View view = getLayoutInflater().inflate(R.layout.hs_choose, null);
             ContentAdapter adapter = new ContentAdapter(Main.this,
-                    R.layout.hs_list, R.id.hs_list_text, names);
+                    android.R.layout.simple_list_item_1, names);
 
             IndexableListView listView = (IndexableListView) view
                     .findViewById(R.id.listview);
@@ -822,9 +822,9 @@ public class Main extends Activity {
 
         private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        public ContentAdapter(Context context, int resource, int textViewResourceId,
+        public ContentAdapter(Context context, int textViewResourceId,
                 List<String> objects) {
-            super(context, resource, textViewResourceId, objects);
+            super(context, textViewResourceId, objects);
         }
 
         @Override
