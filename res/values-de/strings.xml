@@ -18,8 +18,8 @@ Licensed under GNU's GPL 3, see README
     <string name="choose_hs">Hackerspace wählen</string>
     <string name="choose_time">Zeitraum in Minuten wählen: </string>
     <string name="choose_time_default">30</string>
-    <string name="choose_transparency">Durchsichtigkeit des Widgets</string>
-    <string name="choose_text">Text des Statut unter Widgets</string>
+    <string name="choose_transparency">Transparenz des Widgets</string>
+    <string name="choose_text">Statustext unter Widgets</string>
     
     <string name="btn_refresh">Neu laden</string>                
     <string name="btn_prefs">Vorzug</string>
@@ -31,7 +31,7 @@ Licensed under GNU's GPL 3, see README
     <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe http://spaceapi.net</string>
             
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
-    <string name="prefs_interval_summary">Zeitspanne in der das Widget auf richtigkeit des aktuellen Status überprüft wird.</string>                
+    <string name="prefs_interval_summary">Zeitspanne in der das Widget den tatsächlichen Status überprüft.</string>                
     <string name="prefs_transparent_title">transparentes Widget</string>
     <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau dargestellt.</string>                
     <string name="prefs_text_title">Widget Statustext</string>
