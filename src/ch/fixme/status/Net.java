@@ -66,8 +66,7 @@ public class Net {
            Log.v(Main.TAG, "fetching " + urlStr);
 
            if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
-               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
-               || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+           || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
 
                String location = mUrlConnection.getHeaderField("Location");
                redirect_limt -= 1;
