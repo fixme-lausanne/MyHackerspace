@@ -29,6 +29,8 @@
     <string name="error_network_msg">Network unreachable</string>
     <string name="error_generic">\n\nCheck that your API complies to the level you declare!\n\nSee http://spaceapi.net</string>
 
+    <string name="prefs_api_title">SpaceAPI Endpoint</string>
+    <string name="prefs_api_summary">URL to the spaceapi directory.json file</string>
     <string name="prefs_interval_title">Check interval</string>
     <string name="prefs_interval_summary">Interval in minutes to check the status in the widget</string>
     <string name="prefs_transparent_title">Widget background transparency</string>

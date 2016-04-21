@@ -41,6 +41,7 @@ public class Widget_config extends Activity {
     private SharedPreferences mPrefs;
     private GetDirTask getDirTask;
     private int mAppWidgetId;
+    private String mApiEndpoint;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,9 @@ public class Widget_config extends Activity {
         setContentView(R.layout.widget_config);
         mPrefs = PreferenceManager
                 .getDefaultSharedPreferences(Widget_config.this);
+        mApiEndpoint = mPrefs.getString(Prefs.KEY_API_ENDPOINT, Prefs.DEFAULT_API_ENDPOINT);
         getDirTask = new GetDirTask();
-        getDirTask.execute(ParseGeneric.API_DIRECTORY);
+        getDirTask.execute(mApiEndpoint);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -178,7 +180,7 @@ public class Widget_config extends Activity {
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e(Main.TAG, ParseGeneric.API_DIRECTORY);
+                Log.e(Main.TAG, mApiEndpoint);
                 Log.e(Main.TAG, result);
             }
 

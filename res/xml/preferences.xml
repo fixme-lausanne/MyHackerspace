@@ -6,6 +6,13 @@
 -->
 
     <EditTextPreference
+        android:key="api_endpoint"
+        android:title="@string/prefs_api_title"
+        android:summary="@string/prefs_api_summary"
+        android:defaultValue="https://spaceapi.fixme.ch"
+        android:inputType="textUri" />
+
+    <EditTextPreference
         android:key="check_interval"
         android:title="@string/prefs_interval_title"
         android:summary="@string/prefs_interval_summary"

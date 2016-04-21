@@ -278,8 +278,9 @@ public class Main extends Activity {
         if (data == null
                 || (savedInstanceState == null && !savedInstanceState
                         .containsKey(STATE_DIR))) {
+            String apiEndpoint = mPrefs.getString(Prefs.KEY_API_ENDPOINT, Prefs.DEFAULT_API_ENDPOINT);
             getDirTask = new GetDirTask();
-            getDirTask.execute(ParseGeneric.API_DIRECTORY);
+            getDirTask.execute(apiEndpoint);
         } else {
             finishDir = true;
             mResultDir = data.getString(STATE_DIR);
