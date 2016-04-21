@@ -9,7 +9,7 @@
         android:key="api_endpoint"
         android:title="@string/prefs_api_title"
         android:summary="@string/prefs_api_summary"
-        android:defaultValue="https://spaceapi.fixme.ch"
+        android:defaultValue="https://spaceapi.fixme.ch/directory.json"
         android:inputType="textUri" />
 
     <EditTextPreference
