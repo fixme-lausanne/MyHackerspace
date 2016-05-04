@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2016 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 3, see README
  */
 
@@ -36,6 +36,7 @@ public class Net {
             + Build.MODEL + ") MyHackerspace/1.7.4.1";
 
     private HttpURLConnection mUrlConnection;
+    private InputStream mInputStream;
     private Context mCtxt;
 
     public Net(String urlStr, Context ctxt) throws Throwable {
@@ -53,70 +54,64 @@ public class Net {
             mtm.wrapHostnameVerifier(HttpsURLConnection.getDefaultHostnameVerifier()));
 
         // Create client
-        URL url = new URL(urlStr);
 
-        // HttpsURLConnection does not support redirect with protocol switch,
-        // so we take care of that here:
-        boolean redirect = false;
+        // Connect to URL
+        URL url;
+        int responseCode;
         int redirect_limt = 10;
         do {
+           Log.v(Main.TAG, "fetching " + urlStr);
+           url = new URL(urlStr);
            mUrlConnection = (HttpURLConnection) url.openConnection();
            mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
            mUrlConnection.setUseCaches(useCache);
-           Log.v(Main.TAG, "fetching " + urlStr);
 
-           if(mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP
-           || mUrlConnection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+           mUrlConnection.connect();
+           responseCode = mUrlConnection.getResponseCode();
 
-               String location = mUrlConnection.getHeaderField("Location");
+            // HttpsURLConnection does not support redirect with protocol switch,
+            // so we take care of that here:
+           if(responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+           || responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
+               urlStr = mUrlConnection.getHeaderField("Location");
                redirect_limt -= 1;
+           } else {
+               break;
+           }
+       } while(redirect_limt > 0);
+       
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            String msg = mUrlConnection.getResponseMessage();
+            mUrlConnection.disconnect();
+            throw new Throwable(msg);
+        }
 
-          } else {
-            redirect = false;
-          }
-       } while(redirect && redirect_limt > 0);
+        mInputStream = mUrlConnection.getInputStream();
     }
 
     public String getString() throws Throwable {
-        InputStream is = null;
         try {
-            mUrlConnection.connect();
-            int responseCode = mUrlConnection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                is = mUrlConnection.getInputStream();
-                BufferedReader r = new BufferedReader(new InputStreamReader(is));
-                StringBuilder str = new StringBuilder();
-                String line;
-                while ((line = r.readLine()) != null) {
-                    str.append(line);
-                }
-                return str.toString();
-            } else {
-                throw new Throwable(mUrlConnection.getResponseMessage()
-                    + ": " + mUrlConnection.getResponseMessage());
+            BufferedReader r = new BufferedReader(new InputStreamReader(mInputStream));
+            StringBuilder str = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                str.append(line);
             }
+            return str.toString();
         } finally {
-            if (is != null) {
-                is.close();
+            if (mInputStream != null) {
+                mInputStream.close();
             }
             mUrlConnection.disconnect();
         }
     }
 
     public Bitmap getBitmap() throws Throwable {
-        InputStream is = null;
         try {
-            mUrlConnection.connect();
-            int responseCode = mUrlConnection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                is = mUrlConnection.getInputStream();
-                return BitmapFactory.decodeStream(new FlushedInputStream(is));
-            } else {
-                throw new Throwable(mUrlConnection.getResponseMessage());
-            }
+            return BitmapFactory.decodeStream(new FlushedInputStream(mInputStream));
         } finally {
-            if (is != null) {
-                is.close();
+            if (mInputStream != null) {
+                mInputStream.close();
             }
             mUrlConnection.disconnect();
         }
