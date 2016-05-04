@@ -60,26 +60,26 @@ public class Net {
         int responseCode;
         int redirect_limt = 10;
         do {
-           Log.v(Main.TAG, "fetching " + urlStr);
-           url = new URL(urlStr);
-           mUrlConnection = (HttpURLConnection) url.openConnection();
-           mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
-           mUrlConnection.setUseCaches(useCache);
+            Log.v(Main.TAG, "fetching " + urlStr);
+            url = new URL(urlStr);
+            mUrlConnection = (HttpURLConnection) url.openConnection();
+            mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
+            mUrlConnection.setUseCaches(useCache);
 
-           mUrlConnection.connect();
-           responseCode = mUrlConnection.getResponseCode();
+            mUrlConnection.connect();
+            responseCode = mUrlConnection.getResponseCode();
 
             // HttpsURLConnection does not support redirect with protocol switch,
             // so we take care of that here:
-           if(responseCode == HttpURLConnection.HTTP_MOVED_TEMP
-           || responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
-               urlStr = mUrlConnection.getHeaderField("Location");
-               redirect_limt -= 1;
-           } else {
-               break;
-           }
-       } while(redirect_limt > 0);
-       
+            if(responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+            || responseCode == HttpURLConnection.HTTP_MOVED_PERM) {
+                urlStr = mUrlConnection.getHeaderField("Location");
+                redirect_limt -= 1;
+            } else {
+                break;
+            }
+        } while(redirect_limt > 0);
+
         if (responseCode != HttpURLConnection.HTTP_OK) {
             String msg = mUrlConnection.getResponseMessage();
             mUrlConnection.disconnect();
