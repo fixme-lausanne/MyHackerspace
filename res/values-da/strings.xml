@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 Aubort Jean-Baptiste (Rorist)
+    Copyright (C) 2016 Mikkel Kirkgaard Nielsen (mikini)
+    Licensed under GNU's GPL 3, see README
+-->
+<resources>
+
+    <string name="app_name">MyHackerspace</string>
+    <string name="empty"></string>
+    <string name="ok">OK</string>
+
+    <string name="ui_logo">Hackerspacets logo</string>
+    <string name="ui_name">FIXME</string>
+    <string name="ui_url">https://fixme.ch</string>
+    <string name="ui_image_status">Hackerspacets statusbillede</string>
+
+    <string name="choose_hs">Vælg et hackerspace</string>
+    <string name="choose_time">Vælg et opdateringsinterval i minutter: </string>
+    <string name="choose_time_default">30</string>
+    <string name="choose_transparency">Widgetens gennemsightighed</string>
+    <string name="choose_text">Widgetens tekst</string>
+
+    <string name="btn_refresh">Opdater</string>
+    <string name="btn_prefs">Indstillinger</string>
+
+    <string name="msg_loading">Indlæser…</string>
+    <string name="error_title">Fejl: </string>
+    <string name="error_network_title">Netværk</string>
+    <string name="error_network_msg">Netværket er ikke tilgængeligt</string>
+    <string name="error_generic">\n\nKontroller at API\'et  overholder det niveau det annoncerer!\n\nSe http://spaceapi.net</string>
+
+    <string name="prefs_api_title">SpaceAPI Endepunkt</string>
+    <string name="prefs_api_summary">URL til den globale SpaceAPI fortegnelse (directory.json fil)\nEksempler:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_interval_title">Opdateringsinterval</string>
+    <string name="prefs_interval_summary">Interval i minutter imellem opdatering af widget-status</string>
+    <string name="prefs_transparent_title">Gennemsigtig baggrund</string>
+    <string name="prefs_transparent_summary">Widgetens baggrund vil være gennemsigtig i stedet for grå</string>
+    <string name="prefs_text_title">Vis statustekst</string>
+    <string name="prefs_text_summary">Tilføj en tekst med status under widgeten</string>
+
+    <string name="api_status">Status</string>
+    <string name="api_lastchange">Sidst ændret: </string>
+    <string name="api_duration">Varighed: </string>
+    <string name="api_duration_hours"> time(r)</string>
+    <string name="api_location">Lokation</string>
+    <string name="api_contact">Kontakt</string>
+    <string name="api_stream">Videostrøm</string>
+    <string name="api_sensors">Sensorer</string>
+
+</resources>
