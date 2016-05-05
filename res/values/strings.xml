@@ -14,7 +14,7 @@
     <string name="ui_url">https://fixme.ch</string>
     <string name="ui_image_status">Status image of the hackerspace</string>
 
-    <string name="choose_hs">Choose an hackerspace</string>
+    <string name="choose_hs">Choose a hackerspace</string>
     <string name="choose_time">Choose an update interval in minutes: </string>
     <string name="choose_time_default">30</string>
     <string name="choose_transparency">Widget\'s transparency</string>
@@ -27,16 +27,16 @@
     <string name="error_title">Error: </string>
     <string name="error_network_title">Network</string>
     <string name="error_network_msg">Network unreachable</string>
-    <string name="error_generic">\n\nCheck that your API complies to the level you declare!\n\nSee http://spaceapi.net</string>
+    <string name="error_generic">\n\nCheck that the API conforms to the level it actually declares!\n\nSee http://spaceapi.net</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
-    <string name="prefs_api_summary">URL to the spaceapi directory.json file\nExamples:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_api_summary">URL to the global SpaceAPI directory (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
     <string name="prefs_interval_title">Check interval</string>
     <string name="prefs_interval_summary">Interval in minutes to check the status in the widget</string>
-    <string name="prefs_transparent_title">Widget background transparency</string>
-    <string name="prefs_transparent_summary">Widgets background will be transparent instead of gray</string>
-    <string name="prefs_text_title">Widget status text</string>
-    <string name="prefs_text_summary">Add a text with the status under the widgets</string>
+    <string name="prefs_transparent_title">Show transparent background</string>
+    <string name="prefs_transparent_summary">Widget\'s background will be transparent instead of gray</string>
+    <string name="prefs_text_title">Show status text</string>
+    <string name="prefs_text_summary">Add a text with the status under the widget</string>
 
     <string name="api_status">Status</string>
     <string name="api_lastchange">Last change: </string>
