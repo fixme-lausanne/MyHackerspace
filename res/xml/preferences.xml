@@ -13,6 +13,13 @@
         android:inputType="textUri" />
 
     <EditTextPreference
+        android:key="apiurl"
+        android:title="@string/prefs_api_url_title"
+        android:summary="@string/prefs_api_url_summary"
+        android:defaultValue="https://fixme.ch/status.json"
+        android:inputType="textUri" />
+
+    <EditTextPreference
         android:key="check_interval"
         android:title="@string/prefs_interval_title"
         android:summary="@string/prefs_interval_summary"

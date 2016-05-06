@@ -70,7 +70,6 @@ public class Main extends Activity {
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
     protected static final String STATE_HS = "hs";
     protected static final String STATE_DIR = "dir";
-    private static final String PREF_API_URL = "apiurl";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST = 1;
     private static final String TWITTER = "https://twitter.com/#!/";
@@ -256,7 +255,7 @@ public class Main extends Activity {
                         int position, long id) {
                     String url = urls.get(position);
                     Editor edit = mPrefs.edit();
-                    edit.putString(PREF_API_URL, url);
+                    edit.putString(Prefs.KEY_API_URL, url);
                     getApiTask = new GetApiTask();
                     getApiTask.execute(url);
                     edit.commit();
@@ -300,7 +299,7 @@ public class Main extends Activity {
         } else if (intent != null && intent.hasExtra(STATE_HS)) {
             mApiUrl = intent.getStringExtra(STATE_HS);
         } else {
-            mApiUrl = mPrefs.getString(PREF_API_URL, ParseGeneric.API_DEFAULT);
+            mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
