@@ -43,6 +43,13 @@ TODO
 RELEASE NOTES
 =============
 
+1.8.1
+---
+
+- Uses custom API directory end point (https://spaceapi.fixme.ch/directory.json)
+- Allow editing of the API directory end point and the current hackerspace API
+- Add Danish translation (thanks Mikkel)
+
 1.8
 ---
 
