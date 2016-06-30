@@ -72,7 +72,7 @@ public class Main extends Activity {
     protected static final String STATE_DIR = "dir";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST = 1;
-    private static final String TWITTER = "https://twitter.com/#!/";
+    private static final String TWITTER = "https://twitter.com/";
     private static final String FOURSQUARE = "https://foursquare.com/v/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
@@ -628,7 +628,7 @@ public class Main extends Activity {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setText(TWITTER
-                            + (String) data.get(ParseGeneric.API_TWITTER));
+                            + ((String) data.get(ParseGeneric.API_TWITTER)).replace("@", ""));
                     vg.addView(tv);
                 }
                 // Identica
