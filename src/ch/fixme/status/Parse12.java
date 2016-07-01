@@ -143,6 +143,7 @@ public class Parse12 extends ParseGeneric {
                     for (int i = 0; i < cam.length(); i++) {
                         camMap.put("http", cam.getString(i));
                     }
+                    mResult.put(API_CAM, camMap);
                 }
             }
         }
