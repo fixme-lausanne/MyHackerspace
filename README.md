@@ -43,6 +43,12 @@ TODO
 RELEASE NOTES
 =============
 
+1.8.2
+---
+
+- Fix camera and stream url being displayed
+- Fix twitter link to the new url format
+
 1.8.1
 ---
 
