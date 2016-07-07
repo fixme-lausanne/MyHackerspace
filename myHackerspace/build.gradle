@@ -1,0 +1,25 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "ch.fixme.status"
+        minSdkVersion 7
+        targetSdkVersion 17
+        versionCode 20
+        versionName "1.8.1"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.github.ge0rg:MemorizingTrustManager:b6a3d558e4'
+}
