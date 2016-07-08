@@ -1,1 +1,3 @@
 include ':myHackerspace'
+include ':MemorizingTrustManager'
+project(':MemorizingTrustManager').projectDir = new File('libs/MemorizingTrustManager')

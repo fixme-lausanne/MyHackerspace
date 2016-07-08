@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 17
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "ch.fixme.status"
@@ -21,5 +21,5 @@ android {
 }
 
 dependencies {
-    compile 'com.github.ge0rg:MemorizingTrustManager:b6a3d558e4'
+    compile project(':MemorizingTrustManager')
 }
