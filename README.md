@@ -11,28 +11,39 @@ Master branch: [![Build Status](https://travis-ci.org/fixme-lausanne/MyHackerspa
 HOW TO COMPILE
 =============
 
-- Get the sources
+First, get the sources.
 
-```bash
-    git clone https://github.com/fixme-lausanne/MyHackerspace.git
+    git clone --recursive https://github.com/fixme-lausanne/MyHackerspace.git
     cd MyHackerspace
-    git submodule update --init
-```
 
-- SDK properties
+Android Studio
+--------------
 
-```bash
-    SDK_LEVEL='android-17' #change this to the sdk level you have installed
-    android update project -p . -t $SDK_LEVEL
-    cd libs/MemorizingTrustManager/
-    android update project --subprojects -p . -t $SDK_LEVEL
-```
+With Android Studio, simply open the project directory and you should be set.
 
-- Create the APK
+Command Line
+------------
 
-```bash
-    ant debug
-```
+You can build the project using Gradle.
+
+The following examples use the gradle wrapper script which will automatically
+download gradle to your local directory. If you want to use your own
+system-wide installation instead, simply replace `./graldew` commands with
+`gradle`.
+
+To build a debug APK:
+
+    ./gradlew assembleDebug
+
+You will find your APK file in the ` app/build/outputs/apk/` directory.
+
+You can also build and directly install the file to your connected smartphone:
+
+    ./gradlew assembleDebug installDebug
+
+To see other tasks that gradle offers, run
+
+    ./graldew tasks
 
 TODO
 ====
