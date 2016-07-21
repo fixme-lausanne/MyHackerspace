@@ -10,3 +10,8 @@ build.properties
 *.iml
 .idea
 out
+.gradle
+/local.properties
+.DS_Store
+build
+/captures
