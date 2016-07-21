@@ -536,7 +536,7 @@ public class Main extends Activity {
             }
             if (data.containsKey(ParseGeneric.API_STATUS_TXT)) {
                 status_txt += ": "
-                        + (String) data.get(ParseGeneric.API_STATUS_TXT);
+                        + data.get(ParseGeneric.API_STATUS_TXT);
             }
             ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
 
@@ -545,7 +545,7 @@ public class Main extends Activity {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setAutoLinkMask(0);
                 tv.setText(getString(R.string.api_lastchange) + " "
-                        + (String) data.get(ParseGeneric.API_LASTCHANGE));
+                        + data.get(ParseGeneric.API_LASTCHANGE));
                 vg.addView(tv);
             }
 
@@ -555,7 +555,7 @@ public class Main extends Activity {
                     && (Boolean) data.get(ParseGeneric.API_STATUS)) {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setText(getString(R.string.api_duration) + " "
-                        + (String) data.get(ParseGeneric.API_EXT_DURATION)
+                        + data.get(ParseGeneric.API_EXT_DURATION)
                         + getString(R.string.api_duration_hours));
                 vg.addView(tv);
             }
@@ -587,11 +587,11 @@ public class Main extends Activity {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setAutoLinkMask(0);
-                    tv.setText((String) data.get(ParseGeneric.API_LON) + ", "
-                            + (String) data.get(ParseGeneric.API_LAT));
+                    tv.setText(data.get(ParseGeneric.API_LON) + ", "
+                            + data.get(ParseGeneric.API_LAT));
                     Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            (String) data.get(ParseGeneric.API_LAT),
-                            (String) data.get(ParseGeneric.API_LON), addr));
+                            data.get(ParseGeneric.API_LAT),
+                            data.get(ParseGeneric.API_LON), addr));
                     vg.addView(tv);
                 }
             }
@@ -641,8 +641,7 @@ public class Main extends Activity {
                 if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
-                    tv.setText(FOURSQUARE
-                            + (String) data.get(ParseGeneric.API_FOURSQUARE));
+                    tv.setText(FOURSQUARE + data.get(ParseGeneric.API_FOURSQUARE));
                     vg.addView(tv);
                 }
                 // IRC
