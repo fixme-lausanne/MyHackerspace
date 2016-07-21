@@ -33,7 +33,7 @@ import de.duenndns.ssl.MemorizingTrustManager;
 public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-            + Build.MODEL + ") MyHackerspace/1.8.1";
+            + Build.MODEL + ") MyHackerspace/" + BuildConfig.VERSION_NAME;
 
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
