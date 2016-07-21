@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLContext;
-import java.security.SecureRandom;
 
 import de.duenndns.ssl.MemorizingTrustManager;
 

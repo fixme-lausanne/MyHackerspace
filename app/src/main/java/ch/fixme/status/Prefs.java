@@ -9,7 +9,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.widget.Toast;
 
 public class Prefs extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
