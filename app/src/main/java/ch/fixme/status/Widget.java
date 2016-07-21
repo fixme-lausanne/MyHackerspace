@@ -45,9 +45,7 @@ public class Widget extends AppWidgetProvider {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
-            final int N = ids.length;
-            for (int i = 0; i < N; i++) {
-                final int widgetId = ids[i];
+            for (final int widgetId : ids) {
                 // Set force to false by default
                 edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId,
                         intent.getBooleanExtra(Widget.WIDGET_FORCE, false));
@@ -63,9 +61,7 @@ public class Widget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context ctxt, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            int widgetId = appWidgetIds[i];
+        for (int widgetId : appWidgetIds) {
             // Remove widget alarm
             PendingIntent pi = PendingIntent.getService(ctxt, widgetId,
                     getIntent(ctxt, widgetId), 0);
