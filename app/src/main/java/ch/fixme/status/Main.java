@@ -324,10 +324,7 @@ public class Main extends Activity {
         ConnectivityManager cm = (ConnectivityManager) ctxt
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo == null || !netInfo.isConnected()) {
-            return false;
-        }
-        return true;
+        return netInfo != null && netInfo.isConnected();
     }
 
     private void showError(String title, String msg) {
