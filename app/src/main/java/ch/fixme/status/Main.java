@@ -8,7 +8,6 @@ package ch.fixme.status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -684,12 +683,11 @@ public class Main extends Activity {
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
 
-                HashMap<String, ArrayList<HashMap<String, String>>> sensors = (HashMap<String, ArrayList<HashMap<String, String>>>) data
-                        .get(ParseGeneric.API_SENSORS);
+                HashMap<String, ArrayList<HashMap<String, String>>> sensors =
+                        (HashMap<String, ArrayList<HashMap<String, String>>>)
+                                data.get(ParseGeneric.API_SENSORS);
                 Set<String> names = sensors.keySet();
-                Iterator<String> it = names.iterator();
-                while (it.hasNext()) {
-                    String name = it.next();
+                for (String name : names) {
                     // Subtitle
                     String name_title = name.toLowerCase().replace("_", " ");
                     name_title = name_title.substring(0, 1).toUpperCase()
