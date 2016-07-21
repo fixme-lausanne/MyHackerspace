@@ -60,7 +60,7 @@ public class Main extends Activity {
     // API: http://hackerspaces.nl/spaceapi/
     // http://spaceapi.net
 
-    protected static String TAG = "MyHackerspace";
+    protected static final String TAG = "MyHackerspace";
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
     protected static final String UNKNOWN = "Unknown";
@@ -451,7 +451,7 @@ public class Main extends Activity {
 
     private class GetImage extends AsyncTask<String, Void, Bitmap> {
 
-        private int mId;
+        private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
         private Context mCtxt;
@@ -819,7 +819,7 @@ public class Main extends Activity {
     private class ContentAdapter extends ArrayAdapter<String> implements
             SectionIndexer {
 
-        private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private final String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public ContentAdapter(Context context, int textViewResourceId,
                 List<String> objects) {

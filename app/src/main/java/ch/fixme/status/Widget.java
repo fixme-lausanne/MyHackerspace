@@ -116,9 +116,9 @@ public class Widget extends AppWidgetProvider {
 
     private static class GetImage extends AsyncTask<String, Void, Bitmap> {
 
-        private int mId;
-        private Context mCtxt;
-        private String mText;
+        private final int mId;
+        private final Context mCtxt;
+        private final String mText;
         private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
@@ -194,8 +194,8 @@ public class Widget extends AppWidgetProvider {
 
     private static class GetApiTask extends AsyncTask<String, Void, String> {
 
-        private int mId;
-        private Context mCtxt;
+        private final int mId;
+        private final Context mCtxt;
         private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {

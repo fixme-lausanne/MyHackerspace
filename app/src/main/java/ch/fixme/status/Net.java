@@ -36,7 +36,7 @@ public class Net {
 
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
-    private Context mCtxt;
+    private final Context mCtxt;
 
     public Net(String urlStr, Context ctxt) throws Throwable {
         this(urlStr, true, ctxt);
