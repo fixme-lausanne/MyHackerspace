@@ -517,7 +517,7 @@ public class Main extends Activity {
             getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
 
             // Status text
-            String status_txt = "";
+            String status_txt;
             if (data.get(ParseGeneric.API_STATUS) == null) {
                 status_txt = UNKNOWN;
                 ((TextView) findViewById(R.id.status_txt))
