@@ -209,7 +209,6 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
-                String msg = e.getMessage();
                 mError = e.getMessage();
                 cancel(true);
             }

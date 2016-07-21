@@ -61,7 +61,6 @@ public class Main extends Activity {
     // http://spaceapi.net
 
     protected static String TAG = "MyHackerspace";
-    protected static final String PKG = "ch.fixme.status";
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
     protected static final String UNKNOWN = "Unknown";

@@ -18,7 +18,6 @@ public class Prefs extends PreferenceActivity implements
     public static final String DEFAULT_API_ENDPOINT = "https://spaceapi.fixme.ch/directory.json";
 
     public static final String KEY_API_URL = "apiurl";
-    public static final String DEFAULT_API_URL = "https://fixme.ch/status.json";
 
     public static final String KEY_CHECK_INTERVAL = "check_interval";
     public static final String DEFAULT_CHECK_INTERVAL = "30"; // minutes
