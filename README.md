@@ -31,6 +31,9 @@ download gradle to your local directory. If you want to use your own
 system-wide installation instead, simply replace `./graldew` commands with
 `gradle`.
 
+First, copy `local.properties.example` to `local.properties` and adjust the
+path to your Android SDK installation.
+
 To build a debug APK:
 
     ./gradlew assembleDebug
