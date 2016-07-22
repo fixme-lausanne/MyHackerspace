@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLContext;
-import java.security.SecureRandom;
 
 import de.duenndns.ssl.MemorizingTrustManager;
 
@@ -37,7 +36,7 @@ public class Net {
 
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
-    private Context mCtxt;
+    private final Context mCtxt;
 
     public Net(String urlStr, Context ctxt) throws Throwable {
         this(urlStr, true, ctxt);
