@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLContext;
-import java.security.SecureRandom;
 
 import de.duenndns.ssl.MemorizingTrustManager;
 
@@ -33,11 +32,11 @@ import de.duenndns.ssl.MemorizingTrustManager;
 public class Net {
 
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
-            + Build.MODEL + ") MyHackerspace/1.8.1";
+            + Build.MODEL + ") MyHackerspace/" + BuildConfig.VERSION_NAME;
 
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
-    private Context mCtxt;
+    private final Context mCtxt;
 
     public Net(String urlStr, Context ctxt) throws Throwable {
         this(urlStr, true, ctxt);

@@ -8,7 +8,6 @@ package ch.fixme.status;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -60,8 +59,7 @@ public class Main extends Activity {
     // API: http://hackerspaces.nl/spaceapi/
     // http://spaceapi.net
 
-    protected static String TAG = "MyHackerspace";
-    protected static final String PKG = "ch.fixme.status";
+    protected static final String TAG = "MyHackerspace";
     protected static final String OPEN = "Open";
     protected static final String CLOSED = "Closed";
     protected static final String UNKNOWN = "Unknown";
@@ -326,10 +324,7 @@ public class Main extends Activity {
         ConnectivityManager cm = (ConnectivityManager) ctxt
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo == null || !netInfo.isConnected()) {
-            return false;
-        }
-        return true;
+        return netInfo != null && netInfo.isConnected();
     }
 
     private void showError(String title, String msg) {
@@ -452,7 +447,7 @@ public class Main extends Activity {
 
     private class GetImage extends AsyncTask<String, Void, Bitmap> {
 
-        private int mId;
+        private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
         private Context mCtxt;
@@ -518,7 +513,7 @@ public class Main extends Activity {
             getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
 
             // Status text
-            String status_txt = "";
+            String status_txt;
             if (data.get(ParseGeneric.API_STATUS) == null) {
                 status_txt = UNKNOWN;
                 ((TextView) findViewById(R.id.status_txt))
@@ -537,7 +532,7 @@ public class Main extends Activity {
             }
             if (data.containsKey(ParseGeneric.API_STATUS_TXT)) {
                 status_txt += ": "
-                        + (String) data.get(ParseGeneric.API_STATUS_TXT);
+                        + data.get(ParseGeneric.API_STATUS_TXT);
             }
             ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
 
@@ -546,7 +541,7 @@ public class Main extends Activity {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setAutoLinkMask(0);
                 tv.setText(getString(R.string.api_lastchange) + " "
-                        + (String) data.get(ParseGeneric.API_LASTCHANGE));
+                        + data.get(ParseGeneric.API_LASTCHANGE));
                 vg.addView(tv);
             }
 
@@ -556,7 +551,7 @@ public class Main extends Activity {
                     && (Boolean) data.get(ParseGeneric.API_STATUS)) {
                 TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
                 tv.setText(getString(R.string.api_duration) + " "
-                        + (String) data.get(ParseGeneric.API_EXT_DURATION)
+                        + data.get(ParseGeneric.API_EXT_DURATION)
                         + getString(R.string.api_duration_hours));
                 vg.addView(tv);
             }
@@ -588,11 +583,11 @@ public class Main extends Activity {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
                     tv.setAutoLinkMask(0);
-                    tv.setText((String) data.get(ParseGeneric.API_LON) + ", "
-                            + (String) data.get(ParseGeneric.API_LAT));
+                    tv.setText(data.get(ParseGeneric.API_LON) + ", "
+                            + data.get(ParseGeneric.API_LAT));
                     Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            (String) data.get(ParseGeneric.API_LAT),
-                            (String) data.get(ParseGeneric.API_LON), addr));
+                            data.get(ParseGeneric.API_LAT),
+                            data.get(ParseGeneric.API_LON), addr));
                     vg.addView(tv);
                 }
             }
@@ -642,8 +637,7 @@ public class Main extends Activity {
                 if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
                     TextView tv = (TextView) inflater.inflate(R.layout.entry,
                             null);
-                    tv.setText(FOURSQUARE
-                            + (String) data.get(ParseGeneric.API_FOURSQUARE));
+                    tv.setText(FOURSQUARE + data.get(ParseGeneric.API_FOURSQUARE));
                     vg.addView(tv);
                 }
                 // IRC
@@ -686,12 +680,11 @@ public class Main extends Activity {
                 vg.addView(title);
                 inflater.inflate(R.layout.separator, vg);
 
-                HashMap<String, ArrayList<HashMap<String, String>>> sensors = (HashMap<String, ArrayList<HashMap<String, String>>>) data
-                        .get(ParseGeneric.API_SENSORS);
+                HashMap<String, ArrayList<HashMap<String, String>>> sensors =
+                        (HashMap<String, ArrayList<HashMap<String, String>>>)
+                                data.get(ParseGeneric.API_SENSORS);
                 Set<String> names = sensors.keySet();
-                Iterator<String> it = names.iterator();
-                while (it.hasNext()) {
-                    String name = it.next();
+                for (String name : names) {
                     // Subtitle
                     String name_title = name.toLowerCase().replace("_", " ");
                     name_title = name_title.substring(0, 1).toUpperCase()
@@ -820,7 +813,7 @@ public class Main extends Activity {
     private class ContentAdapter extends ArrayAdapter<String> implements
             SectionIndexer {
 
-        private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private final String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public ContentAdapter(Context context, int textViewResourceId,
                 List<String> objects) {

@@ -22,7 +22,6 @@ public class ParseGeneric {
     protected static final String API_STATE = "state";
     protected static final String API_STATE_MESSAGE = "message";
     protected static final String API_STATUS_TXT = "status";
-    protected static final String API_DURATION = "duration";
     protected static final String API_EXT_DURATION = "ext_duration";
     protected static final String API_ADDRESS = "address";
     protected static final String API_CONTACT = "contact";

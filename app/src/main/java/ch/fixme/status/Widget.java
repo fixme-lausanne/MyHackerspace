@@ -45,9 +45,7 @@ public class Widget extends AppWidgetProvider {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
-            final int N = ids.length;
-            for (int i = 0; i < N; i++) {
-                final int widgetId = ids[i];
+            for (final int widgetId : ids) {
                 // Set force to false by default
                 edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId,
                         intent.getBooleanExtra(Widget.WIDGET_FORCE, false));
@@ -63,9 +61,7 @@ public class Widget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context ctxt, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i = 0; i < N; i++) {
-            int widgetId = appWidgetIds[i];
+        for (int widgetId : appWidgetIds) {
             // Remove widget alarm
             PendingIntent pi = PendingIntent.getService(ctxt, widgetId,
                     getIntent(ctxt, widgetId), 0);
@@ -116,9 +112,9 @@ public class Widget extends AppWidgetProvider {
 
     private static class GetImage extends AsyncTask<String, Void, Bitmap> {
 
-        private int mId;
-        private Context mCtxt;
-        private String mText;
+        private final int mId;
+        private final Context mCtxt;
+        private final String mText;
         private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
@@ -194,8 +190,8 @@ public class Widget extends AppWidgetProvider {
 
     private static class GetApiTask extends AsyncTask<String, Void, String> {
 
-        private int mId;
-        private Context mCtxt;
+        private final int mId;
+        private final Context mCtxt;
         private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {
@@ -209,7 +205,6 @@ public class Widget extends AppWidgetProvider {
                 return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
-                String msg = e.getMessage();
                 mError = e.getMessage();
                 cancel(true);
             }
