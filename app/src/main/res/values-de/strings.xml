@@ -3,6 +3,7 @@
 Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
 Copyright (C) 2013 Phervieux
 Copyright (C) 2014 Lokke
+Copyright (C) 2016 dbrgn
 Licensed under GNU's GPL 3, see README
 -->
 <resources>
@@ -14,6 +15,7 @@ Licensed under GNU's GPL 3, see README
     <string name="ui_logo">Logo des Hackerspaces</string>
     <string name="ui_name">FIXME</string>
     <string name="ui_url">https://fixme.ch</string>
+    <string name="ui_image_status">Status-Bild des Hackerspaces</string>
     
     <string name="choose_hs">Hackerspace wählen</string>
     <string name="choose_time">Zeitraum in Minuten wählen: </string>
@@ -30,6 +32,10 @@ Licensed under GNU's GPL 3, see README
     <string name="error_network_msg">Netzwerk deaktiviert</string>
     <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe http://spaceapi.net</string>
             
+    <string name="prefs_api_title">SpaceAPI Endpoint</string>
+    <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiele:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json
+    <string name="prefs_api_url_title">Aktuelle Hackerspace-API</string>
+    <string name="prefs_api_url_summary">Aktuelle Hackerspace-API überladen (geht verloren, wenn ein anderer Hackerspace in der Liste gewählt wird)</string>
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
     <string name="prefs_interval_summary">Zeitspanne in der das Widget den tatsächlichen Status überprüft.</string>                
     <string name="prefs_transparent_title">transparentes Widget</string>
