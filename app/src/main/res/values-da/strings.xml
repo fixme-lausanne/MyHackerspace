@@ -32,6 +32,8 @@
 
     <string name="prefs_api_title">SpaceAPI Endepunkt</string>
     <string name="prefs_api_summary">URL til den globale SpaceAPI fortegnelse (directory.json fil)\nEksempler:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_api_url_title">Current hackerspace API</string>
+    <string name="prefs_api_url_summary">Override current hackerspace URL (will be lost when choosing an other hackerspace in the list)</string>
     <string name="prefs_interval_title">Opdateringsinterval</string>
     <string name="prefs_interval_summary">Interval i minutter imellem opdatering af widget-status</string>
     <string name="prefs_transparent_title">Gennemsigtig baggrund</string>

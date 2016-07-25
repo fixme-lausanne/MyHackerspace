@@ -29,6 +29,10 @@
     <string name="error_network_msg">Netwerk niet bereikbaar</string>
     <string name="error_generic">\n\nKijk of uw API gelijk is aan het level dat u gebruikt!\n\nZie http://spaceapi.net</string>
 
+    <string name="prefs_api_title">SpaceAPI Endpoint</string>
+    <string name="prefs_api_summary">URL to the global SpaceAPI directory (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_api_url_title">Current hackerspace API</string>
+    <string name="prefs_api_url_summary">Override current hackerspace URL (will be lost when choosing an other hackerspace in the list)</string>
     <string name="prefs_interval_title">Update tijd</string>
     <string name="prefs_interval_summary">Update tijd in minuten voor het updaten van de widget</string>
     <string name="prefs_transparent_title">Widget achtergrond transparantie</string>
