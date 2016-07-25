@@ -16,6 +16,11 @@ First, get the sources.
     git clone --recursive https://github.com/fixme-lausanne/MyHackerspace.git
     cd MyHackerspace
 
+Get the 3rd party librairies
+
+    git submodule init
+    git submodule update
+
 Android Studio
 --------------
 
