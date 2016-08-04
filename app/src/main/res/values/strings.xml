@@ -46,7 +46,7 @@
     <string name="api_duration_hours"> hour(s)</string>
     <string name="api_location">Location</string>
     <string name="api_contact">Contact</string>
-    <string name="api_stream">Stream</string>
+    <string name="api_stream">Stream + WebCam</string>
     <string name="api_sensors">Sensors</string>
 
 </resources>
