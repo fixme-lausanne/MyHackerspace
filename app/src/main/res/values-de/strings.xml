@@ -4,6 +4,7 @@ Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
 Copyright (C) 2013 Phervieux
 Copyright (C) 2014 Lokke
 Copyright (C) 2016 dbrgn
+Copyright (C) 2016 dns2utf8
 Licensed under GNU's GPL 3, see README
 -->
 <resources>
@@ -23,7 +24,7 @@ Licensed under GNU's GPL 3, see README
     <string name="choose_transparency">Transparenz des Widgets</string>
     <string name="choose_text">Statustext unter Widgets</string>
     
-    <string name="btn_refresh">Neu laden</string>                
+    <string name="btn_refresh">Neu laden</string>
     <string name="btn_prefs">Vorzug</string>
     
     <string name="msg_loading">Lade…</string>
@@ -47,9 +48,9 @@ Licensed under GNU's GPL 3, see README
     <string name="api_lastchange">Letzte Aktualisierung: </string>
     <string name="api_duration">Dauer: </string>
     <string name="api_duration_hours"> Stunde(n)</string>
-    <string name="api_location">Location</string>
+    <string name="api_location">Ort</string>
     <string name="api_contact">Kontakt</string>
-    <string name="api_stream">Stream</string>
+    <string name="api_stream">WebCam</string>
     <string name="api_sensors">Sensoren</string>
 
 </resources>
