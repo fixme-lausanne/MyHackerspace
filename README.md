@@ -31,6 +31,9 @@ Command Line
 
 You can build the project using Gradle.
 
+You'll first need the Android SDK, and install build tools 21.1.1 which is considered Obsolete.
+You can find this version by ticking Obsolete in the Android SDK Manager.
+
 The following examples use the gradle wrapper script which will automatically
 download gradle to your local directory. If you want to use your own
 system-wide installation instead, simply replace `./graldew` commands with
