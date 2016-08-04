@@ -181,33 +181,31 @@ public class Parse13 extends ParseGeneric {
             mResult.put(API_SENSORS, result);
         }
 
-        if (!mApi.isNull(API_STREAM) || !mApi.isNull(API_CAM)) {
-            // Stream
-            if (!mApi.isNull(API_STREAM)) {
-                JSONObject stream = mApi.optJSONObject(API_STREAM);
-                if (stream != null) {
-                    HashMap<String, String> streamMap = new HashMap<String, String>(
-                            stream.length());
-                    JSONArray names = stream.names();
-                    for (int i = 0; i < stream.length(); i++) {
-                        final String type = names.getString(i);
-                        final String url = stream.getString(type);
-                        streamMap.put(type, url);
-                    }
-                    mResult.put(API_STREAM, streamMap);
+        // Stream
+        if (!mApi.isNull(API_STREAM)) {
+            JSONObject stream = mApi.optJSONObject(API_STREAM);
+            if (stream != null) {
+                HashMap<String, String> streamMap = new HashMap<String, String>(
+                        stream.length());
+                JSONArray names = stream.names();
+                for (int i = 0; i < stream.length(); i++) {
+                    final String type = names.getString(i);
+                    final String url = stream.getString(type);
+                    streamMap.put(type, url);
                 }
+                mResult.put(API_STREAM, streamMap);
             }
-            // Cam
-            if (!mApi.isNull(API_CAM)) {
-                JSONArray cam = mApi.optJSONArray(API_CAM);
-                if (cam != null) {
-                    HashMap<String, String> camMap = new HashMap<String, String>(
-                            cam.length());
-                    for (int i = 0; i < cam.length(); i++) {
-                        camMap.put("http", cam.getString(i));
-                    }
-                    mResult.put(API_CAM, camMap);
+        }
+
+        // Cam
+        if (!mApi.isNull(API_CAM)) {
+            JSONArray cam = mApi.optJSONArray(API_CAM);
+            if (cam != null) {
+                ArrayList<String> camList = new ArrayList<String>(cam.length());
+                for (int i = 0; i < cam.length(); i++) {
+                    camList.add(cam.getString(i));
                 }
+                mResult.put(API_CAM, camList);
             }
         }
 

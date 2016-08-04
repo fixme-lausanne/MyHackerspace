@@ -790,9 +790,9 @@ public class Main extends Activity {
                 }
                 // Cam
                 if (data.containsKey(ParseGeneric.API_CAM)) {
-                    HashMap<String, String> cam = (HashMap<String, String>) data
+                    ArrayList<String> cams = (ArrayList<String>) data
                             .get(ParseGeneric.API_CAM);
-                    for (String value : cam.values()) {
+                    for (String value : cams) {
                         TextView tv = (TextView) inflater.inflate(
                                 R.layout.entry, null);
                         tv.setText(value);
