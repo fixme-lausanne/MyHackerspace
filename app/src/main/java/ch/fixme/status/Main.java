@@ -77,7 +77,7 @@ public class Main extends Activity {
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
     private SharedPreferences mPrefs;
-    private String mResultHs;
+    private HashMap<String, String> mResultHs;
     public String mResultDir;
     private String mApiUrl;
     private boolean finishApi = false;
@@ -95,6 +95,7 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
+        mResultHs = new HashMap<String, String>();
         Intent intent = getIntent();
         setViewVisibility(false);
         if (checkNetwork()) {
@@ -158,14 +159,14 @@ public class Main extends Activity {
     @Override
     public Bundle onRetainNonConfigurationInstance() {
         Bundle data = new Bundle(2);
-        data.putString(STATE_HS, mResultHs);
+        data.putSerializable(STATE_HS, mResultHs);
         data.putString(STATE_DIR, mResultDir);
         return data;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(STATE_HS, mResultHs);
+        outState.putSerializable(STATE_HS, mResultHs);
         outState.putString(STATE_DIR, mResultDir);
         super.onSaveInstanceState(outState);
     }
@@ -305,15 +306,16 @@ public class Main extends Activity {
         }
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        if (data == null
-                || (savedInstanceState != null && !savedInstanceState
-                        .containsKey(STATE_HS))) {
+        if(data != null) {
+            finishApi = true;
+            mResultHs.put(mApiUrl, data.getString(STATE_HS));
+            populateDataHs();
+        } else if(mResultHs.containsKey(mApiUrl)) {
+            finishApi = true;
+            populateDataHs();
+        } else {
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
-        } else {
-            finishApi = true;
-            mResultHs = data.getString(STATE_HS);
-            populateDataHs();
         }
 
         // Update widget
@@ -407,6 +409,7 @@ public class Main extends Activity {
         private String mErrorTitle;
         private String mErrorMsg;
         private Context mCtxt;
+        private String mUrl;
 
         @Override
         protected void onPreExecute() {
@@ -419,6 +422,7 @@ public class Main extends Activity {
 
         @Override
         protected String doInBackground(String... url) {
+            mUrl = url[0];
             try {
                 return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
@@ -434,7 +438,7 @@ public class Main extends Activity {
             finishApi = true;
             dismissLoading();
             if (mErrorMsg == null) {
-                mResultHs = result;
+                mResultHs.put(mUrl, result);
                 populateDataHs();
             } else {
                 setViewVisibility(false);
@@ -497,7 +501,7 @@ public class Main extends Activity {
     private void populateDataHs() {
         try {
             setViewVisibility(false);
-            HashMap<String, Object> data = new ParseGeneric(mResultHs)
+            HashMap<String, Object> data = new ParseGeneric(mResultHs.get(mApiUrl))
                     .getData();
 
             // Initialize views
