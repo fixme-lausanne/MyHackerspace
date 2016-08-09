@@ -41,6 +41,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -81,6 +82,9 @@ public class Main extends Activity {
     private String mApiUrl;
     private boolean finishApi = false;
     private boolean finishDir = false;
+
+    private ArrayList<String> mHsNames;
+    private ArrayList<String> mHsUrls;
 
     private GetDirTask getDirTask;
     private GetApiTask getApiTask;
@@ -227,21 +231,21 @@ public class Main extends Activity {
             JSONObject obj = new JSONObject(mResultDir);
             JSONArray arr = obj.names();
             int len = obj.length();
-            final ArrayList<String> names = new ArrayList<String>(len);
-            final ArrayList<String> urls = new ArrayList<String>(len);
+            mHsNames = new ArrayList<String>(len);
+            mHsUrls = new ArrayList<String>(len);
             for (int i = 0; i < len; i++) {
-                names.add(arr.getString(i));
+                mHsNames.add(arr.getString(i));
             }
-            Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
+            Collections.sort(mHsNames, String.CASE_INSENSITIVE_ORDER);
             for (int i = 0; i < len; i++) {
-                urls.add(i, obj.getString(names.get(i)));
+                mHsUrls.add(i, obj.getString(mHsNames.get(i)));
             }
 
             // Create the dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
             View view = getLayoutInflater().inflate(R.layout.hs_choose, null);
             ContentAdapter adapter = new ContentAdapter(Main.this,
-                    android.R.layout.simple_list_item_1, names);
+                    android.R.layout.simple_list_item_2, mHsNames);
 
             IndexableListView listView = (IndexableListView) view
                     .findViewById(R.id.listview);
@@ -251,7 +255,7 @@ public class Main extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
-                    String url = urls.get(position);
+                    String url = mHsUrls.get(position);
                     Editor edit = mPrefs.edit();
                     edit.putString(Prefs.KEY_API_URL, url);
                     getApiTask = new GetApiTask();
@@ -809,15 +813,39 @@ public class Main extends Activity {
         }
     }
 
+    static class ViewHolder {
+        TextView name;
+        TextView desc;
+    }
+
     // https://github.com/woozzu/IndexableListView/
     private class ContentAdapter extends ArrayAdapter<String> implements
             SectionIndexer {
 
+        private final LayoutInflater mInflater;
         private final String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public ContentAdapter(Context context, int textViewResourceId,
                 List<String> objects) {
             super(context, textViewResourceId, objects);
+            mInflater = getLayoutInflater();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.hs_entry, null);
+                holder = new ViewHolder();
+                holder.name = (TextView) convertView.findViewById(R.id.text1);
+                holder.desc = (TextView) convertView.findViewById(R.id.text2);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.name.setText(mHsNames.get(position));
+            holder.desc.setText(mHsUrls.get(position));
+            return convertView;
         }
 
         @Override
