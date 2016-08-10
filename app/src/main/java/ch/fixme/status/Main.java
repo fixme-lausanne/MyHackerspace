@@ -310,9 +310,6 @@ public class Main extends Activity {
             finishApi = true;
             mResultHs.put(mApiUrl, data.getString(STATE_HS));
             populateDataHs();
-        } else if(mResultHs.containsKey(mApiUrl)) {
-            finishApi = true;
-            populateDataHs();
         } else {
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
