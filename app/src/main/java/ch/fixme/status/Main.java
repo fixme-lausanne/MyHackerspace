@@ -259,9 +259,13 @@ public class Main extends Activity {
                     mApiUrl = mHsUrls.get(position);
                     Editor edit = mPrefs.edit();
                     edit.putString(Prefs.KEY_API_URL, mApiUrl);
-                    getApiTask = new GetApiTask();
-                    getApiTask.execute(mApiUrl);
                     edit.commit();
+                    if(mResultHs.containsKey(mApiUrl)){
+                        populateDataHs();
+                    } else {
+                        getApiTask = new GetApiTask();
+                        getApiTask.execute(mApiUrl);
+                    }
                     dismissDialog(DIALOG_LIST);
                 }
             });
