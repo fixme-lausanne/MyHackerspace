@@ -256,11 +256,11 @@ public class Main extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
-                    String url = mHsUrls.get(position);
+                    mApiUrl = mHsUrls.get(position);
                     Editor edit = mPrefs.edit();
-                    edit.putString(Prefs.KEY_API_URL, url);
+                    edit.putString(Prefs.KEY_API_URL, mApiUrl);
                     getApiTask = new GetApiTask();
-                    getApiTask.execute(url);
+                    getApiTask.execute(mApiUrl);
                     edit.commit();
                     dismissDialog(DIALOG_LIST);
                 }
