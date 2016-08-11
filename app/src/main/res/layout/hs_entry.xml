@@ -3,25 +3,55 @@
     Copyright (C) 2016 Aubort Jean-Baptiste (Rorist)
     Licensed under GNU's GPL 3, see README
 -->
-<TwoLineListItem xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:mode="twoLine"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:padding="2dip">
 
-    <TextView android:id="@+id/text1"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/logo"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="10dip"
+        android:paddingLeft="5dip" />
+        
+    <LinearLayout
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAppearance="?android:attr/textAppearanceSearchResultTitle" />
-
-    <TextView android:id="@+id/text2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text1"
-        android:layout_alignStart="@id/text1"
-        android:textAppearance="?android:attr/textAppearanceSearchResultSubtitle" />
-
-</TwoLineListItem>
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
+        
+        <TextView
+            android:id="@+id/hs_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="start"
+            android:maxLines="2"
+            style="@style/ListTextTitle"
+            android:text="List" />
+            
+        <TextView
+            android:id="@+id/hs_status"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ListTextSummary"
+            android:text="" />
+            
+        <TextView
+            android:id="@+id/hs_country"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
+            style="@style/ListTextSummary"
+            android:text="" />
+            
+    </LinearLayout>
+    
+</LinearLayout>

@@ -5,4 +5,16 @@
 -->
 <resources>
     <style name="LightThemeSelector" parent="android:Theme.Light.NoTitleBar" />
+    <style name="ListText">
+        <item name="android:typeface">monospace</item>
+    </style>
+    <style name="ListTextTitle" parent="ListText">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="ListTextSummary" parent="ListText">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
+

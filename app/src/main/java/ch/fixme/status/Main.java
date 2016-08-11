@@ -819,8 +819,10 @@ public class Main extends Activity {
     }
 
     static class ViewHolder {
+        ImageView logo;
         TextView name;
-        TextView desc;
+        TextView status;
+        TextView country;
     }
 
     // https://github.com/woozzu/IndexableListView/
@@ -842,14 +844,12 @@ public class Main extends Activity {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.hs_entry, null);
                 holder = new ViewHolder();
-                holder.name = (TextView) convertView.findViewById(R.id.text1);
-                holder.desc = (TextView) convertView.findViewById(R.id.text2);
+                holder.name = (TextView) convertView.findViewById(R.id.hs_title);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.name.setText(mHsNames.get(position));
-            holder.desc.setText(mHsUrls.get(position));
             return convertView;
         }
 
