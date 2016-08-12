@@ -845,11 +845,33 @@ public class Main extends Activity {
                 convertView = mInflater.inflate(R.layout.hs_entry, null);
                 holder = new ViewHolder();
                 holder.name = (TextView) convertView.findViewById(R.id.hs_title);
+                holder.status = (TextView) convertView.findViewById(R.id.hs_status);
+                holder.country = (TextView) convertView.findViewById(R.id.hs_country);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.name.setText(mHsNames.get(position));
+            String url = mHsUrls.get(position);
+            if(mResultHs.containsKey(url)){
+                try {
+                    HashMap<String, Object> data = new ParseGeneric(mResultHs.get(url))
+                        .getData();
+                    String status_txt = CLOSED;
+                    if((Boolean) data.get(ParseGeneric.API_STATUS)) {
+                        status_txt = OPEN;
+                    }
+                    holder.status.setText(status_txt);
+                    if (data.containsKey(ParseGeneric.API_ADDRESS)) {
+                        holder.country.setText((String) data.get(ParseGeneric.API_ADDRESS));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showError(e.getClass().getCanonicalName(), e.getLocalizedMessage(), true);
+                    return null;
+                }
+            } else {
+            }
             return convertView;
         }
 
