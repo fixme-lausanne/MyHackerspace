@@ -411,14 +411,26 @@ public class Main extends Activity {
         private String mErrorMsg;
         private Context mCtxt;
         private String mUrl;
+        private boolean mUpdateMainView = true;
+
+        public GetApiTask(){
+            super();
+        }
+
+        public GetApiTask(boolean updateMainView){
+            super();
+            mUpdateMainView = updateMainView;
+        }
 
         @Override
         protected void onPreExecute() {
             mCtxt = getApplicationContext();
-            showDialog(DIALOG_LOADING);
-            // Clean UI
-            ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
-            setViewVisibility(false);
+            if(mUpdateMainView){
+                showDialog(DIALOG_LOADING);
+                // Clean UI
+                ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
+                setViewVisibility(false);
+            }
         }
 
         @Override
@@ -877,6 +889,8 @@ public class Main extends Activity {
                     return convertView;
                 }
             } else {
+                getApiTask = new GetApiTask(false);
+                getApiTask.execute(url);
             }
             return convertView;
         }
