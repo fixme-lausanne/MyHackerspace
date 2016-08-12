@@ -11,7 +11,7 @@
     android:padding="2dip">
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/hs_logo"
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_width="48dip"
         android:layout_height="48dip"

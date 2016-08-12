@@ -847,6 +847,7 @@ public class Main extends Activity {
                 holder.name = (TextView) convertView.findViewById(R.id.hs_title);
                 holder.status = (TextView) convertView.findViewById(R.id.hs_status);
                 holder.country = (TextView) convertView.findViewById(R.id.hs_country);
+                holder.logo = (ImageView) convertView.findViewById(R.id.hs_logo);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -855,6 +856,7 @@ public class Main extends Activity {
             holder.name.setText(mHsNames.get(position));
             holder.status.setText("");
             holder.country.setText("");
+            holder.logo.setImageResource(android.R.drawable.ic_menu_gallery);
 
             String url = mHsUrls.get(position);
             if(mResultHs.containsKey(url)){
