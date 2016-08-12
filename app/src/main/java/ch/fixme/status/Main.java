@@ -438,6 +438,7 @@ public class Main extends Activity {
         @Override
         protected String doInBackground(String... url) {
             mUrl = url[0];
+            Log.d(TAG, "updating " + mUrl);
             try {
                 return new Net(url[0], false, mCtxt).getString();
             } catch (Throwable e) {
@@ -897,8 +898,8 @@ public class Main extends Activity {
                     return convertView;
                 }
             } else {
-                getApiTask = new GetApiTask(false, ContentAdapter.this);
-                getApiTask.execute(url);
+                //GetApiTask task = new GetApiTask(false, ContentAdapter.this);
+                //task.execute(url);
             }
             return convertView;
         }
