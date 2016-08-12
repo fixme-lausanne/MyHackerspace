@@ -851,7 +851,11 @@ public class Main extends Activity {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
             holder.name.setText(mHsNames.get(position));
+            holder.status.setText("");
+            holder.country.setText("");
+
             String url = mHsUrls.get(position);
             if(mResultHs.containsKey(url)){
                 try {
@@ -868,7 +872,7 @@ public class Main extends Activity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     showError(e.getClass().getCanonicalName(), e.getLocalizedMessage(), true);
-                    return null;
+                    return convertView;
                 }
             } else {
             }
