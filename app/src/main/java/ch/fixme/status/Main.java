@@ -412,14 +412,16 @@ public class Main extends Activity {
         private Context mCtxt;
         private String mUrl;
         private boolean mUpdateMainView = true;
+        private ContentAdapter mAdapter;
 
         public GetApiTask(){
             super();
         }
 
-        public GetApiTask(boolean updateMainView){
+        public GetApiTask(boolean updateMainView, ContentAdapter adapter){
             super();
             mUpdateMainView = updateMainView;
+            mAdapter = adapter;
         }
 
         @Override
@@ -454,6 +456,8 @@ public class Main extends Activity {
                 mResultHs.put(mUrl, result);
                 if(mUpdateMainView){
                     populateDataHs();
+                } else {
+                    mAdapter.notifyDataSetChanged();
                 }
             } else {
                 if(mUpdateMainView){
@@ -893,7 +897,7 @@ public class Main extends Activity {
                     return convertView;
                 }
             } else {
-                getApiTask = new GetApiTask(false);
+                getApiTask = new GetApiTask(false, ContentAdapter.this);
                 getApiTask.execute(url);
             }
             return convertView;
