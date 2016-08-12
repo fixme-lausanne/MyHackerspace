@@ -452,10 +452,14 @@ public class Main extends Activity {
             dismissLoading();
             if (mErrorMsg == null) {
                 mResultHs.put(mUrl, result);
-                populateDataHs();
+                if(mUpdateMainView){
+                    populateDataHs();
+                }
             } else {
-                setViewVisibility(false);
-                showError(mErrorTitle, mErrorMsg);
+                if(mUpdateMainView){
+                    setViewVisibility(false);
+                    showError(mErrorTitle, mErrorMsg);
+                }
             }
         }
 
