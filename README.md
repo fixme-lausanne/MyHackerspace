@@ -56,6 +56,21 @@ To see other tasks that gradle offers, run
 
     ./graldew tasks
 
+LOCAL DIRECORTY
+===============
+
+For testing purposes you can run a local directory using this technique:
+
+* Create a new Android AVD called for instance "android6"
+* Start the AVD from the command line:
+    `emulator -avd android6 -shared-net-id 16`
+* Make sure a network interface on your host computer is reachable by this ip:
+    `sudo ifconfig eth0 10.0.2.3`
+* On the host, go to the test directory and run the serv.py script:
+    `./serv.py`
+* Go in the App preferences and set the OpenSpaceDirectory URL to the following:
+    `https://10.0.2.3:8443/directory.json`
+
 TODO
 ====
 
