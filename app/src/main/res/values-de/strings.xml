@@ -25,7 +25,7 @@ Licensed under GNU's GPL 3, see README
     <string name="choose_text">Statustext unter Widgets</string>
     
     <string name="btn_refresh">Neu laden</string>
-    <string name="btn_prefs">Vorzug</string>
+    <string name="btn_prefs">Einstellungen</string>
     
     <string name="msg_loading">Lade…</string>
     <string name="error_title">Fehler: </string>
