@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.lang.ref.WeakReference;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -366,18 +367,21 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
-        private Context mCtxt;
+        private WeakReference<Context> mCtxt;
 
         @Override
         protected void onPreExecute() {
-            mCtxt = getApplicationContext();
+            mCtxt = new WeakReference<Context>(getApplicationContext());
             showDialog(DIALOG_LOADING);
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0], mCtxt).getString();
+                final Context ctxt = mCtxt.get();
+                if(ctxt != null){
+                    return new Net(url[0], ctxt).getString();
+                }
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -408,12 +412,12 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
-        private Context mCtxt;
+        private WeakReference<Context> mCtxt;
         private String mUrl;
 
         @Override
         protected void onPreExecute() {
-            mCtxt = getApplicationContext();
+            mCtxt = new WeakReference<Context>(getApplicationContext());
             showDialog(DIALOG_LOADING);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
@@ -424,7 +428,10 @@ public class Main extends Activity {
         protected String doInBackground(String... url) {
             mUrl = url[0];
             try {
-                return new Net(url[0], false, mCtxt).getString();
+                final Context ctxt = mCtxt.get();
+                if(ctxt != null) {
+                    return new Net(url[0], false, ctxt).getString();
+                }
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -458,7 +465,7 @@ public class Main extends Activity {
         private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
-        private Context mCtxt;
+        private WeakReference<Context> mCtxt;
 
         public GetImage(int id) {
             mId = id;
@@ -466,7 +473,7 @@ public class Main extends Activity {
 
         @Override
         protected void onPreExecute() {
-            mCtxt = getApplicationContext();
+            mCtxt = new WeakReference<Context>(getApplicationContext());
             ImageView img = (ImageView) findViewById(mId);
             img.setImageResource(android.R.drawable.ic_popup_sync);
             AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
@@ -476,7 +483,10 @@ public class Main extends Activity {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                return new Net(url[0], mCtxt).getBitmap();
+                final Context ctxt = mCtxt.get();
+                if(ctxt != null) {
+                    return new Net(url[0], ctxt).getBitmap();
+                }
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
