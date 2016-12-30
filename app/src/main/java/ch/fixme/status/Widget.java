@@ -53,7 +53,7 @@ public class Widget extends AppWidgetProvider {
                 Intent newIntent = getIntent(ctxt, widgetId);
                 setAlarm(ctxt, newIntent, widgetId);
             }
-            edit.commit();
+            edit.apply();
         } else {
             super.onReceive(ctxt, intent);
         }
@@ -76,7 +76,7 @@ public class Widget extends AppWidgetProvider {
             edit.remove(Main.PREF_API_URL_WIDGET + widgetId);
             edit.remove(Main.PREF_LAST_WIDGET + widgetId);
             edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
-            edit.commit();
+            edit.apply();
 
             Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
         }
@@ -248,7 +248,7 @@ public class Widget extends AppWidgetProvider {
                 }
                 Editor edit = prefs.edit();
                 edit.putBoolean(Main.PREF_LAST_WIDGET + mId, statusBool);
-                edit.commit();
+                edit.apply();
 
                 String status_text = null;
                 if (prefs.getBoolean(Prefs.KEY_WIDGET_TEXT,
