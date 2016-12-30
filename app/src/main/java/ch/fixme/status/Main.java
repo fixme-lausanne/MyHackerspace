@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -704,8 +705,8 @@ public class Main extends Activity {
                 Set<String> names = sensors.keySet();
                 for (String name : names) {
                     // Subtitle
-                    String name_title = name.toLowerCase().replace("_", " ");
-                    name_title = name_title.substring(0, 1).toUpperCase()
+                    String name_title = name.toLowerCase(Locale.getDefault()).replace("_", " ");
+                    name_title = name_title.substring(0, 1).toUpperCase(Locale.getDefault())
                             + name_title.substring(1, name_title.length());
                     TextView subtitle = (TextView) inflater.inflate(
                             R.layout.subtitle, null);
