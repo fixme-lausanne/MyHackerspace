@@ -448,7 +448,7 @@ public class Main extends Activity {
             dismissLoading();
             if (mErrorMsg == null) {
                 mResultHs.put(mUrl, result);
-                populateDataHs();
+                showHsInfo(null, null);
             } else {
                 setViewVisibility(false);
                 showError(mErrorTitle, mErrorMsg);
