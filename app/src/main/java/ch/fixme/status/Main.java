@@ -265,6 +265,7 @@ public class Main extends Activity {
                     getApiTask.execute(url);
                     edit.commit();
                     dismissDialog(DIALOG_LIST);
+                    Log.i(TAG, "Item clicked=" + url +  " (" + position + ")");
                 }
             });
             builder.setView(view);
@@ -511,6 +512,7 @@ public class Main extends Activity {
 
     private void populateDataHs() {
         try {
+            Log.i(TAG, "populateDataHs()=" + mApiUrl);
             setViewVisibility(false);
             HashMap<String, Object> data = new ParseGeneric(mResultHs.get(mApiUrl))
                     .getData();
