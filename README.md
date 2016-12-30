@@ -56,7 +56,7 @@ To see other tasks that gradle offers, run
 
     ./graldew tasks
 
-LOCAL DIRECORTY
+LOCAL DIRECTORY
 ===============
 
 For testing purposes you can run a local directory using this technique:
