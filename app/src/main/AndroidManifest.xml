@@ -4,9 +4,7 @@
     Licensed under GNU's GPL 3, see README
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.fixme.status"
-    android:versionCode="21"
-    android:versionName="1.8.2" >
+    package="ch.fixme.status">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
