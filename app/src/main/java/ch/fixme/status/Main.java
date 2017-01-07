@@ -468,7 +468,7 @@ public class Main extends Activity {
         private String mErrorMsg;
         private WeakReference<Context> mCtxt;
 
-        public GetImage(int id) {
+        GetImage(int id) {
             mId = id;
         }
 
@@ -841,7 +841,7 @@ public class Main extends Activity {
         private final LayoutInflater mInflater;
         private final String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        public ContentAdapter(Context context, int textViewResourceId,
+        ContentAdapter(Context context, int textViewResourceId,
                 List<String> objects) {
             super(context, textViewResourceId, objects);
             mInflater = getLayoutInflater();
