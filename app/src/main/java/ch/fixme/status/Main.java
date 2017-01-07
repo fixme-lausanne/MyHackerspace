@@ -102,7 +102,7 @@ public class Main extends Activity {
         if (checkNetwork()) {
             Net.setCache(getApplicationContext());
             getHsList(savedInstanceState);
-            showHsInfo(getIntent(), savedInstanceState);
+            showHsInfo(getIntent());
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
@@ -111,7 +111,7 @@ public class Main extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        showHsInfo(intent, null);
+        showHsInfo(intent);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class Main extends Activity {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
             if (checkNetwork()){
-                showHsInfo(getIntent(), null);
+                showHsInfo(getIntent());
             } else {
                 showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                         getString(R.string.error_network_msg));
@@ -291,7 +291,7 @@ public class Main extends Activity {
         }
     }
 
-    private void showHsInfo(Intent intent, Bundle savedInstanceState) {
+    private void showHsInfo(Intent intent) {
         // Get hackerspace api url
         if (intent != null
                 && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
@@ -447,7 +447,7 @@ public class Main extends Activity {
             dismissLoading();
             if (mErrorMsg == null) {
                 mResultHs.put(mUrl, result);
-                showHsInfo(null, null);
+                showHsInfo(null);
             } else {
                 setViewVisibility(false);
                 showError(mErrorTitle, mErrorMsg);
