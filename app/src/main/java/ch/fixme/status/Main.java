@@ -96,14 +96,13 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        setViewVisibility(false);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         mResultHs = new HashMap<String, String>();
-        Intent intent = getIntent();
-        setViewVisibility(false);
         if (checkNetwork()) {
             Net.setCache(getApplicationContext());
             getHsList(savedInstanceState);
-            showHsInfo(intent, savedInstanceState);
+            showHsInfo(getIntent(), savedInstanceState);
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
