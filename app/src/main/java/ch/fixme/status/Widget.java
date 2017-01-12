@@ -105,7 +105,7 @@ public class Widget extends AppWidgetProvider {
         PendingIntent pi = PendingIntent.getService(ctxt, widgetId, i, 0);
         am.cancel(pi);
         am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + delay, update_interval, pi);
+                delay, update_interval, pi);
         // Log.i(Main.TAG, "start notification every " + update_interval / 1000
         // + "s");
     }
