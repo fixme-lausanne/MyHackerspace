@@ -39,7 +39,7 @@ public class Widget_config extends Activity {
 
     private static final int DIALOG_LOADING = 0;
     private SharedPreferences mPrefs;
-    private GetDirTask getDirTask;
+    private GetDirTask mGetDirTask;
     private int mAppWidgetId;
     private String mApiEndpoint;
 
@@ -50,8 +50,8 @@ public class Widget_config extends Activity {
         mPrefs = PreferenceManager
                 .getDefaultSharedPreferences(Widget_config.this);
         mApiEndpoint = mPrefs.getString(Prefs.KEY_API_ENDPOINT, Prefs.DEFAULT_API_ENDPOINT);
-        getDirTask = new GetDirTask();
-        getDirTask.execute(mApiEndpoint);
+        mGetDirTask = new GetDirTask();
+        mGetDirTask.execute(mApiEndpoint);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
