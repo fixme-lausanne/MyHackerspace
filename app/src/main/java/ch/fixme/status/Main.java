@@ -100,6 +100,7 @@ public class Main extends Activity {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
         mResultHs = new HashMap<String, String>();
         if (checkNetwork()) {
+            Log.d(TAG, "onCreate() intent="+ getIntent().toString());
             Net.setCache(getApplicationContext());
             getHsList(savedInstanceState);
             showHsInfo(getIntent());
@@ -111,6 +112,7 @@ public class Main extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntent()=" + intent);
         showHsInfo(intent);
     }
 
@@ -257,6 +259,7 @@ public class Main extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
+                    Log.d(TAG, "hs dialog, on click");
                     String url = mHsUrls.get(position);
                     Editor edit = mPrefs.edit();
                     edit.putString(Prefs.KEY_API_URL, url);
@@ -295,6 +298,7 @@ public class Main extends Activity {
         // Get hackerspace api url
         if (intent != null
                 && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            Log.d(TAG, "showHsInfo(from widget intent)");
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
                             + intent.getIntExtra(
@@ -302,8 +306,10 @@ public class Main extends Activity {
                                     AppWidgetManager.INVALID_APPWIDGET_ID),
                     ParseGeneric.API_DEFAULT);
         } else if (intent != null && intent.hasExtra(STATE_HS)) {
+            Log.d(TAG, "showHsInfo(from intent)");
             mApiUrl = intent.getStringExtra(STATE_HS);
         } else {
+            Log.d(TAG, "showHsInfo(from prefs)");
             mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
         // Get Data
@@ -428,6 +434,7 @@ public class Main extends Activity {
         @Override
         protected String doInBackground(String... url) {
             mUrl = url[0];
+            Log.d(TAG, "GetApiTask(), mUrl="+mUrl);
             try {
                 final Context ctxt = mCtxt.get();
                 if(ctxt != null) {
