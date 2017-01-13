@@ -19,6 +19,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.X509TrustManager;
@@ -49,7 +50,7 @@ public class Net {
         // register MemorizingTrustManager for HTTPS
         SSLContext sc = SSLContext.getInstance("TLS");
         MemorizingTrustManager mtm = new MemorizingTrustManager(mCtxt);
-        sc.init(null, new X509TrustManager[] { mtm }, new java.security.SecureRandom());
+        sc.init(null, new X509TrustManager[] { mtm }, new SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier(
             mtm.wrapHostnameVerifier(HttpsURLConnection.getDefaultHostnameVerifier()));
