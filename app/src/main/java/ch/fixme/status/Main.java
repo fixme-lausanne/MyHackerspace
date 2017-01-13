@@ -299,7 +299,7 @@ public class Main extends Activity {
         // Get hackerspace api url
         if (intent != null
                 && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-            Log.d(TAG, "showHsInfo(from widget intent)");
+            Log.d(TAG, "showHsInfo(uri from widget intent)");
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
                             + intent.getIntExtra(
@@ -307,22 +307,25 @@ public class Main extends Activity {
                                     AppWidgetManager.INVALID_APPWIDGET_ID),
                     ParseGeneric.API_DEFAULT);
         } else if (intent != null && intent.hasExtra(STATE_HS)) {
-            Log.d(TAG, "showHsInfo(from intent)");
+            Log.d(TAG, "showHsInfo(uri from intent)");
             mApiUrl = intent.getStringExtra(STATE_HS);
         } else {
-            Log.d(TAG, "showHsInfo(from prefs)");
+            Log.d(TAG, "showHsInfo(uri from prefs)");
             mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if(data != null && data.containsKey(STATE_HS)) {
+            Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
             mResultHs.put(mApiUrl, data.getString(STATE_HS));
             populateDataHs();
         } else if(mResultHs.containsKey(mApiUrl)) {
+            Log.d(TAG, "showHsInfo(data from cache)");
             finishApi = true;
             populateDataHs();
         } else {
+            Log.d(TAG, "showHsInfo(fresh data)");
             getApiTask = new GetApiTask();
             getApiTask.execute(mApiUrl);
         }
