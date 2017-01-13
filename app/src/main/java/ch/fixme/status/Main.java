@@ -315,7 +315,7 @@ public class Main extends Activity {
         }
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        if(data != null) {
+        if(data != null && data.containsKey(STATE_HS)) {
             finishApi = true;
             mResultHs.put(mApiUrl, data.getString(STATE_HS));
             populateDataHs();
