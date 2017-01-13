@@ -133,46 +133,46 @@ public class Parse13 extends ParseGeneric {
                     HashMap<String, String> elem_value_map = new HashMap<String, String>();
                     try {
                         JSONObject obj = (JSONObject) elem.get(j);
-                        if (!obj.isNull(API_VALUE)
-                                && !"".equals(obj.getString(API_VALUE))) {
-                            elem_value_map.put(API_VALUE, obj.getString(API_VALUE));
+                        if (!obj.isNull(API_SENSOR_VALUE)
+                                && !"".equals(obj.getString(API_SENSOR_VALUE))) {
+                            elem_value_map.put(API_SENSOR_VALUE, obj.getString(API_SENSOR_VALUE));
                         }
-                        if (!obj.isNull(API_UNIT)
-                                && !"".equals(obj.getString(API_UNIT))) {
-                            elem_value_map.put(API_UNIT, obj.getString(API_UNIT));
+                        if (!obj.isNull(API_SENSOR_UNIT)
+                                && !"".equals(obj.getString(API_SENSOR_UNIT))) {
+                            elem_value_map.put(API_SENSOR_UNIT, obj.getString(API_SENSOR_UNIT));
                         }
-                        if (!obj.isNull(API_NAME2)
-                                && !"".equals(obj.getString(API_NAME2))) {
-                            elem_value_map.put(API_NAME2, obj.getString(API_NAME2));
+                        if (!obj.isNull(API_SENSOR_NAME)
+                                && !"".equals(obj.getString(API_SENSOR_NAME))) {
+                            elem_value_map.put(API_SENSOR_NAME, obj.getString(API_SENSOR_NAME));
                         }
-                        if (!obj.isNull(API_LOCATION2)
-                                && !"".equals(obj.getString(API_LOCATION2))) {
-                            elem_value_map.put(API_LOCATION2, obj.getString(API_LOCATION2));
+                        if (!obj.isNull(API_SENSOR_LOCATION)
+                                && !"".equals(obj.getString(API_SENSOR_LOCATION))) {
+                            elem_value_map.put(API_SENSOR_LOCATION, obj.getString(API_SENSOR_LOCATION));
                         }
-                        if (!obj.isNull(API_DESCRIPTION)
-                                && !"".equals(obj.getString(API_DESCRIPTION))) {
-                            elem_value_map.put(API_DESCRIPTION, obj.getString(API_DESCRIPTION));
+                        if (!obj.isNull(API_SENSOR_DESCRIPTION)
+                                && !"".equals(obj.getString(API_SENSOR_DESCRIPTION))) {
+                            elem_value_map.put(API_SENSOR_DESCRIPTION, obj.getString(API_SENSOR_DESCRIPTION));
                         }
-                        if (!obj.isNull(API_MACHINES) && obj.getJSONArray(API_MACHINES).length() > 0) {
-                            elem_value_map.put(API_MACHINES, obj.get(API_MACHINES).toString());
+                        if (!obj.isNull(API_SENSOR_MACHINES) && obj.getJSONArray(API_SENSOR_MACHINES).length() > 0) {
+                            elem_value_map.put(API_SENSOR_MACHINES, obj.get(API_SENSOR_MACHINES).toString());
                         }
-                        if (!obj.isNull(API_NAMES) && obj.getJSONArray(API_NAMES).length() > 0) {
-                            elem_value_map.put(API_NAMES, obj.get(API_NAMES).toString());
+                        if (!obj.isNull(API_SENSOR_NAMES) && obj.getJSONArray(API_SENSOR_NAMES).length() > 0) {
+                            elem_value_map.put(API_SENSOR_NAMES, obj.get(API_SENSOR_NAMES).toString());
                         }
-                        if (!obj.isNull(API_PROPERTIES)) {
+                        if (!obj.isNull(API_SENSOR_PROPERTIES)) {
 
-                            JSONObject obj2 = obj.getJSONObject(API_PROPERTIES);
+                            JSONObject obj2 = obj.getJSONObject(API_SENSOR_PROPERTIES);
                             String prop = "";
                             for (int k = 0; k < obj2.length(); k++) {
                                 String name = (String) obj2.names().get(k);
                                 JSONObject obj3 = obj2.getJSONObject(name);
-                                prop += name + ": " + obj3.getString(API_VALUE) + " " + obj3.getString(API_UNIT) + ", ";
+                                prop += name + ": " + obj3.getString(API_SENSOR_VALUE) + " " + obj3.getString(API_SENSOR_UNIT) + ", ";
                             }
-                            elem_value_map.put(API_PROPERTIES, prop.substring(0, prop.length() - 2));
+                            elem_value_map.put(API_SENSOR_PROPERTIES, prop.substring(0, prop.length() - 2));
                         }
                     } catch (Exception e) {
                         Log.e(Main.TAG, e.getMessage());
-                        elem_value_map.put(API_VALUE, elem.get(j).toString());
+                        elem_value_map.put(API_SENSOR_VALUE, elem.get(j).toString());
                     }
                     elem_value.add(elem_value_map);
                 }

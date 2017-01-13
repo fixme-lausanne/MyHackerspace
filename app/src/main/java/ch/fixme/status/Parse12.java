@@ -99,8 +99,8 @@ public class Parse12 extends ParseGeneric {
                         for (int k = 0; k < obj.length(); k++) {
                             String name2 = (String) obj.names().get(k);
                             HashMap<String, String> elem_value_map = new HashMap<String, String>();
-                            elem_value_map.put(API_NAME2, name2);
-                            elem_value_map.put(API_VALUE, obj.getString(name2));
+                            elem_value_map.put(API_SENSOR_NAME, name2);
+                            elem_value_map.put(API_SENSOR_VALUE, obj.getString(name2));
                             elem_value.add(elem_value_map);
                         }
                         result.put(name, elem_value);
@@ -110,7 +110,7 @@ public class Parse12 extends ParseGeneric {
                     e.printStackTrace();
                     ArrayList<HashMap<String, String>> elem_value = new ArrayList<HashMap<String, String>>();
                     HashMap<String, String> elem_value_map = new HashMap<String, String>();
-                    elem_value_map.put(API_VALUE, elem.toString());
+                    elem_value_map.put(API_SENSOR_VALUE, elem.toString());
                     elem_value.add(elem_value_map);
                     result.put((String) elem.names().get(0), elem_value);
                 }

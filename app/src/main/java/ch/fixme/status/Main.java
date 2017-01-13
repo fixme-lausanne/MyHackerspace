@@ -690,58 +690,58 @@ public class Main extends Activity {
                     for (HashMap<String, String> elem : sensorsData) {
                         RelativeLayout rl = (RelativeLayout) iftr.inflate(
                                 R.layout.entry_sensor, null);
-                        if (elem.containsKey(ParseGeneric.API_VALUE)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_VALUE)) {
                             ((TextView) rl.findViewById(R.id.entry_value))
-                                    .setText(elem.get(ParseGeneric.API_VALUE));
+                                    .setText(elem.get(ParseGeneric.API_SENSOR_VALUE));
                         } else {
                             rl.findViewById(R.id.entry_value).setVisibility(
                                     View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_UNIT)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_UNIT)) {
                             ((TextView) rl.findViewById(R.id.entry_unit))
-                                    .setText(elem.get(ParseGeneric.API_UNIT));
+                                    .setText(elem.get(ParseGeneric.API_SENSOR_UNIT));
                         } else {
                             rl.findViewById(R.id.entry_unit).setVisibility(
                                     View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_NAME2)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_NAME)) {
                             ((TextView) rl.findViewById(R.id.entry_name))
-                                    .setText(elem.get(ParseGeneric.API_NAME2));
+                                    .setText(elem.get(ParseGeneric.API_SENSOR_NAME));
                         } else {
                             rl.findViewById(R.id.entry_name).setVisibility(
                                     View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_LOCATION2)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_LOCATION)) {
                             ((TextView) rl.findViewById(R.id.entry_location))
                                     .setText(elem
-                                            .get(ParseGeneric.API_LOCATION2));
+                                            .get(ParseGeneric.API_SENSOR_LOCATION));
                         } else {
                             rl.findViewById(R.id.entry_location).setVisibility(
                                     View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_DESCRIPTION)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_DESCRIPTION)) {
                             ((TextView) rl.findViewById(R.id.entry_description))
                                     .setText(elem
-                                            .get(ParseGeneric.API_DESCRIPTION));
+                                            .get(ParseGeneric.API_SENSOR_DESCRIPTION));
                         } else {
                             rl.findViewById(R.id.entry_description)
                                     .setVisibility(View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_PROPERTIES)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_PROPERTIES)) {
                             ((TextView) rl.findViewById(R.id.entry_properties))
                                     .setText(elem
-                                            .get(ParseGeneric.API_PROPERTIES));
+                                            .get(ParseGeneric.API_SENSOR_PROPERTIES));
                         } else {
                             rl.findViewById(R.id.entry_properties)
                                     .setVisibility(View.GONE);
                         }
-                        if (elem.containsKey(ParseGeneric.API_MACHINES)) {
+                        if (elem.containsKey(ParseGeneric.API_SENSOR_MACHINES)) {
                             ((TextView) rl.findViewById(R.id.entry_other))
                                     .setText(elem
-                                            .get(ParseGeneric.API_MACHINES));
-                        } else if (elem.containsKey(ParseGeneric.API_NAMES)) {
+                                            .get(ParseGeneric.API_SENSOR_MACHINES));
+                        } else if (elem.containsKey(ParseGeneric.API_SENSOR_NAMES)) {
                             ((TextView) rl.findViewById(R.id.entry_other))
-                                    .setText(elem.get(ParseGeneric.API_NAMES));
+                                    .setText(elem.get(ParseGeneric.API_SENSOR_NAMES));
                         } else {
                             rl.findViewById(R.id.entry_other).setVisibility(
                                     View.GONE);

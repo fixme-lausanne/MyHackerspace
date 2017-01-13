@@ -41,14 +41,14 @@ public class ParseGeneric {
     protected static final String API_RADIATION = "radiation";
 
     // Sensors
-    protected static final String API_VALUE = "value";
-    protected static final String API_UNIT = "unit";
-    protected static final String API_LOCATION2 = "location";
-    protected static final String API_NAME2 = "name";
-    protected static final String API_DESCRIPTION = "description";
-    protected static final String API_MACHINES = "machines";
-    protected static final String API_NAMES = "names";
-    protected static final String API_PROPERTIES = "properties";
+    protected static final String API_SENSOR_VALUE = "value";
+    protected static final String API_SENSOR_UNIT = "unit";
+    protected static final String API_SENSOR_LOCATION = "location";
+    protected static final String API_SENSOR_NAME = "name";
+    protected static final String API_SENSOR_DESCRIPTION = "description";
+    protected static final String API_SENSOR_MACHINES = "machines";
+    protected static final String API_SENSOR_NAMES = "names";
+    protected static final String API_SENSOR_PROPERTIES = "properties";
 
     // State
     protected static final String API_DEFAULT = "https://fixme.ch/status.json";
