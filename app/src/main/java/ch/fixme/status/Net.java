@@ -34,6 +34,8 @@ public class Net {
     private final String USERAGENT = "Android/" + Build.VERSION.RELEASE + " ("
             + Build.MODEL + ") MyHackerspace/" + BuildConfig.VERSION_NAME;
 
+    private static final String TAG = "MyHackerspace_Net";
+
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
     private final Context mCtxt;
@@ -59,7 +61,7 @@ public class Net {
         int responseCode;
         int redirect_limt = 10;
         do {
-            Log.v(Main.TAG, "fetching " + urlStr);
+            Log.v(TAG, "fetching " + urlStr);
             url = new URL(urlStr);
             mUrlConnection = (HttpURLConnection) url.openConnection();
             mUrlConnection.setRequestProperty("User-Agent", USERAGENT);
@@ -125,7 +127,7 @@ public class Net {
                 .getMethod("install", File.class, long.class)
                 .invoke(null, httpCacheDir, httpCacheSize);
         } catch (Exception e) {
-            Log.e(Main.TAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 

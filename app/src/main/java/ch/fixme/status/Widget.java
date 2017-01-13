@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 public class Widget extends AppWidgetProvider {
 
+    static final String TAG ="MyHackerspace_Widget";
     static final String WIDGET_IDS = "widget_ids";
     static final String WIDGET_FORCE = "widget_force";
 
@@ -78,7 +79,7 @@ public class Widget extends AppWidgetProvider {
             edit.remove(Main.PREF_FORCE_WIDGET + widgetId);
             edit.apply();
 
-            Log.i(Main.TAG, "Remove widget alarm for id=" + widgetId);
+            Log.i(TAG, "Remove widget alarm for id=" + widgetId);
         }
     }
 
@@ -106,7 +107,7 @@ public class Widget extends AppWidgetProvider {
         am.cancel(pi);
         am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 delay, update_interval, pi);
-        // Log.i(Main.TAG, "start notification every " + update_interval / 1000
+        // Log.i(TAG, "start notification every " + update_interval / 1000
         // + "s");
     }
 
@@ -213,8 +214,7 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onCancelled() {
-            // Set alarm 5 seconds in the future
-            Log.i(Main.TAG, "Set alarm in 1 seconds");
+            Log.i(TAG, "Reset alarm after cancel");
             Intent intent = getIntent(mCtxt, mId);
             setAlarm(mCtxt, intent, mId, 1000);
             if (mError != null) {
@@ -236,7 +236,7 @@ public class Widget extends AppWidgetProvider {
                         && prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
                         && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
                                 false)) {
-                    // Log.i(Main.TAG, "Nothing to update");
+                    Log.d(TAG, "Nothing to update");
                     return;
                 }
 
@@ -297,7 +297,7 @@ public class Widget extends AppWidgetProvider {
             if (Main.checkNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
                 String url = prefs.getString(Main.PREF_API_URL_WIDGET
                         + widgetId, ParseGeneric.API_DEFAULT);
-                Log.i(Main.TAG, "Update widgetid " + widgetId + " with url "
+                Log.i(TAG, "Update widgetid " + widgetId + " with url "
                         + url);
                 new GetApiTask(ctxt, widgetId).execute(url);
             }
@@ -314,14 +314,14 @@ public class Widget extends AppWidgetProvider {
         ui.putExtra(Widget.WIDGET_IDS, ids);
         ui.putExtra(Widget.WIDGET_FORCE, force);
         ctxt.sendBroadcast(ui);
-        // Log.i(Main.TAG, "UpdateAllWidgets force=" + force);
+        Log.i(TAG, "UpdateAllWidgets force=" + force);
     }
 
     private static void printMessage(final Context ctxt, String msg){
         if(msg == null){
             return;
         }
-        Log.e(Main.TAG, msg);
+        Log.e(TAG, msg);
         Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT).show();
     }
 
