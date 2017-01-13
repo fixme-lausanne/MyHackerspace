@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 public class Widget extends AppWidgetProvider {
@@ -110,12 +111,12 @@ public class Widget extends AppWidgetProvider {
     private static class GetImage extends AsyncTask<String, Void, Bitmap> {
 
         private final int mId;
-        private final Context mCtxt;
+        private WeakReference<Context> mCtxt;
         private final String mText;
         private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
-            mCtxt = ctxt;
+            mCtxt = new WeakReference<Context>(ctxt);
             mId = id;
             mText = text;
         }
@@ -123,7 +124,12 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                return new Net(url[0], mCtxt).getBitmap();
+                final Context ctxt = mCtxt.get();
+                if(ctxt != null) {
+                    return new Net(url[0], ctxt).getBitmap();
+                } else {
+                Log.e(TAG, "Context error (background)");
+                }
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -134,14 +140,17 @@ public class Widget extends AppWidgetProvider {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            AppWidgetManager manager = AppWidgetManager.getInstance(mCtxt);
-            updateWidget(mCtxt, mId, manager, result, mText);
+            final Context ctxt = mCtxt.get();
+            if(ctxt == null) { Log.e(TAG, "Context error (postExecute)"); return; }
+            AppWidgetManager manager = AppWidgetManager.getInstance(ctxt);
+            updateWidget(ctxt, mId, manager, result, mText);
         }
 
         @Override
         protected void onCancelled () {
-            if (mError != null) {
-                printMessage(mCtxt, mError);
+            final Context ctxt = mCtxt.get();
+            if (mError != null && ctxt != null) {
+                printMessage(ctxt, mError);
             }
         }
 
@@ -188,18 +197,21 @@ public class Widget extends AppWidgetProvider {
     private static class GetApiTask extends AsyncTask<String, Void, String> {
 
         private final int mId;
-        private final Context mCtxt;
+        private WeakReference<Context> mCtxt;
         private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {
-            mCtxt = ctxt;
+            mCtxt = new WeakReference<Context>(ctxt);
             mId = id;
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0], false, mCtxt).getString();
+                final Context ctxt = mCtxt.get();
+                if(ctxt != null) {
+                    return new Net(url[0], false, ctxt).getString();
+                }
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -211,18 +223,24 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected void onCancelled() {
             Log.i(TAG, "Reset alarm after cancel");
-            Intent intent = getIntent(mCtxt, mId);
-            setAlarm(mCtxt, intent, mId, 500);
-            if (mError != null) {
-                printMessage(mCtxt, mError);
+            final Context ctxt = mCtxt.get();
+            if(ctxt != null) {
+                Intent intent = getIntent(ctxt, mId);
+                setAlarm(ctxt, intent, mId, 500);
+                if (mError != null) {
+                    printMessage(ctxt, mError);
+                }
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
+            final Context ctxt = mCtxt.get();
+            if(ctxt == null) { Log.e(TAG, "Context error (postExecute)"); return; }
+
             try {
                 SharedPreferences prefs = PreferenceManager
-                        .getDefaultSharedPreferences(mCtxt);
+                        .getDefaultSharedPreferences(ctxt);
 
                 HashMap<String, Object> api = new ParseGeneric(result)
                         .getData();
@@ -253,8 +271,8 @@ public class Widget extends AppWidgetProvider {
                         status_text = (String) api
                                 .get(ParseGeneric.API_STATUS_TXT);
                     } else {
-                        status_text = statusBool ? mCtxt.getString(R.string.status_open) :
-                                mCtxt.getString(R.string.status_closed);
+                        status_text = statusBool ? ctxt.getString(R.string.status_open) :
+                                ctxt.getString(R.string.status_closed);
                     }
                 }
 
@@ -263,16 +281,16 @@ public class Widget extends AppWidgetProvider {
                         + ParseGeneric.API_ICON_OPEN)
                         && api.containsKey(ParseGeneric.API_ICON
                                 + ParseGeneric.API_ICON_CLOSED)) {
-                    new GetImage(mCtxt, mId, status_text).execute((String) api
+                    new GetImage(ctxt, mId, status_text).execute((String) api
                             .get(status));
                 } else {
-                    new GetImage(mCtxt, mId, status_text).execute((String) api
+                    new GetImage(ctxt, mId, status_text).execute((String) api
                             .get(ParseGeneric.API_LOGO));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 String msg = e.getMessage();
-                printMessage(mCtxt, msg);
+                printMessage(ctxt, msg);
             }
         }
     }
