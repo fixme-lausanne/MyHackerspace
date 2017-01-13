@@ -266,6 +266,7 @@ public class Main extends Activity {
                     getApiTask = new GetApiTask();
                     getApiTask.execute(url);
                     edit.commit();
+                    setIntent(null);
                     dismissDialog(DIALOG_LIST);
                     Log.i(TAG, "Item clicked=" + url +  " (" + position + ")");
                 }
