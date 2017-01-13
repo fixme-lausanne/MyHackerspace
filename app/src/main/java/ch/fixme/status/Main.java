@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2017 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 3, see README
  */
 
@@ -478,8 +478,7 @@ public class Main extends Activity {
         private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
-        private WeakReference<Context> mCtxt;
-
+u
         GetImage(int id) {
             mId = id;
         }

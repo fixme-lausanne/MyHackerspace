@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2012-2017 Aubort Jean-Baptiste (Rorist)
  * Licensed under GNU's GPL 3, see README
  */
 package ch.fixme.status;
