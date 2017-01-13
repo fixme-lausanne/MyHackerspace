@@ -8,6 +8,7 @@ package ch.fixme.status;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.http.HttpResponseCache;
 import android.os.Build;
 import android.util.Log;
 
@@ -116,19 +117,6 @@ public class Net {
                 mInputStream.close();
             }
             mUrlConnection.disconnect();
-        }
-    }
-
-    public static void setCache(Context ctxt) {
-        try {
-            File httpCacheDir = new File(ctxt.getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-            // Use reflection for Android < 4.0
-            Class.forName("android.net.http.HttpResponseCache")
-                .getMethod("install", File.class, long.class)
-                .invoke(null, httpCacheDir, httpCacheSize);
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
         }
     }
 

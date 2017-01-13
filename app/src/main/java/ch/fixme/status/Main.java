@@ -5,6 +5,8 @@
 
 package ch.fixme.status;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -99,7 +102,7 @@ public class Main extends Activity {
         mResultHs = new HashMap<String, String>();
         if (checkNetwork()) {
             Log.d(TAG, "onCreate() intent="+ getIntent().toString());
-            Net.setCache(getApplicationContext());
+            setCache();
             getHsList(savedInstanceState);
             showHsInfo(getIntent());
         } else {
@@ -344,6 +347,16 @@ public class Main extends Activity {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
+    }
+
+    private void setCache() {
+        try {
+            File httpCacheDir = new File(getCacheDir(), "http");
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     private void showError(String title, String msg) {
