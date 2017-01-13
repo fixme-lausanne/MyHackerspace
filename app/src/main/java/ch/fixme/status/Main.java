@@ -294,8 +294,12 @@ public class Main extends Activity {
     }
 
     private void showHsInfo(Intent intent) {
+        final Bundle data = (Bundle) getLastNonConfigurationInstance();
         // Get hackerspace api url
-        if (intent != null
+        if(data != null && data.containsKey(STATE_URL)) {
+            Log.d(TAG, "showHsInfo(uri from state)");
+            mApiUrl = data.getString(STATE_URL);
+        } else if (intent != null
                 && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
             Log.d(TAG, "showHsInfo(uri from widget intent)");
             mApiUrl = mPrefs.getString(
@@ -312,12 +316,10 @@ public class Main extends Activity {
             mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
         // Get Data
-        final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if(data != null && data.containsKey(STATE_HS) && data.containsKey(STATE_URL)) {
             Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
             mResultHs = (HashMap<String, String>) data.getSerializable(STATE_HS);
-            mApiUrl = data.getString(STATE_URL);
             populateDataHs();
         } else if(mResultHs.containsKey(mApiUrl)) {
             Log.d(TAG, "showHsInfo(data from cache)");
