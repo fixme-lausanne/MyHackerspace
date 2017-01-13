@@ -478,7 +478,8 @@ public class Main extends Activity {
         private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
-u
+        private WeakReference<Context> mCtxt;
+        
         GetImage(int id) {
             mId = id;
         }
