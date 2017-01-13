@@ -454,7 +454,7 @@ public class Main extends Activity {
             dismissLoading();
             if (mErrorMsg == null) {
                 mResultHs.put(mUrl, result);
-                showHsInfo(null);
+                showHsInfo(getIntent());
             } else {
                 setViewVisibility(false);
                 showError(mErrorTitle, mErrorMsg);
