@@ -479,7 +479,7 @@ public class Main extends Activity {
         private String mErrorTitle;
         private String mErrorMsg;
         private WeakReference<Context> mCtxt;
-        
+
         GetImage(int id) {
             mId = id;
         }

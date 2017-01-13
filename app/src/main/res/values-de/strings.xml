@@ -12,7 +12,11 @@ Licensed under GNU's GPL 3, see README
     <string name="app_name">MyHackerspace</string>
     <string name="empty"></string>
     <string name="ok">OK</string>
-    
+
+    <string name="status_open">Öffnen</string>
+    <string name="status_closed">Abgeschlossen</string>
+    <string name="status_unknown">Unbekannt</string>
+
     <string name="ui_logo">Logo des Hackerspaces</string>
     <string name="ui_name">FIXME</string>
     <string name="ui_url">https://fixme.ch</string>

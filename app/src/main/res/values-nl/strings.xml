@@ -9,6 +9,10 @@
     <string name="empty"></string>
     <string name="ok">OK</string>
 
+    <string name="status_open">Open</string>
+    <string name="status_closed">Gesloten</string>
+    <string name="status_unknown">Onbekend</string>
+
     <string name="ui_logo">Logo van de hackerspace</string>
     <string name="ui_name">FIXME</string>
     <string name="ui_url">https://fixme.ch</string>
