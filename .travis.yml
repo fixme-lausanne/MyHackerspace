@@ -22,4 +22,5 @@ before_script:
 
 script:
   - ./gradlew build connectedCheck
+  - ./gradlew assembleDebug installDebug
   - adb shell am start -n "ch.fixme.status/.Main"
