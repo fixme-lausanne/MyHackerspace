@@ -36,16 +36,13 @@ public class Widget extends AppWidgetProvider {
 
     public void onReceive(Context ctxt, Intent intent) {
         String action = intent.getAction();
-        if ((intent.hasExtra(WIDGET_IDS)
-                && AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) ||
-                Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            // Get all widgets ids
-            AppWidgetManager manager = AppWidgetManager.getInstance(ctxt);
-            int[] ids = manager.getAppWidgetIds(new ComponentName(ctxt, Widget.class));
-            // Set prefs
+        if (intent.hasExtra(WIDGET_IDS)
+                && (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action) ||
+                Intent.ACTION_BOOT_COMPLETED.equals(action))) {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             Editor edit = prefs.edit();
+            int[] ids = intent.getIntArrayExtra(WIDGET_IDS);
             for (final int widgetId : ids) {
                 // Set force to false by default
                 edit.putBoolean(Main.PREF_FORCE_WIDGET + widgetId,
