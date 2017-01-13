@@ -68,6 +68,7 @@ public class Main extends Activity {
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
     protected static final String STATE_HS = "hs";
     protected static final String STATE_DIR = "dir";
+    protected static final String STATE_URL = "url";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST = 1;
     private static final String TWITTER = "https://twitter.com/";
@@ -158,9 +159,10 @@ public class Main extends Activity {
 
     @Override
     public Bundle onRetainNonConfigurationInstance() {
-        Bundle data = new Bundle(2);
+        Bundle data = new Bundle(3);
         data.putSerializable(STATE_HS, mResultHs);
         data.putString(STATE_DIR, mResultDir);
+        data.putString(STATE_URL, mApiUrl);
         return data;
     }
 
@@ -168,6 +170,7 @@ public class Main extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(STATE_HS, mResultHs);
         outState.putString(STATE_DIR, mResultDir);
+        outState.putString(STATE_URL, mApiUrl);
         super.onSaveInstanceState(outState);
     }
 
@@ -280,9 +283,7 @@ public class Main extends Activity {
 
     private void getHsList(Bundle savedInstanceState) {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        if (data == null
-                || (savedInstanceState == null && !savedInstanceState
-                        .containsKey(STATE_DIR))) {
+        if (data == null) {
             String apiEndpoint = mPrefs.getString(Prefs.KEY_API_ENDPOINT, Prefs.DEFAULT_API_ENDPOINT);
             getDirTask = new GetDirTask();
             getDirTask.execute(apiEndpoint);
@@ -312,10 +313,11 @@ public class Main extends Activity {
         }
         // Get Data
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        if(data != null && data.containsKey(STATE_HS)) {
+        if(data != null && data.containsKey(STATE_HS) && data.containsKey(STATE_URL)) {
             Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
-            mResultHs.put(mApiUrl, data.getString(STATE_HS));
+            mResultHs = (HashMap<String, String>) data.getSerializable(STATE_HS);
+            mApiUrl = data.getString(STATE_URL);
             populateDataHs();
         } else if(mResultHs.containsKey(mApiUrl)) {
             Log.d(TAG, "showHsInfo(data from cache)");
