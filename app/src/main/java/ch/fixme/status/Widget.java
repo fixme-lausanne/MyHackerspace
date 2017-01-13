@@ -5,10 +5,6 @@
 
 package ch.fixme.status;
 
-import java.util.HashMap;
-
-import org.json.JSONException;
-
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -21,12 +17,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import org.json.JSONException;
+
+import java.util.HashMap;
 
 public class Widget extends AppWidgetProvider {
 
