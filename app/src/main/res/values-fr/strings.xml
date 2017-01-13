@@ -8,6 +8,10 @@
     <string name="app_name">MyHackerspace</string>
     <string name="empty"></string>
     <string name="ok">OK</string>
+
+    <string name="status_open">Ouvert</string>
+    <string name="status_closed">Fermé</string>
+    <string name="status_unknown">Inconnu</string>
     
     <string name="ui_logo">Logo du hackerspace</string>
     <string name="ui_name">FIXME</string>

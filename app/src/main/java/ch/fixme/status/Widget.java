@@ -253,7 +253,8 @@ public class Widget extends AppWidgetProvider {
                         status_text = (String) api
                                 .get(ParseGeneric.API_STATUS_TXT);
                     } else {
-                        status_text = statusBool ? Main.OPEN : Main.CLOSED;
+                        status_text = statusBool ? mCtxt.getString(R.string.status_open) :
+                                mCtxt.getString(R.string.status_closed);
                     }
                 }
 

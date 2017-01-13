@@ -63,9 +63,6 @@ public class Main extends Activity {
     // http://spaceapi.net
 
     protected static final String TAG = "MyHackerspace";
-    protected static final String OPEN = "Open";
-    protected static final String CLOSED = "Closed";
-    protected static final String UNKNOWN = "Unknown";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
@@ -546,17 +543,17 @@ public class Main extends Activity {
             // Status text
             String status_txt;
             if (data.get(ParseGeneric.API_STATUS) == null) {
-                status_txt = UNKNOWN;
+                status_txt = getString(R.string.status_unknown);
                 ((TextView) findViewById(R.id.status_txt))
                         .setCompoundDrawablesWithIntrinsicBounds(
                                 android.R.drawable.presence_invisible, 0, 0, 0);
             } else if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
-                status_txt = OPEN;
+                status_txt = getString(R.string.status_open);
                 ((TextView) findViewById(R.id.status_txt))
                         .setCompoundDrawablesWithIntrinsicBounds(
                                 android.R.drawable.presence_online, 0, 0, 0);
             } else {
-                status_txt = CLOSED;
+                status_txt = getString(R.string.status_closed);
                 ((TextView) findViewById(R.id.status_txt))
                         .setCompoundDrawablesWithIntrinsicBounds(
                                 android.R.drawable.presence_busy, 0, 0, 0);
