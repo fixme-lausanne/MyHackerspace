@@ -521,6 +521,25 @@ public class Main extends Activity {
 
     }
 
+    private TextView addEntry(LayoutInflater inflater, LinearLayout vg, String value) {
+        TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
+        tv.setAutoLinkMask(0);
+        tv.setText(value);
+        vg.addView(tv);
+        return tv;
+    }
+    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, int value) {
+        return addTitle(inflater, vg, getString(value));
+    }
+
+    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, String value) {
+        TextView title = (TextView) inflater.inflate(R.layout.title, null);
+        title.setText(value);
+        vg.addView(title);
+        inflater.inflate(R.layout.separator, vg);
+        return title;
+    }
+
     private void populateDataHs() {
         try {
             Log.i(TAG, "populateDataHs()=" + mApiUrl);
@@ -529,9 +548,8 @@ public class Main extends Activity {
                     .getData();
 
             // Initialize views
-            LayoutInflater inflater = getLayoutInflater();
-            LinearLayout vg = (LinearLayout) inflater.inflate(R.layout.base,
-                    null);
+            LayoutInflater iftr = getLayoutInflater();
+            LinearLayout vg = (LinearLayout) iftr.inflate(R.layout.base, null);
             ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
             scroll.removeAllViews();
             scroll.addView(vg);
@@ -570,57 +588,40 @@ public class Main extends Activity {
 
             // Status last change
             if (data.containsKey(ParseGeneric.API_LASTCHANGE)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setAutoLinkMask(0);
-                tv.setText(getString(R.string.api_lastchange) + " "
+                addEntry(iftr, vg, getString(R.string.api_lastchange) + " "
                         + data.get(ParseGeneric.API_LASTCHANGE));
-                vg.addView(tv);
             }
 
             // Status duration
             if (data.containsKey(ParseGeneric.API_EXT_DURATION)
                     && data.get(ParseGeneric.API_STATUS) != null
                     && (Boolean) data.get(ParseGeneric.API_STATUS)) {
-                TextView tv = (TextView) inflater.inflate(R.layout.entry, null);
-                tv.setText(getString(R.string.api_duration) + " "
+                addEntry(iftr, vg, getString(R.string.api_duration) + " "
                         + data.get(ParseGeneric.API_EXT_DURATION)
                         + getString(R.string.api_duration_hours));
-                vg.addView(tv);
             }
 
             // Location
             Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
             if (data.containsKey(ParseGeneric.API_ADDRESS)
                     || data.containsKey(ParseGeneric.API_LON)) {
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText(getString(R.string.api_location));
-                vg.addView(title);
-                inflater.inflate(R.layout.separator, vg);
+
+                addTitle(iftr, vg, R.string.api_location);
+
                 // Address
                 if (data.containsKey(ParseGeneric.API_ADDRESS)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setAutoLinkMask(0);
-                    tv.setText((String) data.get(ParseGeneric.API_ADDRESS));
+                    TextView tv = addEntry(iftr, vg, (String) data.get(ParseGeneric.API_ADDRESS));
                     Linkify.addLinks(tv, ptn, MAP_SEARCH);
-                    vg.addView(tv);
                 }
                 // Lon/Lat
                 if (data.containsKey(ParseGeneric.API_LON)
                         && data.containsKey(ParseGeneric.API_LAT)) {
-                    String addr = (data.containsKey(ParseGeneric.API_ADDRESS)) ? (String) data
-                            .get(ParseGeneric.API_ADDRESS)
-                            : getString(R.string.empty);
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setAutoLinkMask(0);
-                    tv.setText(data.get(ParseGeneric.API_LON) + ", "
+                    TextView tv = addEntry(iftr, vg, data.get(ParseGeneric.API_LON) + ", "
                             + data.get(ParseGeneric.API_LAT));
+                    String addr = (data.containsKey(ParseGeneric.API_ADDRESS)) ? (String) data
+                            .get(ParseGeneric.API_ADDRESS) : getString(R.string.empty);
                     Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            data.get(ParseGeneric.API_LAT),
-                            data.get(ParseGeneric.API_LON), addr));
-                    vg.addView(tv);
+                            data.get(ParseGeneric.API_LAT), data.get(ParseGeneric.API_LON), addr));
                 }
             }
 
@@ -630,106 +631,64 @@ public class Main extends Activity {
                     || data.containsKey(ParseGeneric.API_IRC)
                     || data.containsKey(ParseGeneric.API_EMAIL)
                     || data.containsKey(ParseGeneric.API_ML)) {
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText(R.string.api_contact);
-                vg.addView(title);
-                inflater.inflate(R.layout.separator, vg);
 
-                // Phone
+                addTitle(iftr, vg, R.string.api_contact);
+
                 if (data.containsKey(ParseGeneric.API_PHONE)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_PHONE));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_PHONE));
                 }
-                // SIP
                 if (data.containsKey(ParseGeneric.API_SIP)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_SIP));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_SIP));
                 }
-                // Twitter
                 if (data.containsKey(ParseGeneric.API_TWITTER)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText(TWITTER
+                    addEntry(iftr, vg, TWITTER
                             + ((String) data.get(ParseGeneric.API_TWITTER)).replace("@", ""));
-                    vg.addView(tv);
                 }
-                // Identica
                 if (data.containsKey(ParseGeneric.API_IDENTICA)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_IDENTICA));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_IDENTICA));
                 }
-                // Foursquare
                 if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText(FOURSQUARE + data.get(ParseGeneric.API_FOURSQUARE));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, FOURSQUARE + data.get(ParseGeneric.API_FOURSQUARE));
                 }
-                // IRC
                 if (data.containsKey(ParseGeneric.API_IRC)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setAutoLinkMask(0);
-                    tv.setText((String) data.get(ParseGeneric.API_IRC));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_IRC));
                 }
-                // Email
                 if (data.containsKey(ParseGeneric.API_EMAIL)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_EMAIL));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_EMAIL));
                 }
-                // Jabber
                 if (data.containsKey(ParseGeneric.API_JABBER)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_JABBER));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_JABBER));
                 }
-                // Mailing-List
                 if (data.containsKey(ParseGeneric.API_ML)) {
-                    TextView tv = (TextView) inflater.inflate(R.layout.entry,
-                            null);
-                    tv.setText((String) data.get(ParseGeneric.API_ML));
-                    vg.addView(tv);
+                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_ML));
                 }
             }
 
             // Sensors
             if (data.containsKey(ParseGeneric.API_SENSORS)) {
-                // Title
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText(getString(R.string.api_sensors));
-                vg.addView(title);
-                inflater.inflate(R.layout.separator, vg);
+
+                addTitle(iftr, vg, R.string.api_sensors);
 
                 HashMap<String, ArrayList<HashMap<String, String>>> sensors =
                         (HashMap<String, ArrayList<HashMap<String, String>>>)
                                 data.get(ParseGeneric.API_SENSORS);
                 Set<String> names = sensors.keySet();
                 for (String name : names) {
+
                     // Subtitle
                     String name_title = name.toLowerCase(Locale.getDefault()).replace("_", " ");
                     name_title = name_title.substring(0, 1).toUpperCase(Locale.getDefault())
                             + name_title.substring(1, name_title.length());
-                    TextView subtitle = (TextView) inflater.inflate(
+                    TextView subtitle = (TextView) iftr.inflate(
                             R.layout.subtitle, null);
                     subtitle.setText(name_title);
                     vg.addView(subtitle);
+
                     // Sensors data
                     ArrayList<HashMap<String, String>> sensorsData = sensors
                             .get(name);
                     for (HashMap<String, String> elem : sensorsData) {
-                        RelativeLayout rl = (RelativeLayout) inflater.inflate(
+                        RelativeLayout rl = (RelativeLayout) iftr.inflate(
                                 R.layout.entry_sensor, null);
                         if (elem.containsKey(ParseGeneric.API_VALUE)) {
                             ((TextView) rl.findViewById(R.id.entry_value))
@@ -795,11 +754,9 @@ public class Main extends Activity {
             // Stream and cam
             if (data.containsKey(ParseGeneric.API_STREAM)
                     || data.containsKey(ParseGeneric.API_CAM)) {
-                TextView title = (TextView) inflater.inflate(R.layout.title,
-                        null);
-                title.setText(getString(R.string.api_stream));
-                vg.addView(title);
-                inflater.inflate(R.layout.separator, vg);
+
+                addTitle(iftr, vg, R.string.api_stream);
+
                 // Stream
                 if (data.containsKey(ParseGeneric.API_STREAM)) {
                     HashMap<String, String> stream = (HashMap<String, String>) data
@@ -807,9 +764,7 @@ public class Main extends Activity {
                     for (Entry<String, String> entry : stream.entrySet()) {
                         final String type = entry.getKey();
                         final String url = entry.getValue();
-                        TextView tv = (TextView) inflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(url);
+                        TextView tv = addEntry(iftr, vg, url);
                         tv.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -817,7 +772,6 @@ public class Main extends Activity {
                                 startActivity(i);
                             }
                         });
-                        vg.addView(tv);
                     }
                 }
                 // Cam
@@ -825,10 +779,7 @@ public class Main extends Activity {
                     ArrayList<String> cams = (ArrayList<String>) data
                             .get(ParseGeneric.API_CAM);
                     for (String value : cams) {
-                        TextView tv = (TextView) inflater.inflate(
-                                R.layout.entry, null);
-                        tv.setText(value);
-                        vg.addView(tv);
+                        addEntry(iftr, vg, value);
                     }
                 }
             }
