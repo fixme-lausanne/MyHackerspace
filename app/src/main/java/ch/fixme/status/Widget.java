@@ -86,7 +86,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId) {
-        setAlarm(ctxt, i, widgetId, 200);
+        setAlarm(ctxt, i, widgetId, 50);
     }
 
     protected static void setAlarm(Context ctxt, Intent i, int widgetId,
@@ -212,7 +212,7 @@ public class Widget extends AppWidgetProvider {
         protected void onCancelled() {
             Log.i(TAG, "Reset alarm after cancel");
             Intent intent = getIntent(mCtxt, mId);
-            setAlarm(mCtxt, intent, mId, 1000);
+            setAlarm(mCtxt, intent, mId, 500);
             if (mError != null) {
                 printMessage(mCtxt, mError);
             }
