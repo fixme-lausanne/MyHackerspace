@@ -5,6 +5,9 @@
  Licensed under GNU's GPL 3, see README
 -->
 
+    <PreferenceCategory android:title="SpaceAPI">
+
+    </PreferenceCategory>
     <EditTextPreference
         android:key="api_endpoint"
         android:title="@string/prefs_api_title"
@@ -19,13 +22,9 @@
         android:defaultValue="https://fixme.ch/status.json"
         android:inputType="textUri" />
 
-    <EditTextPreference
-        android:key="check_interval"
-        android:title="@string/prefs_interval_title"
-        android:summary="@string/prefs_interval_summary"
-        android:defaultValue="30"
-        android:inputType="number" />
+    <PreferenceCategory android:title="Widget">
 
+    </PreferenceCategory>
     <CheckBoxPreference
         android:key="widget_transparency"
         android:title="@string/prefs_transparent_title"
@@ -37,5 +36,11 @@
         android:title="@string/prefs_text_title"
         android:summary="@string/prefs_text_summary"
         android:defaultValue="false" />
+    <EditTextPreference
+        android:key="check_interval"
+        android:title="@string/prefs_interval_title"
+        android:summary="@string/prefs_interval_summary"
+        android:defaultValue="30"
+        android:inputType="number" />
 
 </PreferenceScreen>
