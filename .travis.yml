@@ -21,6 +21,5 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew build connectedCheck
-  - ./gradlew assembleDebug installDebug
+  - ./gradlew build connectedCheck installDebug
   - adb shell am start -n "ch.fixme.status/.Main"
