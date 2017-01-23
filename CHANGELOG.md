@@ -1,6 +1,12 @@
 RELEASE NOTES
 =============
 
+2017-01-XX / 1.8.3
+---
+
+    - Change links from SpaceAPI.net to SpaceDirectory.org
+    - Display all webcams
+
 2016-07-02 / 1.8.2
 ---
 

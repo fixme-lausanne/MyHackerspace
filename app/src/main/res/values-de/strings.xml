@@ -21,24 +21,24 @@ Licensed under GNU's GPL 3, see README
     <string name="ui_name">FIXME</string>
     <string name="ui_url">https://fixme.ch</string>
     <string name="ui_image_status">Status-Bild des Hackerspaces</string>
-    
+
     <string name="choose_hs">Hackerspace wählen</string>
     <string name="choose_time">Zeitraum in Minuten wählen: </string>
     <string name="choose_time_default">30</string>
     <string name="choose_transparency">Transparenz des Widgets</string>
     <string name="choose_text">Statustext unter Widgets</string>
-    
+
     <string name="btn_refresh">Neu laden</string>
     <string name="btn_prefs">Einstellungen</string>
-    
+
     <string name="msg_loading">Lade…</string>
     <string name="error_title">Fehler: </string>
     <string name="error_network_title">Netzwerk</string>
     <string name="error_network_msg">Netzwerk deaktiviert</string>
-    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe http://spaceapi.net</string>
-            
+    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe https://spacedirectory.org/</string>
+
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
-    <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiele:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://spaceapi.fixme.ch/directory.json</string>
     <string name="prefs_api_url_title">Aktuelle Hackerspace-API</string>
     <string name="prefs_api_url_summary">Aktuelle Hackerspace-API überladen (geht verloren, wenn ein anderer Hackerspace in der Liste gewählt wird)</string>
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
@@ -47,7 +47,7 @@ Licensed under GNU's GPL 3, see README
     <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau dargestellt.</string>                
     <string name="prefs_text_title">Widget Statustext</string>
     <string name="prefs_text_summary">Statustext unter dem Widget hinzufügen</string>        
-            
+
     <string name="api_status">Status</string>
     <string name="api_lastchange">Letzte Aktualisierung: </string>
     <string name="api_duration">Dauer: </string>
