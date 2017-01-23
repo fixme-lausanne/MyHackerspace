@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (C) 2013 Aubort Jean-Baptiste (Rorist)
-    Licensed under GNU's GPL 3, see README
+Copyright (C) 2013 Aubort Jean-Baptiste (Rorist)
+Copyright (C) 2017 dns2utf8
+Licensed under GNU's GPL 3, see README
 -->
 <resources>
 
@@ -31,10 +32,10 @@
     <string name="error_title">Error: </string>
     <string name="error_network_title">Network</string>
     <string name="error_network_msg">Network unreachable</string>
-    <string name="error_generic">\n\nCheck that the current SpaceAPI conforms to the level it actually declares!\n\nSee http://spaceapi.net</string>
+    <string name="error_generic">\n\nCheck that the current SpaceAPI conforms to the level it actually declares!\n\nSee https://spacedirectory.org/</string>
 
     <string name="prefs_api_title">Edit OpenSpaceDirectory URL</string>
-    <string name="prefs_api_summary">URL for the global SpaceAPI directory to use (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json\nhttp://spaceapi.net/directory.json</string>
+    <string name="prefs_api_summary">URL for the global SpaceAPI directory to use (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json</string>
     <string name="prefs_api_url_title">Edit SpaceAPI URL</string>
     <string name="prefs_api_url_summary">Override current SpaceAPI URL (will be lost when choosing a hackerspace from the directory)</string>
     <string name="prefs_interval_title">Check interval</string>

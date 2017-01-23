@@ -62,8 +62,7 @@ import com.woozzu.android.widget.IndexableListView;
 
 public class Main extends Activity {
 
-    // API: http://hackerspaces.nl/spaceapi/
-    // http://spaceapi.net
+    // API: https://spacedirectory.org/
 
     protected static final String TAG = "MyHackerspace";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
