@@ -162,18 +162,30 @@ public class Main extends Activity {
     @Override
     public Bundle onRetainNonConfigurationInstance() {
         Bundle data = new Bundle(3);
-        data.putSerializable(STATE_HS, mResultHs);
-        data.putString(STATE_DIR, mResultDir);
-        data.putString(STATE_URL, mApiUrl);
+        if(mResultHs != null && mResultHs.size() > 0) {
+            data.putSerializable(STATE_HS, mResultHs);
+        }
+        if(mResultDir != null && mResultDir.length() > 0) {
+            data.putString(STATE_DIR, mResultDir);
+        }
+        if(mApiUrl != null && mApiUrl.length() > 0) {
+            data.putString(STATE_URL, mApiUrl);
+        }
         return data;
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(STATE_HS, mResultHs);
-        outState.putString(STATE_DIR, mResultDir);
-        outState.putString(STATE_URL, mApiUrl);
-        super.onSaveInstanceState(outState);
+    protected void onSaveInstanceState(Bundle data) {
+        if(mResultHs != null && mResultHs.size() > 0) {
+            data.putSerializable(STATE_HS, mResultHs);
+        }
+        if(mResultDir != null && mResultDir.length() > 0) {
+            data.putString(STATE_DIR, mResultDir);
+        }
+        if(mApiUrl != null && mApiUrl.length() > 0) {
+            data.putString(STATE_URL, mApiUrl);
+        }
+        super.onSaveInstanceState(data);
     }
 
     @Override
@@ -286,10 +298,12 @@ public class Main extends Activity {
     private void getHsList(Bundle savedInstanceState) {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null) {
+            Log.d(TAG, "getHsList(fresh data)");
             String apiEndpoint = mPrefs.getString(Prefs.KEY_API_ENDPOINT, Prefs.DEFAULT_API_ENDPOINT);
             getDirTask = new GetDirTask();
             getDirTask.execute(apiEndpoint);
         } else {
+            Log.d(TAG, "getHsList(from state)");
             finishDir = true;
             mResultDir = data.getString(STATE_DIR);
         }
@@ -318,7 +332,7 @@ public class Main extends Activity {
             mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
         // Get Data
-        if(data != null && data.containsKey(STATE_HS) && data.containsKey(STATE_URL)) {
+        if(data != null && data.containsKey(STATE_HS)) {
             Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
             mResultHs = (HashMap<String, String>) data.getSerializable(STATE_HS);
