@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
 
 public class Main extends Activity {
 
-    // API: https://spacedirectory.org/
+    // API: https://spaceapi.io/
 
     protected static final String TAG = "MyHackerspace";
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";

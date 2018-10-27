@@ -32,7 +32,7 @@ Licensed under GNU's GPL 3, see README
     <string name="error_title">Error: </string>
     <string name="error_network_title">Network</string>
     <string name="error_network_msg">Network unreachable</string>
-    <string name="error_generic">\n\nCheck that the current SpaceAPI conforms to the level it actually declares!\n\nSee https://spacedirectory.org/</string>
+    <string name="error_generic">\n\nCheck that the current SpaceAPI conforms to the level it actually declares!\n\nSee https://spaceapi.io/</string>
 
     <string name="prefs_api_title">Edit OpenSpaceDirectory URL</string>
     <string name="prefs_api_summary">URL for the global SpaceAPI directory to use (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json</string>

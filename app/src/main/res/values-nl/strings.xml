@@ -31,7 +31,7 @@
     <string name="error_title">Fout: </string>
     <string name="error_network_title">Netwerk</string>
     <string name="error_network_msg">Netwerk niet bereikbaar</string>
-    <string name="error_generic">\n\nKijk of uw API gelijk is aan het level dat u gebruikt!\n\nZie https://spacedirectory.org/</string>
+    <string name="error_generic">\n\nKijk of uw API gelijk is aan het level dat u gebruikt!\n\nZie https://spaceapi.io/</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
     <string name="prefs_api_summary">URL to the global SpaceAPI directory (directory.json file)\nExample:\nhttps://spaceapi.fixme.ch/directory.json</string>
