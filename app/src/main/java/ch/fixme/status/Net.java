@@ -26,8 +26,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLContext;
 
-import de.duenndns.ssl.MemorizingTrustManager;
-
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
 // http://android-developers.blogspot.ch/2010/07/multithreading-for-performance.html
@@ -48,15 +46,6 @@ public class Net {
 
     public Net(String urlStr, boolean useCache, Context ctxt) throws Throwable {
         mCtxt = ctxt;
-        // register MemorizingTrustManager for HTTPS
-        SSLContext sc = SSLContext.getInstance("TLS");
-        MemorizingTrustManager mtm = new MemorizingTrustManager(mCtxt);
-        sc.init(null, new X509TrustManager[] { mtm }, new SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        HttpsURLConnection.setDefaultHostnameVerifier(
-            mtm.wrapHostnameVerifier(HttpsURLConnection.getDefaultHostnameVerifier()));
-
-        // Create client
 
         // Connect to URL
         URL url;
