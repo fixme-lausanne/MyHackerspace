@@ -118,7 +118,7 @@ public class Widget extends AppWidgetProvider {
         private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
-            mCtxt = new WeakReference<Context>(ctxt);
+            mCtxt = new WeakReference<>(ctxt);
             mId = id;
             mText = text;
         }
@@ -126,12 +126,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], ctxt).getBitmap();
-                } else {
-                Log.e(TAG, "Context error (background)");
-                }
+                return new Net(url[0]).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -203,17 +198,14 @@ public class Widget extends AppWidgetProvider {
         private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {
-            mCtxt = new WeakReference<Context>(ctxt);
+            mCtxt = new WeakReference<>(ctxt);
             mId = id;
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], false, ctxt).getString();
-                }
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();

@@ -5,28 +5,18 @@
 
 package ch.fixme.status;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.http.HttpResponseCache;
 import android.os.Build;
 import android.util.Log;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.SecureRandom;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.SSLContext;
-
-import de.duenndns.ssl.MemorizingTrustManager;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
@@ -40,24 +30,12 @@ public class Net {
 
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
-    private final Context mCtxt;
 
-    public Net(String urlStr, Context ctxt) throws Throwable {
-        this(urlStr, true, ctxt);
+    public Net(String urlStr) throws Throwable {
+        this(urlStr, true);
     }
 
-    public Net(String urlStr, boolean useCache, Context ctxt) throws Throwable {
-        mCtxt = ctxt;
-        // register MemorizingTrustManager for HTTPS
-        SSLContext sc = SSLContext.getInstance("TLS");
-        MemorizingTrustManager mtm = new MemorizingTrustManager(mCtxt);
-        sc.init(null, new X509TrustManager[] { mtm }, new SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        HttpsURLConnection.setDefaultHostnameVerifier(
-            mtm.wrapHostnameVerifier(HttpsURLConnection.getDefaultHostnameVerifier()));
-
-        // Create client
-
+    public Net(String urlStr, boolean useCache) throws Throwable {
         // Connect to URL
         URL url;
         int responseCode;

@@ -5,21 +5,6 @@
 
 package ch.fixme.status;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.lang.ref.WeakReference;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -60,6 +45,20 @@ import android.widget.TextView;
 import com.woozzu.android.util.StringMatcher;
 import com.woozzu.android.widget.IndexableListView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 public class Main extends Activity {
 
     // API: https://spacedirectory.org/
@@ -98,7 +97,7 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         setViewVisibility(false);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        mResultHs = new HashMap<String, String>();
+        mResultHs = new HashMap<>();
         if (checkNetwork()) {
             Log.d(TAG, "onCreate() intent="+ getIntent().toString());
             setCache();
@@ -249,8 +248,8 @@ public class Main extends Activity {
             JSONObject obj = new JSONObject(mResultDir);
             JSONArray arr = obj.names();
             int len = obj.length();
-            mHsNames = new ArrayList<String>(len);
-            mHsUrls = new ArrayList<String>(len);
+            mHsNames = new ArrayList<>(len);
+            mHsUrls = new ArrayList<>(len);
             for (int i = 0; i < len; i++) {
                 mHsNames.add(arr.getString(i));
             }
@@ -405,21 +404,16 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
-        private WeakReference<Context> mCtxt;
 
         @Override
         protected void onPreExecute() {
-            mCtxt = new WeakReference<Context>(getApplicationContext());
             showDialog(DIALOG_LOADING);
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null){
-                    return new Net(url[0], ctxt).getString();
-                }
+                return new Net(url[0]).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -450,12 +444,10 @@ public class Main extends Activity {
 
         private String mErrorTitle;
         private String mErrorMsg;
-        private WeakReference<Context> mCtxt;
         private String mUrl;
 
         @Override
         protected void onPreExecute() {
-            mCtxt = new WeakReference<Context>(getApplicationContext());
             showDialog(DIALOG_LOADING);
             // Clean UI
             ((ScrollView) findViewById(R.id.scroll)).removeAllViews();
@@ -467,10 +459,7 @@ public class Main extends Activity {
             mUrl = url[0];
             Log.d(TAG, "GetApiTask(), mUrl="+mUrl);
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], false, ctxt).getString();
-                }
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -504,7 +493,6 @@ public class Main extends Activity {
         private final int mId;
         private String mErrorTitle;
         private String mErrorMsg;
-        private WeakReference<Context> mCtxt;
 
         GetImage(int id) {
             mId = id;
@@ -512,8 +500,7 @@ public class Main extends Activity {
 
         @Override
         protected void onPreExecute() {
-            mCtxt = new WeakReference<Context>(getApplicationContext());
-            ImageView img = (ImageView) findViewById(mId);
+            ImageView img = findViewById(mId);
             img.setImageResource(android.R.drawable.ic_popup_sync);
             AnimationDrawable anim = (AnimationDrawable) img.getDrawable();
             anim.start();
@@ -522,10 +509,7 @@ public class Main extends Activity {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], ctxt).getBitmap();
-                }
+                return new Net(url[0]).getBitmap();
             } catch (Throwable e) {
                 mErrorTitle = e.getClass().getCanonicalName();
                 mErrorMsg = e.getLocalizedMessage() + " " + url[0];
@@ -576,7 +560,7 @@ public class Main extends Activity {
             // Initialize views
             LayoutInflater iftr = getLayoutInflater();
             LinearLayout vg = (LinearLayout) iftr.inflate(R.layout.base, null);
-            ScrollView scroll = (ScrollView) findViewById(R.id.scroll);
+            ScrollView scroll = findViewById(R.id.scroll);
             scroll.removeAllViews();
             scroll.addView(vg);
 

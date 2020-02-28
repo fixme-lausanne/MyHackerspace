@@ -45,10 +45,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="de.duenndns.ssl.MemorizingActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-        />
-
         <receiver android:name=".Network">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
