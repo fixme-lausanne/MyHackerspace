@@ -38,7 +38,7 @@ Licensed under GNU's GPL 3, see README
     <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe https://spacedirectory.org/</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
-    <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://spaceapi.fixme.ch/directory.json</string>
+    <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">Aktuelle Hackerspace-API</string>
     <string name="prefs_api_url_summary">Aktuelle Hackerspace-API überladen (geht verloren, wenn ein anderer Hackerspace in der Liste gewählt wird)</string>
     <string name="prefs_interval_title">Aktualisierungsintervall</string>

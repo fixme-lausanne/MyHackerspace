@@ -34,7 +34,7 @@
     <string name="error_generic">\n\nKijk of uw API gelijk is aan het level dat u gebruikt!\n\nZie https://spacedirectory.org/</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
-    <string name="prefs_api_summary">URL to the global SpaceAPI directory (directory.json file)\nExample:\nhttps://spaceapi.fixme.ch/directory.json</string>
+    <string name="prefs_api_summary">URL to the global SpaceAPI directory (directory.json file)\nExample:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">Current hackerspace API</string>
     <string name="prefs_api_url_summary">Override current hackerspace URL (will be lost when choosing an other hackerspace in the list)</string>
     <string name="prefs_interval_title">Update tijd</string>

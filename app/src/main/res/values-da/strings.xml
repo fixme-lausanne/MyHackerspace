@@ -35,7 +35,7 @@
     <string name="error_generic">\n\nKontroller at det aktive SpaceAPI overholder den revision det annoncerer!\n\nSe https://spacedirectory.org/</string>
 
     <string name="prefs_api_title">Rediger OpenSpaceDirectory-URL</string>
-    <string name="prefs_api_summary">URL til den globale SpaceAPI-fortegnelse der skal anvendes (directory.json fil)\nEksempler:\nhttps://spaceapi.fixme.ch/directory.json</string>
+    <string name="prefs_api_summary">URL til den globale SpaceAPI-fortegnelse der skal anvendes (directory.json fil)\nEksempler:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">Rediger SpaceAPI-URL</string>
     <string name="prefs_api_url_summary">Ændr URL for det aktive SpaceAPI (mistes ved valg af hackerspace fra fortegnelsen)</string>
     <string name="prefs_interval_title">Opdateringsinterval</string>
