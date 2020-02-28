@@ -32,7 +32,7 @@
     <string name="error_title">Fejl: </string>
     <string name="error_network_title">Netværk</string>
     <string name="error_network_msg">Netværket er ikke tilgængeligt</string>
-    <string name="error_generic">\n\nKontroller at det aktive SpaceAPI overholder den revision det annoncerer!\n\nSe https://spacedirectory.org/</string>
+    <string name="error_generic">\n\nKontroller at det aktive SpaceAPI overholder den revision det annoncerer!\n\nSe https://spaceapi.io/</string>
 
     <string name="prefs_api_title">Rediger OpenSpaceDirectory-URL</string>
     <string name="prefs_api_summary">URL til den globale SpaceAPI-fortegnelse der skal anvendes (directory.json fil)\nEksempler:\nhttps://spaceapi.fixme.ch/directory.json</string>

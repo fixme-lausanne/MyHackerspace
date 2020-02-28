@@ -35,7 +35,7 @@ Licensed under GNU's GPL 3, see README
     <string name="error_title">Fehler: </string>
     <string name="error_network_title">Netzwerk</string>
     <string name="error_network_msg">Netzwerk deaktiviert</string>
-    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe https://spacedirectory.org/</string>
+    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe https://spaceapi.io/</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
     <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://spaceapi.fixme.ch/directory.json</string>
