@@ -308,12 +308,8 @@ public class Widget extends AppWidgetProvider {
                         + widgetId, ParseGeneric.API_DEFAULT);
                 Log.i(TAG, "Update widgetid " + widgetId + " with url "
                         + url);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        new GetApiTask(ctxt, widgetId).execute(url);
-                    }
-                });
+                new Handler(Looper.getMainLooper())
+                        .post(() -> new GetApiTask(ctxt, widgetId).execute(url));
             }
             stopSelf();
         }
