@@ -34,7 +34,7 @@
     <string name="error_generic">\n\nVérifiez que votre API corresponde à la version que vous déclarez!\n\nVoir https://spaceapi.io/</string>
 
     <string name="prefs_api_title">Serveur de la SpaceAPI</string>
-    <string name="prefs_api_summary">URL vers l\'annuaire de la SpaceAPI (fichier directory.json)\nExemple:\nhttps://spaceapi.fixme.ch/directory.json</string>
+    <string name="prefs_api_summary">URL vers l\'annuaire de la SpaceAPI (fichier directory.json)\nExemple:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">API du hackerspace sélectionné</string>
     <string name="prefs_api_url_summary">Outrepasser l\'url du hackerspace sélectionné (sera perdu lors de la sélection d\'un autre hackerspace dans la liste)</string>
     <string name="prefs_interval_title">Interval de vérification</string>

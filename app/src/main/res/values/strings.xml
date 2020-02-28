@@ -35,7 +35,7 @@ Licensed under GNU's GPL 3, see README
     <string name="error_generic">\n\nCheck that the current SpaceAPI conforms to the level it actually declares!\n\nSee https://spaceapi.io/</string>
 
     <string name="prefs_api_title">Edit OpenSpaceDirectory URL</string>
-    <string name="prefs_api_summary">URL for the global SpaceAPI directory to use (directory.json file)\nExamples:\nhttps://spaceapi.fixme.ch/directory.json</string>
+    <string name="prefs_api_summary">URL for the global SpaceAPI directory to use (directory.json file)\nExamples:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">Edit SpaceAPI URL</string>
     <string name="prefs_api_url_summary">Override current SpaceAPI URL (will be lost when choosing a hackerspace from the directory)</string>
     <string name="prefs_interval_title">Check interval</string>
