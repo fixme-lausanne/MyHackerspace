@@ -125,19 +125,15 @@ public class Widget_config extends Activity {
     }
 
     public class GetDirTask extends AsyncTask<String, Void, String> {
-
-        private Context mCtxt;
-
         @Override
         protected void onPreExecute() {
-            mCtxt = getApplicationContext();
             showDialog(DIALOG_LOADING);
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                return new Net(url[0], false, mCtxt).getString();
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -147,7 +143,7 @@ public class Widget_config extends Activity {
         @Override
         protected void onPostExecute(String result) {
             // Construct hackerspaces list
-            Spinner s = (Spinner) findViewById(R.id.choose_hs);
+            Spinner s = findViewById(R.id.choose_hs);
             try {
                 JSONObject obj = new JSONObject(result);
                 JSONArray arr = obj.names();
@@ -161,7 +157,7 @@ public class Widget_config extends Activity {
                 for (int i = 0; i < len; i++) {
                     url.add(i, obj.getString(names[i]));
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         Widget_config.this,
                         android.R.layout.simple_spinner_item, names);
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);

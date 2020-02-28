@@ -17,6 +17,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -116,7 +118,7 @@ public class Widget extends AppWidgetProvider {
         private String mError = null;
 
         public GetImage(Context ctxt, int id, String text) {
-            mCtxt = new WeakReference<Context>(ctxt);
+            mCtxt = new WeakReference<>(ctxt);
             mId = id;
             mText = text;
         }
@@ -124,12 +126,7 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected Bitmap doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], ctxt).getBitmap();
-                } else {
-                Log.e(TAG, "Context error (background)");
-                }
+                return new Net(url[0]).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -201,17 +198,14 @@ public class Widget extends AppWidgetProvider {
         private String mError = null;
 
         public GetApiTask(Context ctxt, int id) {
-            mCtxt = new WeakReference<Context>(ctxt);
+            mCtxt = new WeakReference<>(ctxt);
             mId = id;
         }
 
         @Override
         protected String doInBackground(String... url) {
             try {
-                final Context ctxt = mCtxt.get();
-                if(ctxt != null) {
-                    return new Net(url[0], false, ctxt).getString();
-                }
+                return new Net(url[0], false).getString();
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -304,17 +298,22 @@ public class Widget extends AppWidgetProvider {
         @Override
         protected void onHandleIntent(Intent intent) {
             final Context ctxt = UpdateService.this;
-            int widgetId = intent.getIntExtra(
+            final int widgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             if (Main.checkNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
-                String url = prefs.getString(Main.PREF_API_URL_WIDGET
+                final String url = prefs.getString(Main.PREF_API_URL_WIDGET
                         + widgetId, ParseGeneric.API_DEFAULT);
                 Log.i(TAG, "Update widgetid " + widgetId + " with url "
                         + url);
-                new GetApiTask(ctxt, widgetId).execute(url);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GetApiTask(ctxt, widgetId).execute(url);
+                    }
+                });
             }
             stopSelf();
         }
