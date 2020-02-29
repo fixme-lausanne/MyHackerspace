@@ -87,18 +87,17 @@ public class Parse12 extends ParseGeneric {
         if (!mApi.isNull(API_SENSORS)) {
             JSONArray sensors = mApi.getJSONArray(API_SENSORS);
             JSONObject elem;
-            HashMap<String, ArrayList<HashMap<String, String>>> result = new HashMap<String, ArrayList<HashMap<String, String>>>(
-                    sensors.length());
+            HashMap<String, ArrayList<HashMap<String, String>>> result = new HashMap<>(sensors.length());
             for (int i = 0; i < sensors.length(); i++) {
                 elem = (JSONObject) sensors.get(i);
                 try {
                     for (int j = 0; j < elem.length(); j++) {
-                        ArrayList<HashMap<String, String>> elem_value = new ArrayList<HashMap<String, String>>();
+                        ArrayList<HashMap<String, String>> elem_value = new ArrayList<>();
                         String name = (String) elem.names().get(j);
                         JSONObject obj = elem.getJSONObject(name);
                         for (int k = 0; k < obj.length(); k++) {
                             String name2 = (String) obj.names().get(k);
-                            HashMap<String, String> elem_value_map = new HashMap<String, String>();
+                            HashMap<String, String> elem_value_map = new HashMap<>();
                             elem_value_map.put(API_SENSOR_NAME, name2);
                             elem_value_map.put(API_SENSOR_VALUE, obj.getString(name2));
                             elem_value.add(elem_value_map);
@@ -108,8 +107,8 @@ public class Parse12 extends ParseGeneric {
                 } catch (Exception e) {
                     Log.e(Main.TAG, e.getLocalizedMessage());
                     e.printStackTrace();
-                    ArrayList<HashMap<String, String>> elem_value = new ArrayList<HashMap<String, String>>();
-                    HashMap<String, String> elem_value_map = new HashMap<String, String>();
+                    ArrayList<HashMap<String, String>> elem_value = new ArrayList<>();
+                    HashMap<String, String> elem_value_map = new HashMap<>();
                     elem_value_map.put(API_SENSOR_VALUE, elem.toString());
                     elem_value.add(elem_value_map);
                     result.put((String) elem.names().get(0), elem_value);
@@ -123,8 +122,7 @@ public class Parse12 extends ParseGeneric {
             if (!mApi.isNull(API_STREAM)) {
                 JSONObject stream = mApi.optJSONObject(API_STREAM);
                 if (stream != null) {
-                    HashMap<String, String> streamMap = new HashMap<String, String>(
-                            stream.length());
+                    HashMap<String, String> streamMap = new HashMap<>(stream.length());
                     JSONArray names = stream.names();
                     for (int i = 0; i < stream.length(); i++) {
                         final String type = names.getString(i);
@@ -138,8 +136,7 @@ public class Parse12 extends ParseGeneric {
             if (!mApi.isNull(API_CAM)) {
                 JSONArray cam = mApi.optJSONArray(API_CAM);
                 if (cam != null) {
-                    HashMap<String, String> camMap = new HashMap<String, String>(
-                            cam.length());
+                    HashMap<String, String> camMap = new HashMap<>(cam.length());
                     for (int i = 0; i < cam.length(); i++) {
                         camMap.put("http", cam.getString(i));
                     }

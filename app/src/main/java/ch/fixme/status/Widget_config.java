@@ -56,22 +56,19 @@ public class Widget_config extends Activity {
         Bundle extras = intent.getExtras();
         mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-        findViewById(R.id.choose_ok).setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Editor edit = mPrefs.edit();
-                        edit.putBoolean(
-                                Prefs.KEY_WIDGET_TRANSPARENCY,
-                                ((CheckBox) findViewById(R.id.choose_transparency))
-                                        .isChecked());
-                        edit.putBoolean(Prefs.KEY_WIDGET_TEXT,
-                                ((CheckBox) findViewById(R.id.choose_text))
-                                        .isChecked());
-                        edit.commit();
-                        setWidgetAlarm();
-                        finish();
-                    }
-                });
+        findViewById(R.id.choose_ok).setOnClickListener(v -> {
+            Editor edit = mPrefs.edit();
+            edit.putBoolean(
+                    Prefs.KEY_WIDGET_TRANSPARENCY,
+                    ((CheckBox) findViewById(R.id.choose_transparency))
+                            .isChecked());
+            edit.putBoolean(Prefs.KEY_WIDGET_TEXT,
+                    ((CheckBox) findViewById(R.id.choose_text))
+                            .isChecked());
+            edit.commit();
+            setWidgetAlarm();
+            finish();
+        });
         ((CheckBox) findViewById(R.id.choose_transparency)).setChecked(mPrefs
                 .getBoolean(Prefs.KEY_WIDGET_TRANSPARENCY,
                         Prefs.DEFAULT_WIDGET_TRANSPARENCY));
@@ -149,7 +146,7 @@ public class Widget_config extends Activity {
                 JSONArray arr = obj.names();
                 int len = obj.length();
                 String[] names = new String[len];
-                final ArrayList<String> url = new ArrayList<String>(len);
+                final ArrayList<String> url = new ArrayList<>(len);
                 for (int i = 0; i < len; i++) {
                     names[i] = arr.getString(i);
                 }

@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class ParseGeneric {
-    protected HashMap<String, Object> mResult = new HashMap<String, Object>();
+    protected HashMap<String, Object> mResult = new HashMap<>();
     protected JSONObject mApi;
 
     protected static final String API_NAME = "space";

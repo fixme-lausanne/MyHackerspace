@@ -268,21 +268,17 @@ public class Main extends Activity {
                     .findViewById(R.id.listview);
             listView.setAdapter(adapter);
             listView.setFastScrollEnabled(true);
-            listView.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                        int position, long id) {
-                    Log.d(TAG, "hs dialog, on click");
-                    String url = mHsUrls.get(position);
-                    Editor edit = mPrefs.edit();
-                    edit.putString(Prefs.KEY_API_URL, url);
-                    getApiTask = new GetApiTask();
-                    getApiTask.execute(url);
-                    edit.commit();
-                    setIntent(null);
-                    dismissDialog(DIALOG_LIST);
-                    Log.i(TAG, "Item clicked=" + url +  " (" + position + ")");
-                }
+            listView.setOnItemClickListener((parent, view1, position, id) -> {
+                Log.d(TAG, "hs dialog, on click");
+                String url = mHsUrls.get(position);
+                Editor edit = mPrefs.edit();
+                edit.putString(Prefs.KEY_API_URL, url);
+                getApiTask = new GetApiTask();
+                getApiTask.execute(url);
+                edit.commit();
+                setIntent(null);
+                dismissDialog(DIALOG_LIST);
+                Log.i(TAG, "Item clicked=" + url +  " (" + position + ")");
             });
             builder.setView(view);
             builder.setTitle(R.string.choose_hs);
@@ -826,8 +822,8 @@ public class Main extends Activity {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.hs_entry, null);
                 holder = new ViewHolder();
-                holder.name = (TextView) convertView.findViewById(R.id.text1);
-                holder.desc = (TextView) convertView.findViewById(R.id.text2);
+                holder.name = convertView.findViewById(R.id.text1);
+                holder.desc = convertView.findViewById(R.id.text2);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();

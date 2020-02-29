@@ -128,9 +128,9 @@ public class Parse13 extends ParseGeneric {
                     continue;
                 }
                 elem = sensors.getJSONArray(sensor_name);
-                elem_value = new ArrayList<HashMap<String, String>>(elem.length());
+                elem_value = new ArrayList<>(elem.length());
                 for (int j = 0; j < elem.length(); j++) {
-                    HashMap<String, String> elem_value_map = new HashMap<String, String>();
+                    HashMap<String, String> elem_value_map = new HashMap<>();
                     try {
                         JSONObject obj = (JSONObject) elem.get(j);
                         if (!obj.isNull(API_SENSOR_VALUE)
@@ -185,7 +185,7 @@ public class Parse13 extends ParseGeneric {
         if (!mApi.isNull(API_STREAM)) {
             JSONObject stream = mApi.optJSONObject(API_STREAM);
             if (stream != null) {
-                HashMap<String, String> streamMap = new HashMap<String, String>(
+                HashMap<String, String> streamMap = new HashMap<>(
                         stream.length());
                 JSONArray names = stream.names();
                 for (int i = 0; i < stream.length(); i++) {
@@ -201,7 +201,7 @@ public class Parse13 extends ParseGeneric {
         if (!mApi.isNull(API_CAM)) {
             JSONArray cam = mApi.optJSONArray(API_CAM);
             if (cam != null) {
-                ArrayList<String> camList = new ArrayList<String>(cam.length());
+                ArrayList<String> camList = new ArrayList<>(cam.length());
                 for (int i = 0; i < cam.length(); i++) {
                     camList.add(cam.getString(i));
                 }
