@@ -7,19 +7,19 @@
 
     <item
         android:id="@+id/menu_choose"
-        android:icon="@android:drawable/ic_input_get"
+        android:icon="@drawable/ic_view_list_black_24dp"
         android:showAsAction="ifRoom|withText"
         android:title="@string/choose_hs"/>
 
     <item
         android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_action_refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:showAsAction="ifRoom|withText"
         android:title="@string/btn_refresh"/>
-    
+
     <item
         android:id="@+id/menu_prefs"
-        android:icon="@android:drawable/ic_menu_preferences"
-        android:showAsAction="never"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/btn_prefs"/>
 </menu>
