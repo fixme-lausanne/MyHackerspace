@@ -18,6 +18,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
 // From CommonsWare and Android Blog
 // https://github.com/commonsguy/cw-android/tree/master/Internet
 // http://android-developers.blogspot.ch/2010/07/multithreading-for-performance.html
@@ -31,11 +34,13 @@ public class Net {
     private HttpURLConnection mUrlConnection;
     private InputStream mInputStream;
 
-    public Net(String urlStr) throws Throwable {
+    @WorkerThread
+    public Net(@NonNull String urlStr) throws Throwable {
         this(urlStr, true);
     }
 
-    public Net(String urlStr, boolean useCache) throws Throwable {
+    @WorkerThread
+    public Net(@NonNull String urlStr, boolean useCache) throws Throwable {
         // Connect to URL
         URL url;
         int responseCode;
@@ -70,6 +75,8 @@ public class Net {
         mInputStream = mUrlConnection.getInputStream();
     }
 
+    @WorkerThread
+    @NonNull
     public String getString() throws Throwable {
         try {
             BufferedReader r = new BufferedReader(new InputStreamReader(mInputStream));
@@ -87,6 +94,8 @@ public class Net {
         }
     }
 
+    @WorkerThread
+    @NonNull
     public Bitmap getBitmap() throws Throwable {
         try {
             return BitmapFactory.decodeStream(new FlushedInputStream(mInputStream));

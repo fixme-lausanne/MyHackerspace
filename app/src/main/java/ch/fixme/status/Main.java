@@ -59,6 +59,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import androidx.annotation.UiThread;
+
 public class Main extends Activity {
 
     // API: https://spaceapi.io/
@@ -92,6 +94,7 @@ public class Main extends Activity {
     private GetImage getImageTask;
 
     @Override
+    @UiThread
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -110,12 +113,14 @@ public class Main extends Activity {
     }
 
     @Override
+    @UiThread
     protected void onNewIntent(Intent intent) {
         Log.d(TAG, "onNewIntent()=" + intent);
         showHsInfo(intent);
     }
 
     @Override
+    @UiThread
     protected void onDestroy() {
         if (getApiTask != null) {
             getApiTask.cancel(true);
@@ -205,6 +210,7 @@ public class Main extends Activity {
     }
 
     @Override
+    @UiThread
     public void startActivity(Intent intent) {
         // http://stackoverflow.com/questions/13691241/autolink-not-working-on-htc-htclinkifydispatcher
         try {
