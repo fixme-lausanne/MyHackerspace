@@ -13,8 +13,8 @@ Licensed under GNU's GPL 3, see README
     <string name="empty"></string>
     <string name="ok">OK</string>
 
-    <string name="status_open">Öffnen</string>
-    <string name="status_closed">Abgeschlossen</string>
+    <string name="status_open">Offen</string>
+    <string name="status_closed">Geschlossen</string>
     <string name="status_unknown">Unbekannt</string>
 
     <string name="ui_logo">Logo des Hackerspaces</string>
@@ -35,17 +35,17 @@ Licensed under GNU's GPL 3, see README
     <string name="error_title">Fehler: </string>
     <string name="error_network_title">Netzwerk</string>
     <string name="error_network_msg">Netzwerk deaktiviert</string>
-    <string name="error_generic">\n\nÜberprüfen Sie ob die API der Version entspricht, welche angeben wurde!\n\nsiehe https://spaceapi.io/</string>
+    <string name="error_generic">\n\nÜberprüfen Sie, ob die API der Version entspricht, welche angegeben wurde!\n\nsiehe https://spaceapi.io/</string>
 
     <string name="prefs_api_title">SpaceAPI Endpoint</string>
     <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://directory.spaceapi.io/</string>
     <string name="prefs_api_url_title">Aktuelle Hackerspace-API</string>
     <string name="prefs_api_url_summary">Aktuelle Hackerspace-API überladen (geht verloren, wenn ein anderer Hackerspace in der Liste gewählt wird)</string>
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
-    <string name="prefs_interval_summary">Zeitspanne in der das Widget den tatsächlichen Status überprüft.</string>                
+    <string name="prefs_interval_summary">Zeitspanne, in der das Widget den tatsächlichen Status überprüft.</string>                
     <string name="prefs_transparent_title">Transparentes Widget</string>
     <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau dargestellt.</string>                
-    <string name="prefs_text_title">Widget Statustext</string>
+    <string name="prefs_text_title">Widget-Statustext</string>
     <string name="prefs_text_summary">Statustext unter dem Widget hinzufügen</string>        
 
     <string name="api_status">Status</string>
