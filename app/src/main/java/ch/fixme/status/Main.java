@@ -32,8 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 import com.woozzu.android.util.StringMatcher;
 import com.woozzu.android.widget.IndexableListView;
@@ -58,8 +59,6 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import androidx.annotation.UiThread;
 
 public class Main extends Activity {
 
@@ -79,9 +78,13 @@ public class Main extends Activity {
     private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
 
+    // Shared preferences
     private SharedPreferences mPrefs;
+    // Hashmap with the endpoint URL as key and the endpoint JSON string as value
     private HashMap<String, String> mResultHs;
+    // Contains directory endpoint JSON data as string
     public String mResultDir;
+    // The endpoint URL of the currently showing space
     private String mApiUrl;
     private boolean finishApi = false;
     private boolean finishDir = false;
@@ -97,14 +100,22 @@ public class Main extends Activity {
     @UiThread
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Load layout
         setContentView(R.layout.main);
+
+        // Hide views until loaded
         setViewVisibility(false);
+
+        // Load shared prefs
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
+
+        // Load data
         mResultHs = new HashMap<>();
         if (checkNetwork()) {
-            Log.d(TAG, "onCreate() intent="+ getIntent().toString());
+            Log.d(TAG, "onCreate() intent=" + getIntent().toString());
             setCache();
-            getHsList(savedInstanceState);
+            getHsList();
             showHsInfo(getIntent());
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
@@ -296,7 +307,7 @@ public class Main extends Activity {
         }
     }
 
-    private void getHsList(Bundle savedInstanceState) {
+    private void getHsList() {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null) {
             Log.d(TAG, "getHsList(fresh data)");
@@ -310,14 +321,14 @@ public class Main extends Activity {
         }
     }
 
-    private void showHsInfo(Intent intent) {
+    private void showHsInfo(@Nullable Intent intent) {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        // Get hackerspace api url
-        if(data != null && data.containsKey(STATE_URL)) {
+
+        // Get space endpoint URL
+        if (data != null && data.containsKey(STATE_URL)) {
             Log.d(TAG, "showHsInfo(uri from state)");
             mApiUrl = data.getString(STATE_URL);
-        } else if (intent != null
-                && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+        } else if (intent != null && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
             Log.d(TAG, "showHsInfo(uri from widget intent)");
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
@@ -332,8 +343,9 @@ public class Main extends Activity {
             Log.d(TAG, "showHsInfo(uri from prefs)");
             mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
         }
-        // Get Data
-        if(data != null && data.containsKey(STATE_HS)) {
+
+        // Now that we have the URL, fetch the data
+        if (data != null && data.containsKey(STATE_HS)) {
             Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
             mResultHs = (HashMap<String, String>) data.getSerializable(STATE_HS);
