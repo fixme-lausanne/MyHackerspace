@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (C) 2012 Aubort Jean-Baptiste (Rorist)
+    Copyright (C) 2020 Danilo Bargen
     Licensed under GNU's GPL 3, see README
 -->
 <RelativeLayout
@@ -30,69 +30,27 @@
         android:layout_marginRight="4dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="true"
-        android:text="20" />
+        android:text="Value" />
     <TextView
-        android:id="@+id/entry_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/entry_value"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="true"
-        android:text="°C" />
-    <TextView
-        android:id="@+id/entry_properties"
+        android:id="@+id/entry_details1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/entry_img"
         android:layout_below="@id/entry_value"
-        android:layout_marginRight="4dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="true"
-        android:text="speed: 0 m/s, gust: 0 m/s" />
-    <TextView
-        android:id="@+id/entry_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/entry_img"
-        android:layout_below="@id/entry_properties"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_marginRight="8dip"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textIsSelectable="true"
-        android:text="Sensor1" />
-    <TextView
-        android:id="@+id/entry_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/entry_name"
-        android:layout_below="@id/entry_properties"
-        android:layout_alignWithParentIfMissing="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textIsSelectable="true"
-        android:text="Outside" />
-    <TextView
-        android:id="@+id/entry_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/entry_img"
-        android:layout_below="@id/entry_name"
         android:layout_alignWithParentIfMissing="true"
         android:autoLink="all"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="true"
         android:text="Description of the sensor" />
     <TextView
-        android:id="@+id/entry_other"
+        android:id="@+id/entry_details2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/entry_img"
-        android:layout_below="@id/entry_description"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/entry_details1"
         android:layout_alignWithParentIfMissing="true"
         android:autoLink="all"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="true"
-        android:text="{other: stuff}" />
+        android:text="More details" />
 </RelativeLayout>

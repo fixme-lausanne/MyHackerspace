@@ -26,4 +26,10 @@ android {
 
 dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
+
+    // SpaceAPI Library
+    implementation "spaceapi-community:spaceapi-kt:0.2.1"
+
+    // JUnit for testing
+    testImplementation 'junit:junit:4.13.1'
 }

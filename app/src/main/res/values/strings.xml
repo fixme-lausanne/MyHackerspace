@@ -50,8 +50,42 @@ Licensed under GNU's GPL 3, see README
     <string name="api_duration">Duration: </string>
     <string name="api_duration_hours"> hour(s)</string>
     <string name="api_location">Location</string>
+    <string name="api_postal_addr">Postal Address</string>
+    <string name="api_coordinates">Coordinates</string>
     <string name="api_contact">Contact</string>
-    <string name="api_stream">Stream + WebCam</string>
+    <string name="api_webcams">Webcams</string>
     <string name="api_sensors">Sensors</string>
+    <string name="api_sensors_environment">Environment</string>
+    <string name="api_sensors_space">Space</string>
+    <string name="api_sensors_organization">Organization</string>
 
+    <string name="api_contact_phone">Phone</string>
+    <string name="api_contact_sip" translatable="false">SIP</string>
+    <string name="api_contact_irc" translatable="false">IRC</string>
+    <string name="api_contact_twitter" translatable="false">Twitter</string>
+    <string name="api_contact_mastodon" translatable="false">Mastodon</string>
+    <string name="api_contact_facebook" translatable="false">Facebook</string>
+    <string name="api_contact_identica" translatable="false">Identica</string>
+    <string name="api_contact_foursquare" translatable="false">Foursquare</string>
+    <string name="api_contact_email">Email</string>
+    <string name="api_contact_ml">ML</string>
+    <string name="api_contact_xmpp" translatable="false">XMPP</string>
+    <string name="api_contact_gopher" translatable="false">Gopher</string>
+    <string name="api_contact_matrix" translatable="false">Matrix</string>
+    <string name="api_contact_mumble" translatable="false">Mumble</string>
+
+    <string name="api_sensor_people_now_present">People Present</string>
+    <string name="api_sensor_door_locked">Door Status</string>
+    <string name="api_sensor_door_locked_yes">Locked</string>
+    <string name="api_sensor_door_locked_no">Unlocked</string>
+    <string name="api_sensor_beverage_supply">Beverage Supply</string>
+    <string name="api_sensor_power_consumption">Power Consumption</string>
+    <string name="api_sensor_network_connections">Network Connections</string>
+    <string name="api_sensor_temperature">Temperature</string>
+    <string name="api_sensor_humidity">Humidity</string>
+    <string name="api_sensor_barometer">Air Pressure</string>
+    <string name="api_sensor_wind">Wind</string>
+    <string name="api_sensor_radiation">Radiation</string>
+    <string name="api_sensor_total_member_count">Member Count</string>
+    <string name="api_sensor_account_balance">Account Balance</string>
 </resources>

@@ -50,7 +50,7 @@
     <string name="api_duration_hours"> u(u)r(en)</string>
     <string name="api_location">Locatie</string>
     <string name="api_contact">Kontakt</string>
-    <string name="api_stream">Stream</string>
+    <string name="api_webcams">Webcams</string>
     <string name="api_sensors">Sensoren</string>
 
 </resources>

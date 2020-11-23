@@ -13,8 +13,8 @@ Licensed under GNU's GPL 3, see README
     <string name="empty"></string>
     <string name="ok">OK</string>
 
-    <string name="status_open">Öffnen</string>
-    <string name="status_closed">Abgeschlossen</string>
+    <string name="status_open">Offen</string>
+    <string name="status_closed">Geschlossen</string>
     <string name="status_unknown">Unbekannt</string>
 
     <string name="ui_logo">Logo des Hackerspaces</string>
@@ -53,8 +53,31 @@ Licensed under GNU's GPL 3, see README
     <string name="api_duration">Dauer: </string>
     <string name="api_duration_hours"> Stunde(n)</string>
     <string name="api_location">Ort</string>
+    <string name="api_postal_addr">Postanschrift</string>
+    <string name="api_coordinates">Koordinaten</string>
     <string name="api_contact">Kontakt</string>
-    <string name="api_stream">Webcam</string>
+    <string name="api_webcams">Webcams</string>
     <string name="api_sensors">Sensoren</string>
+    <string name="api_sensors_environment">Umwelt</string>
+    <string name="api_sensors_space">Space</string>
+    <string name="api_sensors_organization">Organisation</string>
 
+    <string name="api_contact_phone">Tel</string>
+    <string name="api_contact_email">E-Mail</string>
+    <string name="api_contact_ml">ML</string>
+
+    <string name="api_sensor_people_now_present">Anwesende Personen</string>
+    <string name="api_sensor_door_locked">Türstatus</string>
+    <string name="api_sensor_door_locked_yes">Geschlossen</string>
+    <string name="api_sensor_door_locked_no">Geöffnet</string>
+    <string name="api_sensor_beverage_supply">Getränkevorrat</string>
+    <string name="api_sensor_power_consumption">Stromverbrauch</string>
+    <string name="api_sensor_network_connections">Netzwerkverbindungen</string>
+    <string name="api_sensor_temperature">Temperatur</string>
+    <string name="api_sensor_humidity">Luftfeuchtigkeit</string>
+    <string name="api_sensor_barometer">Luftdruck</string>
+    <string name="api_sensor_wind">Wind</string>
+    <string name="api_sensor_radiation">Radioaktivität</string>
+    <string name="api_sensor_total_member_count">Mitgliederanzahl</string>
+    <string name="api_sensor_account_balance">Kontostand</string>
 </resources>

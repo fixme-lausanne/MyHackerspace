@@ -51,7 +51,7 @@
     <string name="api_duration_hours"> time(r)</string>
     <string name="api_location">Lokation</string>
     <string name="api_contact">Kontakt</string>
-    <string name="api_stream">Videostrøm</string>
+    <string name="api_webcams">Webkameraer</string>
     <string name="api_sensors">Sensorer</string>
 
 </resources>
