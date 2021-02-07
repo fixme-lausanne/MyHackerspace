@@ -50,7 +50,7 @@
     <string name="api_duration_hours"> heure(s)</string>
     <string name="api_location">Localisation</string>
     <string name="api_contact">Contact</string>
-    <string name="api_stream">Flux</string>
+    <string name="api_webcams">Webcam</string>
     <string name="api_sensors">Capteurs</string>
 
 </resources>

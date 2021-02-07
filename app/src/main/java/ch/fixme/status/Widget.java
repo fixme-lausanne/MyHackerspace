@@ -28,7 +28,13 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+
+import io.spaceapi.ParseError;
+import io.spaceapi.SpaceApiParser;
+import io.spaceapi.types.Status;
 
 public class Widget extends AppWidgetProvider {
 
@@ -110,7 +116,7 @@ public class Widget extends AppWidgetProvider {
         // + "s");
     }
 
-    private static class GetImage extends AsyncTask<String, Void, Bitmap> {
+    private static class GetImage extends AsyncTask<URL, Void, Bitmap> {
 
         private final int mId;
         private WeakReference<Context> mCtxt;
@@ -124,9 +130,9 @@ public class Widget extends AppWidgetProvider {
         }
 
         @Override
-        protected Bitmap doInBackground(String... url) {
+        protected Bitmap doInBackground(URL... url) {
             try {
-                return new Net(url[0]).getBitmap();
+                return new Net(url[0].toString()).getBitmap();
             } catch (Throwable e) {
                 e.printStackTrace();
                 mError = e.getMessage();
@@ -228,60 +234,48 @@ public class Widget extends AppWidgetProvider {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String endpointJson) {
             final Context ctxt = mCtxt.get();
             if(ctxt == null) { Log.e(TAG, "Context error (postExecute)"); return; }
 
             try {
-                SharedPreferences prefs = PreferenceManager
-                        .getDefaultSharedPreferences(ctxt);
+                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctxt);
 
-                HashMap<String, Object> api = new ParseGeneric(result)
-                        .getData();
-                boolean statusBool = (Boolean) api.get(ParseGeneric.API_STATUS);
+                final io.spaceapi.types.Status data = SpaceApiParser.parseString(endpointJson);
+
+                boolean statusBool = data.state != null && data.state.open;
+
                 // Update only if different than last status or not forced
                 if (prefs.contains(Main.PREF_LAST_WIDGET + mId)
                         && prefs.getBoolean(Main.PREF_LAST_WIDGET + mId, false) == statusBool
-                        && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId,
-                                false)) {
+                        && !prefs.getBoolean(Main.PREF_FORCE_WIDGET + mId, false)) {
                     Log.d(TAG, "Nothing to update");
                     return;
                 }
 
                 // Mandatory fields
-                String status = ParseGeneric.API_ICON
-                        + ParseGeneric.API_ICON_CLOSED;
-                if (statusBool) {
-                    status = ParseGeneric.API_ICON + ParseGeneric.API_ICON_OPEN;
-                }
-                Editor edit = prefs.edit();
+                final Editor edit = prefs.edit();
                 edit.putBoolean(Main.PREF_LAST_WIDGET + mId, statusBool);
                 edit.apply();
 
                 String status_text = null;
-                if (prefs.getBoolean(Prefs.KEY_WIDGET_TEXT,
-                        Prefs.DEFAULT_WIDGET_TEXT)) {
-                    if (api.containsKey(ParseGeneric.API_STATUS_TXT)) {
-                        status_text = (String) api
-                                .get(ParseGeneric.API_STATUS_TXT);
+                if (prefs.getBoolean(Prefs.KEY_WIDGET_TEXT, Prefs.DEFAULT_WIDGET_TEXT)) {
+                    if (data.state != null && data.state.message != null) {
+                        status_text = data.state.message;
                     } else {
-                        status_text = statusBool ? ctxt.getString(R.string.status_open) :
-                                ctxt.getString(R.string.status_closed);
+                        status_text = statusBool
+                            ? ctxt.getString(R.string.status_open)
+                            : ctxt.getString(R.string.status_closed);
                     }
                 }
 
                 // Status icon or space icon
-                if (api.containsKey(ParseGeneric.API_ICON
-                        + ParseGeneric.API_ICON_OPEN)
-                        && api.containsKey(ParseGeneric.API_ICON
-                                + ParseGeneric.API_ICON_CLOSED)) {
-                    new GetImage(ctxt, mId, status_text).execute((String) api
-                            .get(status));
+                if (data.state != null && data.state.icon != null) {
+                    new GetImage(ctxt, mId, status_text).execute(statusBool ? data.state.icon.open : data.state.icon.closed);
                 } else {
-                    new GetImage(ctxt, mId, status_text).execute((String) api
-                            .get(ParseGeneric.API_LOGO));
+                    new GetImage(ctxt, mId, status_text).execute(new URL(data.logo));
                 }
-            } catch (JSONException e) {
+            } catch (ParseError | MalformedURLException e) {
                 e.printStackTrace();
                 String msg = e.getMessage();
                 printMessage(ctxt, msg);
@@ -304,10 +298,8 @@ public class Widget extends AppWidgetProvider {
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
             if (Main.checkNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
-                final String url = prefs.getString(Main.PREF_API_URL_WIDGET
-                        + widgetId, ParseGeneric.API_DEFAULT);
-                Log.i(TAG, "Update widgetid " + widgetId + " with url "
-                        + url);
+                final String url = prefs.getString(Main.PREF_API_URL_WIDGET + widgetId, Main.API_DEFAULT);
+                Log.i(TAG, "Update widgetid " + widgetId + " with url " + url);
                 new Handler(Looper.getMainLooper())
                         .post(() -> new GetApiTask(ctxt, widgetId).execute(url));
             }

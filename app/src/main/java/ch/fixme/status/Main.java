@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012-2017 Aubort Jean-Baptiste (Rorist)
+ * Copyright (C) 2020 Danilo Bargen
  * Licensed under GNU's GPL 3, see README
  */
 
@@ -19,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,8 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +39,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.UiThread;
 
 import com.woozzu.android.util.StringMatcher;
 import com.woozzu.android.widget.IndexableListView;
@@ -54,18 +57,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 
-import androidx.annotation.UiThread;
+import io.spaceapi.SpaceApiParser;
+import io.spaceapi.types.AccountBalance;
+import io.spaceapi.types.Barometer;
+import io.spaceapi.types.BeverageSupply;
+import io.spaceapi.types.DoorLocked;
+import io.spaceapi.types.Humidity;
+import io.spaceapi.types.MemberCount;
+import io.spaceapi.types.NetworkConnection;
+import io.spaceapi.types.PeoplePresent;
+import io.spaceapi.types.PowerConsumption;
+import io.spaceapi.types.Status;
+import io.spaceapi.types.Temperature;
 
 public class Main extends Activity {
+    protected static final String TAG = "MyHackerspace";
 
     // API: https://spaceapi.io/
 
-    protected static final String TAG = "MyHackerspace";
+    static final String API_DEFAULT = "https://fixme.ch/status.json";
+
     protected static final String PREF_API_URL_WIDGET = "api_url_widget_";
     protected static final String PREF_LAST_WIDGET = "last_widget_";
     protected static final String PREF_FORCE_WIDGET = "force_widget_";
@@ -74,14 +87,16 @@ public class Main extends Activity {
     protected static final String STATE_URL = "url";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST = 1;
-    private static final String TWITTER = "https://twitter.com/";
-    private static final String FOURSQUARE = "https://foursquare.com/v/";
     private static final String MAP_SEARCH = "geo:0,0?q=";
-    private static final String MAP_COORD = "geo:%s,%s?z=23&q=%s&";
+    private static final String MAP_COORD = "geo:%s,%s?z=23&q=";
 
+    // Shared preferences
     private SharedPreferences mPrefs;
+    // Hashmap with the endpoint URL as key and the endpoint JSON string as value
     private HashMap<String, String> mResultHs;
+    // Contains directory endpoint JSON data as string
     public String mResultDir;
+    // The endpoint URL of the currently showing space
     private String mApiUrl;
     private boolean finishApi = false;
     private boolean finishDir = false;
@@ -97,14 +112,22 @@ public class Main extends Activity {
     @UiThread
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Load layout
         setContentView(R.layout.main);
+
+        // Hide views until loaded
         setViewVisibility(false);
+
+        // Load shared prefs
         mPrefs = PreferenceManager.getDefaultSharedPreferences(Main.this);
+
+        // Load data
         mResultHs = new HashMap<>();
         if (checkNetwork()) {
-            Log.d(TAG, "onCreate() intent="+ getIntent().toString());
+            Log.d(TAG, "onCreate() intent=" + getIntent().toString());
             setCache();
-            getHsList(savedInstanceState);
+            getHsList();
             showHsInfo(getIntent());
         } else {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
@@ -281,7 +304,7 @@ public class Main extends Activity {
                 edit.putString(Prefs.KEY_API_URL, url);
                 getApiTask = new GetApiTask();
                 getApiTask.execute(url);
-                edit.commit();
+                edit.apply();
                 setIntent(null);
                 dismissDialog(DIALOG_LIST);
                 Log.i(TAG, "Item clicked=" + url +  " (" + position + ")");
@@ -296,7 +319,10 @@ public class Main extends Activity {
         }
     }
 
-    private void getHsList(Bundle savedInstanceState) {
+    /**
+     * Fetch the directory and update the `mResultDir` variable.
+     */
+    private void getHsList() {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
         if (data == null) {
             Log.d(TAG, "getHsList(fresh data)");
@@ -310,30 +336,34 @@ public class Main extends Activity {
         }
     }
 
-    private void showHsInfo(Intent intent) {
+    /**
+     * Fetch the endpoint and update the `mApiUrl` and `mResultHs` variables.
+     */
+    private void showHsInfo(@Nullable Intent intent) {
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
-        // Get hackerspace api url
-        if(data != null && data.containsKey(STATE_URL)) {
+
+        // Get space endpoint URL
+        if (data != null && data.containsKey(STATE_URL)) {
             Log.d(TAG, "showHsInfo(uri from state)");
             mApiUrl = data.getString(STATE_URL);
-        } else if (intent != null
-                && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+        } else if (intent != null && intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
             Log.d(TAG, "showHsInfo(uri from widget intent)");
             mApiUrl = mPrefs.getString(
                     PREF_API_URL_WIDGET
                             + intent.getIntExtra(
                                     AppWidgetManager.EXTRA_APPWIDGET_ID,
                                     AppWidgetManager.INVALID_APPWIDGET_ID),
-                    ParseGeneric.API_DEFAULT);
+                    API_DEFAULT);
         } else if (intent != null && intent.hasExtra(STATE_HS)) {
             Log.d(TAG, "showHsInfo(uri from intent)");
             mApiUrl = intent.getStringExtra(STATE_HS);
         } else {
             Log.d(TAG, "showHsInfo(uri from prefs)");
-            mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, ParseGeneric.API_DEFAULT);
+            mApiUrl = mPrefs.getString(Prefs.KEY_API_URL, API_DEFAULT);
         }
-        // Get Data
-        if(data != null && data.containsKey(STATE_HS)) {
+
+        // Now that we have the URL, fetch the data
+        if (data != null && data.containsKey(STATE_HS)) {
             Log.d(TAG, "showHsInfo(data from state)");
             finishApi = true;
             mResultHs = (HashMap<String, String>) data.getSerializable(STATE_HS);
@@ -540,24 +570,89 @@ public class Main extends Activity {
         vg.addView(tv);
         return tv;
     }
-    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, int value) {
+
+    /**
+     * Shortcut function. If the value is not null, add it as an entry.
+     */
+    private @Nullable TextView addEntryIfValueNotNull(
+        @NonNull LayoutInflater inflater,
+        @NonNull LinearLayout vg,
+        @Nullable @StringRes int title,
+        @Nullable Object value
+    ) {
+        if (value != null) {
+            return addEntry(inflater, vg, getString(title) + ": " + value.toString());
+        }
+        return null;
+    }
+
+    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, @StringRes int value) {
         return addTitle(inflater, vg, getString(value));
     }
 
-    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, String value) {
-        TextView title = (TextView) inflater.inflate(R.layout.title, null);
+    private TextView addTitle(LayoutInflater inflater, LinearLayout vg, @NonNull String value) {
+        final TextView title = (TextView) inflater.inflate(R.layout.title, null);
         title.setText(value);
         vg.addView(title);
         inflater.inflate(R.layout.separator, vg);
         return title;
     }
 
+    private TextView addSubtitle(LayoutInflater inflater, LinearLayout vg, @StringRes int value) {
+        return addSubtitle(inflater, vg, getString(value));
+    }
+
+    private TextView addSubtitle(LayoutInflater inflater, LinearLayout vg, @NonNull String value) {
+        final TextView title = (TextView) inflater.inflate(R.layout.subtitle, null);
+        title.setText(value);
+        vg.addView(title);
+        return title;
+    }
+
+    /**
+     * Add a sensor with the "sensor" layout.
+     */
+    private void addSensor(
+        @NonNull LayoutInflater inflater,
+        @NonNull LinearLayout vg,
+        @NonNull String value,
+        @Nullable String details1,
+        @Nullable String details2
+    ) {
+        final RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.entry_sensor, null);
+        final TextView viewValue = rl.findViewById(R.id.entry_value);
+        final TextView viewDetails1 = rl.findViewById(R.id.entry_details1);
+        final TextView viewDetails2 = rl.findViewById(R.id.entry_details2);
+        viewValue.setText(value);
+        if (details1 != null) {
+            viewDetails1.setText(details1);
+        } else {
+            viewDetails1.setVisibility(View.GONE);
+        }
+        if (details2 != null) {
+            viewDetails2.setText(details2);
+        } else {
+            viewDetails2.setVisibility(View.GONE);
+        }
+        vg.addView(rl);
+    }
+
+    /**
+     * Parse the endpoint JSON and populate UI with parsed information.
+     */
     private void populateDataHs() {
         try {
             Log.i(TAG, "populateDataHs()=" + mApiUrl);
             setViewVisibility(false);
-            HashMap<String, Object> data = new ParseGeneric(mResultHs.get(mApiUrl))
-                    .getData();
+
+            // Look up endpoint JSOn
+            final String endpointJson = mResultHs.get(mApiUrl);
+            if (endpointJson == null) {
+                throw new IllegalStateException("Endpoint JSON not found");
+            }
+
+            // Parse the JSON string using the `spaceapi-kt` library.
+            final Status data = SpaceApiParser.parseString(endpointJson);
 
             // Initialize views
             LayoutInflater iftr = getLayoutInflater();
@@ -567,234 +662,260 @@ public class Main extends Activity {
             scroll.addView(vg);
 
             // Mandatory fields
-            ((TextView) findViewById(R.id.space_name)).setText((String) data
-                    .get(ParseGeneric.API_NAME));
-            ((TextView) findViewById(R.id.space_url)).setText((String) data
-                    .get(ParseGeneric.API_URL));
+            ((TextView) findViewById(R.id.space_name)).setText(data.space);
+            ((TextView) findViewById(R.id.space_url)).setText(data.url.toString());
             getImageTask = new GetImage(R.id.space_image);
-            getImageTask.execute((String) data.get(ParseGeneric.API_LOGO));
+            getImageTask.execute(data.logo);
 
             // Status text
             String status_txt;
-            if (data.get(ParseGeneric.API_STATUS) == null) {
+            if (data.state == null) {
                 status_txt = getString(R.string.status_unknown);
                 ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_invisible, 0, 0, 0);
-            } else if ((Boolean) data.get(ParseGeneric.API_STATUS)) {
+                    .setCompoundDrawablesWithIntrinsicBounds(
+                        android.R.drawable.presence_invisible, 0, 0, 0);
+            } else if (Boolean.TRUE.equals(data.state.open)) {
                 status_txt = getString(R.string.status_open);
                 ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_online, 0, 0, 0);
+                    .setCompoundDrawablesWithIntrinsicBounds(
+                        android.R.drawable.presence_online, 0, 0, 0);
             } else {
                 status_txt = getString(R.string.status_closed);
                 ((TextView) findViewById(R.id.status_txt))
-                        .setCompoundDrawablesWithIntrinsicBounds(
-                                android.R.drawable.presence_busy, 0, 0, 0);
+                    .setCompoundDrawablesWithIntrinsicBounds(
+                        android.R.drawable.presence_busy, 0, 0, 0);
             }
-            if (data.containsKey(ParseGeneric.API_STATUS_TXT)) {
-                status_txt += ": "
-                        + data.get(ParseGeneric.API_STATUS_TXT);
+            if (data.state.message != null) {
+                status_txt += ": " + data.state.message;
             }
             ((TextView) findViewById(R.id.status_txt)).setText(status_txt);
 
             // Status last change
-            if (data.containsKey(ParseGeneric.API_LASTCHANGE)) {
-                addEntry(iftr, vg, getString(R.string.api_lastchange) + " "
-                        + data.get(ParseGeneric.API_LASTCHANGE));
-            }
-
-            // Status duration
-            if (data.containsKey(ParseGeneric.API_EXT_DURATION)
-                    && data.get(ParseGeneric.API_STATUS) != null
-                    && (Boolean) data.get(ParseGeneric.API_STATUS)) {
-                addEntry(iftr, vg, getString(R.string.api_duration) + " "
-                        + data.get(ParseGeneric.API_EXT_DURATION)
-                        + getString(R.string.api_duration_hours));
+            if (data.state != null && data.state.lastchange != null) {
+                // TODO: Do we need to properly format the date? Maybe using relative time?
+                addEntry(iftr, vg, getString(R.string.api_lastchange) + " " + data.state.lastchange);
             }
 
             // Location
-            Pattern ptn = Pattern.compile("^.*$", Pattern.DOTALL);
-            if (data.containsKey(ParseGeneric.API_ADDRESS)
-                    || data.containsKey(ParseGeneric.API_LON)) {
+            addTitle(iftr, vg, R.string.api_location);
+            TextView latLonTv = addEntry(iftr, vg, data.location.lon + ", " + data.location.lat);
+            Linkify.addLinks(
+                latLonTv,
+                Pattern.compile("^.*$", Pattern.DOTALL),
+                String.format(MAP_COORD, data.location.lat, data.location.lon)
+            );
 
-                addTitle(iftr, vg, R.string.api_location);
-
-                // Address
-                if (data.containsKey(ParseGeneric.API_ADDRESS)) {
-                    TextView tv = addEntry(iftr, vg, (String) data.get(ParseGeneric.API_ADDRESS));
-                    Linkify.addLinks(tv, ptn, MAP_SEARCH);
-                }
-                // Lon/Lat
-                if (data.containsKey(ParseGeneric.API_LON)
-                        && data.containsKey(ParseGeneric.API_LAT)) {
-                    TextView tv = addEntry(iftr, vg, data.get(ParseGeneric.API_LON) + ", "
-                            + data.get(ParseGeneric.API_LAT));
-                    String addr = (data.containsKey(ParseGeneric.API_ADDRESS)) ? (String) data
-                            .get(ParseGeneric.API_ADDRESS) : getString(R.string.empty);
-                    Linkify.addLinks(tv, ptn, String.format(MAP_COORD,
-                            data.get(ParseGeneric.API_LAT), data.get(ParseGeneric.API_LON), addr));
-                }
+            // Postal address
+            if (data.location.address != null) {
+                addTitle(iftr, vg, R.string.api_postal_addr);
+                addEntry(iftr, vg, data.location.address);
             }
 
             // Contact
-            if (data.containsKey(ParseGeneric.API_PHONE)
-                    || data.containsKey(ParseGeneric.API_TWITTER)
-                    || data.containsKey(ParseGeneric.API_IRC)
-                    || data.containsKey(ParseGeneric.API_EMAIL)
-                    || data.containsKey(ParseGeneric.API_ML)) {
+            addTitle(iftr, vg, R.string.api_contact);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_phone, data.contact.phone);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_sip, data.contact.sip);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_email, data.contact.email);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_ml, data.contact.ml);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_irc, data.contact.irc);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_twitter, data.contact.twitter);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_identica, data.contact.identica);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_mastodon, data.contact.identica);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_facebook, data.contact.facebook); // Eeeew!
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_foursquare, data.contact.foursquare);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_xmpp, data.contact.xmpp);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_gopher, data.contact.gopher);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_matrix, data.contact.matrix);
+            addEntryIfValueNotNull(iftr, vg, R.string.api_contact_mumble, data.contact.mumble);
 
-                addTitle(iftr, vg, R.string.api_contact);
+            // Sensors: Space
+            if (data.sensors != null && (
+                data.sensors.people_now_present.length > 0
+                    || data.sensors.door_locked.length > 0
+                    || data.sensors.beverage_supply.length > 0
+                    || data.sensors.power_consumption.length > 0
+                    || data.sensors.network_connections.length > 0
+                /*|| data.sensors.network_traffic.length > 0*/
+            )) {
+                addTitle(iftr, vg, getString(R.string.api_sensors) + ": " + getString(R.string.api_sensors_space));
 
-                if (data.containsKey(ParseGeneric.API_PHONE)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_PHONE));
+                // People present
+                if (data.sensors.people_now_present.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_people_now_present);
+                    for (PeoplePresent entry : data.sensors.people_now_present) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%d", entry.value),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
                 }
-                if (data.containsKey(ParseGeneric.API_SIP)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_SIP));
-                }
-                if (data.containsKey(ParseGeneric.API_TWITTER)) {
-                    addEntry(iftr, vg, TWITTER
-                            + ((String) data.get(ParseGeneric.API_TWITTER)).replace("@", ""));
-                }
-                if (data.containsKey(ParseGeneric.API_IDENTICA)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_IDENTICA));
-                }
-                if (data.containsKey(ParseGeneric.API_FOURSQUARE)) {
-                    addEntry(iftr, vg, FOURSQUARE + data.get(ParseGeneric.API_FOURSQUARE));
-                }
-                if (data.containsKey(ParseGeneric.API_IRC)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_IRC));
-                }
-                if (data.containsKey(ParseGeneric.API_EMAIL)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_EMAIL));
-                }
-                if (data.containsKey(ParseGeneric.API_JABBER)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_JABBER));
-                }
-                if (data.containsKey(ParseGeneric.API_ML)) {
-                    addEntry(iftr, vg, (String) data.get(ParseGeneric.API_ML));
-                }
-            }
 
-            // Sensors
-            if (data.containsKey(ParseGeneric.API_SENSORS)) {
+                // Door status
+                if (data.sensors.door_locked.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_door_locked);
+                    for (DoorLocked entry : data.sensors.door_locked) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            getString(entry.value ? R.string.api_sensor_door_locked_yes : R.string.api_sensor_door_locked_no),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
 
-                addTitle(iftr, vg, R.string.api_sensors);
+                // Beverage supply
+                if (data.sensors.beverage_supply.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_beverage_supply);
+                    for (BeverageSupply entry : data.sensors.beverage_supply) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.1f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
 
-                HashMap<String, ArrayList<HashMap<String, String>>> sensors =
-                        (HashMap<String, ArrayList<HashMap<String, String>>>)
-                                data.get(ParseGeneric.API_SENSORS);
-                Set<String> names = sensors.keySet();
-                for (String name : names) {
+                // Power consumption
+                if (data.sensors.power_consumption.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_power_consumption);
+                    for (PowerConsumption entry : data.sensors.power_consumption) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.1f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
 
-                    // Subtitle
-                    String name_title = name.toLowerCase(Locale.getDefault()).replace("_", " ");
-                    name_title = name_title.substring(0, 1).toUpperCase(Locale.getDefault())
-                            + name_title.substring(1, name_title.length());
-                    TextView subtitle = (TextView) iftr.inflate(
-                            R.layout.subtitle, null);
-                    subtitle.setText(name_title);
-                    vg.addView(subtitle);
-
-                    // Sensors data
-                    ArrayList<HashMap<String, String>> sensorsData = sensors
-                            .get(name);
-                    for (HashMap<String, String> elem : sensorsData) {
-                        RelativeLayout rl = (RelativeLayout) iftr.inflate(
-                                R.layout.entry_sensor, null);
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_VALUE)) {
-                            ((TextView) rl.findViewById(R.id.entry_value))
-                                    .setText(elem.get(ParseGeneric.API_SENSOR_VALUE));
-                        } else {
-                            rl.findViewById(R.id.entry_value).setVisibility(
-                                    View.GONE);
+                // Network connections
+                if (data.sensors.network_connections.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_network_connections);
+                    for (NetworkConnection entry : data.sensors.network_connections) {
+                        String details = Utils.joinStrings(" / ", entry.location, entry.name);
+                        if (details != null && entry.type != null) {
+                            details += " (" + entry.type + ")";
+                        } else if (entry.type != null) {
+                            details = entry.type;
                         }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_UNIT)) {
-                            ((TextView) rl.findViewById(R.id.entry_unit))
-                                    .setText(elem.get(ParseGeneric.API_SENSOR_UNIT));
-                        } else {
-                            rl.findViewById(R.id.entry_unit).setVisibility(
-                                    View.GONE);
-                        }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_NAME)) {
-                            ((TextView) rl.findViewById(R.id.entry_name))
-                                    .setText(elem.get(ParseGeneric.API_SENSOR_NAME));
-                        } else {
-                            rl.findViewById(R.id.entry_name).setVisibility(
-                                    View.GONE);
-                        }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_LOCATION)) {
-                            ((TextView) rl.findViewById(R.id.entry_location))
-                                    .setText(elem
-                                            .get(ParseGeneric.API_SENSOR_LOCATION));
-                        } else {
-                            rl.findViewById(R.id.entry_location).setVisibility(
-                                    View.GONE);
-                        }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_DESCRIPTION)) {
-                            ((TextView) rl.findViewById(R.id.entry_description))
-                                    .setText(elem
-                                            .get(ParseGeneric.API_SENSOR_DESCRIPTION));
-                        } else {
-                            rl.findViewById(R.id.entry_description)
-                                    .setVisibility(View.GONE);
-                        }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_PROPERTIES)) {
-                            ((TextView) rl.findViewById(R.id.entry_properties))
-                                    .setText(elem
-                                            .get(ParseGeneric.API_SENSOR_PROPERTIES));
-                        } else {
-                            rl.findViewById(R.id.entry_properties)
-                                    .setVisibility(View.GONE);
-                        }
-                        if (elem.containsKey(ParseGeneric.API_SENSOR_MACHINES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other))
-                                    .setText(elem
-                                            .get(ParseGeneric.API_SENSOR_MACHINES));
-                        } else if (elem.containsKey(ParseGeneric.API_SENSOR_NAMES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other))
-                                    .setText(elem.get(ParseGeneric.API_SENSOR_NAMES));
-                        } else {
-                            rl.findViewById(R.id.entry_other).setVisibility(
-                                    View.GONE);
-                        }
-                        vg.addView(rl);
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%d", entry.value),
+                            details,
+                            entry.description
+                        );
                     }
                 }
             }
 
-            // Stream and cam
-            if (data.containsKey(ParseGeneric.API_STREAM)
-                    || data.containsKey(ParseGeneric.API_CAM)) {
+            // Sensors: Environment
+            if (data.sensors != null && (
+                data.sensors.temperature.length > 0
+                    || data.sensors.humidity.length > 0
+                    || data.sensors.barometer.length > 0
+                    || data.sensors.wind.length > 0
+            )) {
+                addTitle(iftr, vg, getString(R.string.api_sensors) + ": " + getString(R.string.api_sensors_environment));
 
-                addTitle(iftr, vg, R.string.api_stream);
-
-                // Stream
-                if (data.containsKey(ParseGeneric.API_STREAM)) {
-                    HashMap<String, String> stream = (HashMap<String, String>) data
-                            .get(ParseGeneric.API_STREAM);
-                    for (Entry<String, String> entry : stream.entrySet()) {
-                        final String type = entry.getKey();
-                        final String url = entry.getValue();
-                        TextView tv = addEntry(iftr, vg, url);
-                        tv.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setDataAndType(Uri.parse(url), type);
-                                startActivity(i);
-                            }
-                        });
+                // Temperature
+                if (data.sensors.temperature.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_temperature);
+                    for (Temperature entry : data.sensors.temperature) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.1f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
                     }
                 }
-                // Cam
-                if (data.containsKey(ParseGeneric.API_CAM)) {
-                    ArrayList<String> cams = (ArrayList<String>) data
-                            .get(ParseGeneric.API_CAM);
-                    for (String value : cams) {
-                        addEntry(iftr, vg, value);
+
+                // Humidity
+                if (data.sensors.humidity.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_humidity);
+                    for (Humidity entry : data.sensors.humidity) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.1f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
+
+                // Air pressure
+                if (data.sensors.barometer.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_barometer);
+                    for (Barometer entry : data.sensors.barometer) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.1f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
+
+                // Missing: Wind (not used by any space right now)
+                // and Radiation (I don't know how to interpret and visualize the measurements in a meaningful way)
+            }
+
+            // Sensors: Organization
+            if (data.sensors != null && (
+                data.sensors.total_member_count.length > 0
+                    || data.sensors.account_balance.length > 0
+            )) {
+                addTitle(iftr, vg, getString(R.string.api_sensors) + ": " + getString(R.string.api_sensors_organization));
+
+                // Total Member Count
+                if (data.sensors.total_member_count.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_total_member_count);
+                    for (MemberCount entry : data.sensors.total_member_count) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%d", entry.value),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
+                    }
+                }
+
+                // Account balance
+                if (data.sensors.account_balance.length > 0) {
+                    addSubtitle(iftr, vg, R.string.api_sensor_account_balance);
+                    for (AccountBalance entry : data.sensors.account_balance) {
+                        addSensor(
+                            iftr,
+                            vg,
+                            String.format("%.2f %s", entry.value, entry.unit),
+                            Utils.joinStrings(" / ", entry.location, entry.name),
+                            entry.description
+                        );
                     }
                 }
             }
+
+            // Webcams
+            if (data.cam.length > 0) {
+                addTitle(iftr, vg, R.string.api_webcams);
+                for (String url : data.cam) {
+                    final TextView tv = addEntry(iftr, vg, url);
+                    Linkify.addLinks(tv, Pattern.compile("^.*$", Pattern.DOTALL), null);
+                }
+            }
+
             setViewVisibility(true);
         } catch (Exception e) {
             e.printStackTrace();
