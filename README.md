@@ -1,33 +1,35 @@
-My Hackerspace
-==============
+# My Hackerspace
+
+<a href="https://play.google.com/store/apps/details?id=ch.fixme.status"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+<a href="https://f-droid.org/repository/browse/?fdid=ch.fixme.status"><img width="200" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid"></a>
+
+This is an Android app with the following featuress:
 
 - Status of hackerspaces using the [SpaceAPI](https://spaceapi.io/)
 - Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
-- Available on [f-droid](https://f-droid.org/repository/browse/?fdid=ch.fixme.status) and [play store](https://play.google.com/store/apps/details?id=ch.fixme.status)
 
-Master branch: [![Build Status](https://travis-ci.org/fixme-lausanne/MyHackerspace.svg?branch=master)](https://travis-ci.org/fixme-lausanne/MyHackerspace)
+The app was originally developed in 2012 by [@rorist] from [FIXME Lausanne]. In
+2021, the app was transferred to the [SpaceAPI community repositories] and is
+now mainly being developed by members of [Coredump].
 
-HOW TO COMPILE
-=============
+[@rorist]: https://github.com/rorist
+[FIXME Lausanne]: https://fixme.ch/
+[SpaceAPI community repositories]: https://github.com/spaceapi-community/
+[Coredump]: https://www.coredump.ch/
+
+## How to Compile
 
 First, get the sources.
 
-    git clone --recursive https://github.com/fixme-lausanne/MyHackerspace.git
-    cd MyHackerspace
+    git clone --recursive https://github.com/spaceapi-community/my-hackerspace.git
+    cd my-hackerspace
 
-Get the 3rd party librairies
-
-    git submodule init
-    git submodule update
-
-Android Studio
---------------
+### Android Studio
 
 With Android Studio, simply open the project directory and you should be set.
 
-Command Line
-------------
+### Command Line
 
 You can build the project using Gradle.
 
@@ -56,8 +58,7 @@ To see other tasks that gradle offers, run
 
     ./gradlew tasks
 
-LOCAL DIRECTORY
-===============
+## Local Directory
 
 For testing purposes you can run a local directory using this technique:
 
@@ -71,9 +72,7 @@ For testing purposes you can run a local directory using this technique:
 * Go in the app preferences and set the OpenSpaceDirectory URL to the following:
     `https://10.0.2.3:8443/directory.json`
 
-TODO
-====
+## TODO
 
 - Auto recognize field types in the API (array, obj, string, etc)
 - Integrate woozzu library as 3rd party
-
