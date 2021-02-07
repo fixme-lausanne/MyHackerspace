@@ -1,7 +1,6 @@
 # My Hackerspace
 
-<a href="https://play.google.com/store/apps/details?id=ch.fixme.status"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
-<a href="https://f-droid.org/repository/browse/?fdid=ch.fixme.status"><img width="200" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid"></a>
+[![Build status](https://circleci.com/gh/spaceapi-community/my-hackerspace.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/spaceapi-community/my-hackerspace)
 
 This is an Android app with the following featuress:
 
@@ -17,6 +16,9 @@ now mainly being developed by members of [Coredump].
 [FIXME Lausanne]: https://fixme.ch/
 [SpaceAPI community repositories]: https://github.com/spaceapi-community/
 [Coredump]: https://www.coredump.ch/
+
+<a href="https://play.google.com/store/apps/details?id=ch.fixme.status"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+<a href="https://f-droid.org/repository/browse/?fdid=ch.fixme.status"><img width="200" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid"></a>
 
 ## How to Compile
 
