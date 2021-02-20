@@ -1,10 +1,16 @@
+<div align="center">
+  <!-- Centered README header hack -->
+  <img width="280" src="app/src/main/res/app-icon/myhackerspace.png">
+  <br><br>
+</div>
+
 # My Hackerspace
 
 [![Build status](https://circleci.com/gh/spaceapi-community/my-hackerspace.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/spaceapi-community/my-hackerspace)
 
-This is an Android app with the following featuress:
+This is an Android app with the following features:
 
-- Status of hackerspaces using the [SpaceAPI](https://spaceapi.io/)
+- Show the opening status of hacker- and makerspaces using the [SpaceAPI](https://spaceapi.io/)
 - Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
 
@@ -17,7 +23,7 @@ now mainly being developed by members of [Coredump].
 [SpaceAPI community repositories]: https://github.com/spaceapi-community/
 [Coredump]: https://www.coredump.ch/
 
-<a href="https://play.google.com/store/apps/details?id=ch.fixme.status"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+<a href="https://play.google.com/store/apps/details?id=io.spaceapi.myhackerspace"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
 <a href="https://f-droid.org/repository/browse/?fdid=ch.fixme.status"><img width="200" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid"></a>
 
 ## How to Compile
@@ -73,8 +79,3 @@ For testing purposes you can run a local directory using this technique:
     `./serv.py`
 * Go in the app preferences and set the SpaceAPI directory URL to the following:
     `https://10.0.2.3:8443/directory.json`
-
-## TODO
-
-- Auto recognize field types in the API (array, obj, string, etc)
-- Integrate woozzu library as 3rd party

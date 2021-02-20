@@ -1,123 +1,144 @@
-RELEASE NOTES
-=============
+# CHANGELOG
 
-2017-01-XX / 1.8.3
----
+Possible tags:
 
-    - Change links from SpaceAPI.net to SpaceDirectory.org
-    - Display all webcams
+- [info] An information not directly related to code changes
+- [feature] A new feature or an improvement
+- [bug] A bugfix
+- [change] A change that's neither a feature nor a bugfix
+- [i18n] Internationalization / translation
 
-2016-07-02 / 1.8.2
----
+## v2.0.0 (2021-02-20)
 
-    - Fix camera and stream url being displayed
-    - Fix twitter link to the new url format
+- [info] App was re-released by the SpaceAPI project under a new package name ([#1][i1])
+- [info] GitHub is now at https://github.com/spaceapi-community/my-hackerspace/
+- [info] The app now requires at least Android 5 (API 21) ([#75][i75])
+- [feature] Support for SpaceAPI v14 ([#85][i85])
+- [feature] New app launcher icon ([#3][i3])
+- [feature] More modern icons in app UI ([#74][i74])
+- [bug] Don't save empty data in application state ([#64][i64])
+- [change] Update all domains to spaceapi.io ([#65][i65], [#71][i71])
+- [change] Switch to Java 8 ([#73][i73])
+- [change] Remove MemorizingTrustManager ([#65][i65])
+- [change] Upgrade dependencies ([#69][i69])
+- [change] Switch to CircleCI ([#69][i69])
+- [change] Add support for annotations ([#77][i77])
+- [i18n] Improved translations
 
-2016-05-06 / 1.8.1
----
+[i1]: https://github.com/spaceapi-community/my-hackerspace/pull/1
+[i3]: https://github.com/spaceapi-community/my-hackerspace/pull/3
+[i64]: https://github.com/fixme-lausanne/MyHackerspace/pull/64
+[i65]: https://github.com/fixme-lausanne/MyHackerspace/pull/65
+[i69]: https://github.com/fixme-lausanne/MyHackerspace/pull/69
+[i71]: https://github.com/fixme-lausanne/MyHackerspace/pull/71
+[i73]: https://github.com/fixme-lausanne/MyHackerspace/pull/73
+[i74]: https://github.com/fixme-lausanne/MyHackerspace/pull/74
+[i75]: https://github.com/fixme-lausanne/MyHackerspace/pull/75
+[i77]: https://github.com/fixme-lausanne/MyHackerspace/pull/77
+[i85]: https://github.com/fixme-lausanne/MyHackerspace/pull/85
 
-    - Uses custom API directory end point (https://spaceapi.fixme.ch/directory.json)
-    - Allow editing of the API directory end point and the current hackerspace API
-    - Add Danish translation (thanks Mikkel)
+## v1.8.3 (2017-01-XX)
 
-2016-04-14 / 1.8
----
+- Change links from SpaceAPI.net to SpaceDirectory.org
+- Display all webcams
 
-    - Supports invalid SSL certificates
-    - Allow widget to be resized
-    - Add Dutch translation
-    - Fix http to https redirection
-    - General fixes
+## v1.8.2 (2016-07-02)
 
-2014-08-26 / 1.7.4.1
--------
+- Fix camera and stream url being displayed
+- Fix twitter link to the new url format
 
-    - Fix crash when there's no error message
+## v1.8.1 (2016-05-06)
 
-2014-08-07 / 1.7.4
----
+- Uses custom API directory end point (https://spaceapi.fixme.ch/directory.json)
+- Allow editing of the API directory end point and the current hackerspace API
+- Add Danish translation (thanks Mikkel)
 
-    - German translation (thanks to Lokke and Phervieux)
-    - Better hs list with alphabetical index
-    - Better errors messages
-    - Caching for http requests (images, hs directory)
-    - Add status message to the widget (thanks Fpletz)
-    - Fix bugs: widget updates, ignore ext fields, click from widget
+## v1.8 (2016-04-14)
 
-2013-10-25 / 1.7.3
------
+- Supports invalid SSL certificates
+- Allow widget to be resized
+- Add Dutch translation
+- Fix http to https redirection
+- General fixes
 
-    - Fix regression with widget custom open/close logo
-    - Fix order of hackerspaces with different cases
+## v1.7.4.1 (2014-08-26)
 
-2013-09-09 / 1.7.2
------
+- Fix crash when there's no error message
 
-    - Better layout for sensors
-    - Support more fields for sensors (machines, names, properties)
+## v1.7.4 (2014-08-07)
 
-2013-09-06 / 1.7.1
------
+- German translation (thanks to Lokke and Phervieux)
+- Better hs list with alphabetical index
+- Better errors messages
+- Caching for http requests (images, hs directory)
+- Add status message to the widget (thanks Fpletz)
+- Fix bugs: widget updates, ignore ext fields, click from widget
 
-    - Faster http requests (Use DefaultHttpClient instead of HttpURLConnection)
+## v1.7.3 (2013-10-25)
 
-2013-09-05 / 1.7
------
+- Fix regression with widget custom open/close logo
+- Fix order of hackerspaces with different cases
 
-    - Full support of SpaceAPI 0.13, drops mixed api definition: hackerspaces must comply to the level they declare!
-    - Widget transparency preference added (by default transparency is deactivated)
+## v1.7.2 (2013-09-09)
 
-2013-06-04 / 1.6.1
------
+- Better layout for sensors
+- Support more fields for sensors (machines, names, properties)
 
-    - French translation
-    - Fix the widget's image not updating
-    - Change to the new spaceapi url
+## v1.7.1 (2013-09-06)
 
-2013-01-02 / 1.6
----
+- Faster http requests (Use DefaultHttpClient instead of HttpURLConnection)
 
-    - Better layout in general
-    - Use Holo light theme for Android >=3
-    - Refresh the current hackerspace
-    - Default to 15mn for the Widget
-    - Settings button to change the widget interval
-    - Fix lat/lon link
-    - Fix crash when maps/email app not found
+## v1.7 (2013-09-05)
 
-2012-10-29 / 1.5.1
------
+- Full support of SpaceAPI 0.13, drops mixed api definition: hackerspaces must comply to the level they declare!
+- Widget transparency preference added (by default transparency is deactivated)
 
-    - Bug fixes
-    - Add a spinner when loading image
-    - Faster download
+## v1.6.1 (2013-06-04)
 
-2012-05-19 / 1.5
----
+- French translation
+- Fix the widget's image not updating
+- Change to the new spaceapi url
 
-    - Only download image if there is a change of state (better battery live and reduce network usage)
+## v1.6 (2013-01-02)
 
-2012-05-15 / 1.4
----
+- Better layout in general
+- Use Holo light theme for Android >=3
+- Refresh the current hackerspace
+- Default to 15mn for the Widget
+- Settings button to change the widget interval
+- Fix lat/lon link
+- Fix crash when maps/email app not found
 
-    - Add Cam and Stream links if present
-    - Link for adresses opening GMaps
-    - Sort Hackerspaces by name
-    - Accept untrusted SSL certificates
-    - Better error reporting
-    - BUGFIX: Theme shoud be correct on all devices/versions
-    - BUGFIX: Should work after reboot correctly
+## v1.5.1 (2012-10-29)
 
-2012-05-08 / 1.3
----
+- Bug fixes
+- Add a spinner when loading image
+- Faster download
 
-    - White theme by default (may break on samsung devices)
-    - Check if network is enabled
-    - Handle rotation correctly
+## v1.5 (2012-05-19)
 
-2012-05-06 / 1.2
-2012-05-04 / 1.1
-2012-04-29 / 1.0
----
+- Only download image if there is a change of state (better battery live and reduce network usage)
 
-    - Initial release
+## v1.4 (2012-05-15)
+
+- Add Cam and Stream links if present
+- Link for adresses opening GMaps
+- Sort Hackerspaces by name
+- Accept untrusted SSL certificates
+- Better error reporting
+- BUGFIX: Theme shoud be correct on all devices/versions
+- BUGFIX: Should work after reboot correctly
+
+## v1.3 (2012-05-08)
+
+- White theme by default (may break on samsung devices)
+- Check if network is enabled
+- Handle rotation correctly
+
+## v1.2 (2012-05-06)
+
+## v1.1 (2012-05-04)
+
+## v1.0 (2012-04-29)
+
+- Initial release
