@@ -1,6 +1,6 @@
 <div align="center">
   <!-- Centered README header hack -->
-  <img width="280" src="app/src/main/res/app-icon/myhackerspace.png">
+  <img width="280" src="graphics/myhackerspace.png">
   <br><br>
 </div>
 
