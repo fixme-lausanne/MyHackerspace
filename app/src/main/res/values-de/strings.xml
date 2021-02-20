@@ -37,14 +37,14 @@ Licensed under GNU's GPL 3, see README
     <string name="error_network_msg">Netzwerk deaktiviert</string>
     <string name="error_generic">\n\nÜberprüfe, ob die API der Version entspricht, welche angegeben wurde!\n\nSiehe https://spaceapi.io/</string>
 
-    <string name="prefs_api_title">SpaceAPI Endpoint</string>
+    <string name="prefs_api_title">SpaceAPI Directory-URL</string>
     <string name="prefs_api_summary">URL zum globalen SpaceAPI-Directory (directory.json)\nBeispiel:\nhttps://directory.spaceapi.io/</string>
-    <string name="prefs_api_url_title">Aktuelle Hackerspace-API</string>
-    <string name="prefs_api_url_summary">Aktuelle Hackerspace-API überladen (geht verloren, wenn ein anderer Hackerspace in der Liste gewählt wird)</string>
+    <string name="prefs_api_url_title">SpaceAPI Endpunkt-URL</string>
+    <string name="prefs_api_url_summary">Aktuelle SpaceAPI Endpunkt-URL überladen (geht verloren, wenn ein anderer Space in der Liste gewählt wird)</string>
     <string name="prefs_interval_title">Aktualisierungsintervall</string>
-    <string name="prefs_interval_summary">Zeitspanne,, in der das Widget den tatsächlichen Status überprüft.</string>
+    <string name="prefs_interval_summary">Zeitspanne, in der das Widget den tatsächlichen Status überprüft.</string>
     <string name="prefs_transparent_title">Transparentes Widget</string>
-    <string name="prefs_transparent_summary">Das Hintengrundbild des Widgets wird transparent statt grau dargestellt.</string>                
+    <string name="prefs_transparent_summary">Das Hintergrundbild des Widgets wird transparent statt grau dargestellt.</string>                
     <string name="prefs_text_title">Widget-Statustext</string>
     <string name="prefs_text_summary">Statustext unter dem Widget hinzufügen</string>        
 

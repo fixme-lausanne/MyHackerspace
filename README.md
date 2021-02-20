@@ -71,7 +71,7 @@ For testing purposes you can run a local directory using this technique:
     `sudo ifconfig eth0 10.0.2.3`
 * On the host, go to the test directory and run the serv.py script:
     `./serv.py`
-* Go in the app preferences and set the OpenSpaceDirectory URL to the following:
+* Go in the app preferences and set the SpaceAPI directory URL to the following:
     `https://10.0.2.3:8443/directory.json`
 
 ## TODO
