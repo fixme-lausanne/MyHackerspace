@@ -13,7 +13,7 @@ public class Network extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context ctxt, Intent intent) {
-        if (Main.checkNetwork(ctxt)) {
+        if (Main.hasNetwork(ctxt)) {
             Log.i(Main.TAG, "Update widget on " + intent.getAction());
             Widget.UpdateAllWidgets(ctxt, true);
         } else {

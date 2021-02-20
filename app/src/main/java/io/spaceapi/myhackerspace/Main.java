@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import io.spaceapi.SpaceApiParser;
@@ -124,7 +125,7 @@ public class Main extends Activity {
 
         // Load data
         mResultHs = new HashMap<>();
-        if (checkNetwork()) {
+        if (hasNetwork()) {
             Log.d(TAG, "onCreate() intent=" + getIntent().toString());
             setCache();
             getHsList();
@@ -166,24 +167,23 @@ public class Main extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.menu_refresh:
-            if (checkNetwork()){
+        final int id = item.getItemId();
+        if (id == R.id.menu_refresh) {
+            if (hasNetwork()) {
                 showHsInfo(getIntent());
             } else {
                 showError(getString(R.string.error_title) + getString(R.string.error_network_title),
-                        getString(R.string.error_network_msg));
+                    getString(R.string.error_network_msg));
             }
             return true;
-        case R.id.menu_choose:
+        } else if (id == R.id.menu_choose) {
             showDialog(DIALOG_LIST);
             return true;
-        case R.id.menu_prefs:
+        } else if (id == R.id.menu_prefs) {
             startActivity(new Intent(Main.this, Prefs.class));
             return true;
-        default:
-            return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -217,14 +217,14 @@ public class Main extends Activity {
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        AlertDialog dialog = null;
+        ProgressDialog dialog = null;
         switch (id) {
         case DIALOG_LOADING:
             dialog = new ProgressDialog(this);
             dialog.setCancelable(false);
             dialog.setMessage(getString(R.string.msg_loading));
             dialog.setCancelable(true);
-            ((ProgressDialog) dialog).setIndeterminate(true);
+            dialog.setIndeterminate(true);
             break;
         case DIALOG_LIST:
             return createHsDialog();
@@ -382,14 +382,20 @@ public class Main extends Activity {
         Widget.UpdateAllWidgets(getApplicationContext(), false);
     }
 
-    private boolean checkNetwork() {
-        return checkNetwork(getApplicationContext());
+    /**
+     * Return whether the phone has an active network connection or not.
+     */
+    private boolean hasNetwork() {
+        return hasNetwork(getApplicationContext());
     }
 
-    protected static boolean checkNetwork(Context ctxt) {
-        ConnectivityManager cm = (ConnectivityManager) ctxt
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+    /**
+     * Return whether the phone has an active network connection or not.
+     */
+    protected static boolean hasNetwork(Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo netInfo = Objects.requireNonNull(cm).getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
     }
 

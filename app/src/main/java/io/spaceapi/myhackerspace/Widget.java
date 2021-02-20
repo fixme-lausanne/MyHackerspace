@@ -25,16 +25,12 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 import io.spaceapi.ParseError;
 import io.spaceapi.SpaceApiParser;
-import io.spaceapi.types.Status;
 
 public class Widget extends AppWidgetProvider {
 
@@ -297,7 +293,7 @@ public class Widget extends AppWidgetProvider {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(ctxt);
-            if (Main.checkNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
+            if (Main.hasNetwork(ctxt) && prefs.contains(Main.PREF_API_URL_WIDGET + widgetId)) {
                 final String url = prefs.getString(Main.PREF_API_URL_WIDGET + widgetId, Main.API_DEFAULT);
                 Log.i(TAG, "Update widgetid " + widgetId + " with url " + url);
                 new Handler(Looper.getMainLooper())
