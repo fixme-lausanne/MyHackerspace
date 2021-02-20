@@ -8,9 +8,9 @@
 
 [![Build status](https://circleci.com/gh/spaceapi-community/my-hackerspace.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/spaceapi-community/my-hackerspace)
 
-This is an Android app with the following featuress:
+This is an Android app with the following features:
 
-- Status of hackerspaces using the [SpaceAPI](https://spaceapi.io/)
+- Show the opening status of hacker- and makerspaces using the [SpaceAPI](https://spaceapi.io/)
 - Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
 
@@ -79,8 +79,3 @@ For testing purposes you can run a local directory using this technique:
     `./serv.py`
 * Go in the app preferences and set the SpaceAPI directory URL to the following:
     `https://10.0.2.3:8443/directory.json`
-
-## TODO
-
-- Auto recognize field types in the API (array, obj, string, etc)
-- Integrate woozzu library as 3rd party
