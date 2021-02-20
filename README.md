@@ -1,3 +1,9 @@
+<div align="center">
+  <!-- Centered README header hack -->
+  <img width="280" src="app/src/main/res/app-icon/myhackerspace.png">
+  <br><br>
+</div>
+
 # My Hackerspace
 
 [![Build status](https://circleci.com/gh/spaceapi-community/my-hackerspace.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/spaceapi-community/my-hackerspace)
