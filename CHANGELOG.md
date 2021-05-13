@@ -8,6 +8,12 @@ Possible tags:
 - [change] A change that's neither a feature nor a bugfix
 - [i18n] Internationalization / translation
 
+## v2.0.1 (2021-05-14)
+
+- [bug] Fix refresh button ([#5][i5])
+
+[i5]: https://github.com/spaceapi-community/my-hackerspace/pull/5
+
 ## v2.0.0 (2021-02-20)
 
 - [info] App was re-released by the SpaceAPI project under a new package name ([#1][i1])
