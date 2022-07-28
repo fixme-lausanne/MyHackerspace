@@ -1,0 +1,14 @@
+- [info] App was re-released by the SpaceAPI project under a new package name
+- [info] GitHub is now at https://github.com/spaceapi-community/my-hackerspace/
+- [info] The app now requires at least Android 5 (API 21)
+- [feature] Support for SpaceAPI v14
+- [feature] New app launcher icon
+- [feature] More modern icons in app UI
+- [bug] Don't save empty data in application state
+- [change] Update all domains to spaceapi.io
+- [change] Switch to Java 8
+- [change] Remove MemorizingTrustManager
+- [change] Upgrade dependencies
+- [change] Switch to CircleCI
+- [change] Add support for annotations
+- [i18n] Improved translations

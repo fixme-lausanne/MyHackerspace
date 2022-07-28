@@ -1,0 +1,15 @@
+<p>View information about hacker- and makerspaces registered in the
+<a href="https://spaceapi.io/">SpaceAPI</a> directory. This includes:</p>
+
+<ul>
+    <li>Location and contact information</li>
+    <li>Opening status</li>
+    <li>Sensor values</li>
+    <li>...and much more!</li>
+</ul>
+
+<strong>History</strong>
+
+<p>This app was originally developed in 2012 by @rorist from FIXME Lausanne. In
+2021, the app was transferred to the SpaceAPI community repositories and is now
+mainly being developed by members of Coredump.</p>
