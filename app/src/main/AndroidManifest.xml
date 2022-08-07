@@ -26,7 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".NewVersionActivity"
+            android:exported="false" />
         <activity
             android:name=".Prefs"
             android:label="@string/app_name"

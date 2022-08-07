@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
 import android.util.Log;
@@ -110,6 +111,12 @@ public class Main extends Activity {
             showError(getString(R.string.error_title) + getString(R.string.error_network_title),
                     getString(R.string.error_network_msg));
         }
+
+        // Show info about new app after 1s
+        new Handler().postDelayed(() -> {
+            final Intent intent = new Intent(this, NewVersionActivity.class);
+            startActivity(intent);
+        }, 1000);
     }
 
     @Override
