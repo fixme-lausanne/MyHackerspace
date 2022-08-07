@@ -8,6 +8,20 @@ Possible tags:
 - [change] A change that's neither a feature nor a bugfix
 - [i18n] Internationalization / translation
 
+## v2.0.2 (2022-08-07)
+
+Unfortunately the app was pulled down from Google Play by Google due to
+"developer inactivity". Due to the lack of e-mail forwarding, we never noticed
+the warnings, so the app is now gone.
+
+To fix this, we had to change the app ID. Additionally, there will be an F-Droid release.
+
+Changes:
+
+- [change] Update dependencies
+- [change] Rename package to `io.spaceapi.community.myhackerspace`
+- [info] Add F-Droid metadata
+
 ## v2.0.1 (2021-05-14)
 
 - [bug] Fix refresh button ([#5][i5])
