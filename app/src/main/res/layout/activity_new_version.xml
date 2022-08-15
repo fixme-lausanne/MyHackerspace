@@ -70,7 +70,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="To switch, please install the 'MyHackerspace' app with the new logo (which you can see above) from F-Droid. Then, uninstall this app." />
+        android:text="To switch, please install the 'MyHackerspace' app with the new logo (which you can see above) from F-Droid (recommended) or Google Play." />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:autoLink="web"
+        android:text="- F-Droid: https://f-droid.org/en/packages/io.spaceapi.community.myhackerspace/\n- Google Play: https://play.google.com/store/apps/details?id=io.spaceapi.community.myhackerspace" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Then, uninstall this app." />
 
     <TextView
         android:layout_width="match_parent"
