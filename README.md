@@ -27,6 +27,24 @@ You can join our [Matrix](https://matrix.org/) chat at `#spaceapi:matrix.coredum
 <a href="https://f-droid.org/packages/io.spaceapi.community.myhackerspace/"><img width="200" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid"></a>
 <a href="https://play.google.com/store/apps/details?id=io.spaceapi.community.myhackerspace"><img width="200" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
 
+## How it works
+
+The app will get the list of hackspaces from [https://directory.spaceapi.io](https://directory.spaceapi.io).
+You can then choose the space by its name from a list.
+When the space is chosen, the associated data is retrieved from the space's
+SpaceAPI endpoint (which is registered in the SpaceAPI directory).
+If you would like to add your space to the directory, have a look at
+[the SpaceAPI website](https://spaceapi.io/provide-an-endpoint/).
+
+### The Widget
+
+The image for the widget is specified in the SpaceAPI endpoint JSON.
+Have a look at the [schema documentation](https://spaceapi.io/docs/) to make your
+widget more pretty!
+
+1. `open.icon` - if present, the widget chooses the specific open/closed images
+2. `logo` - the widget chooses the logo of the hackspace to display
+
 ## How to Compile
 
 First, get the sources.
@@ -63,3 +81,5 @@ You can also build and directly install the file to your connected smartphone:
 To see other tasks that gradle offers, run
 
     ./gradlew tasks
+
+
