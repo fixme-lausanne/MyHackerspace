@@ -2,6 +2,8 @@
 <io.spaceapi.community.myhackerspace.AboutLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1.0.0" />
+            android:layout_marginStart="2sp"
+            android:text="{version}" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,6 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="2sp"
             android:text="@string/about_license_text" />
     </LinearLayout>
 
@@ -46,12 +50,7 @@
         android:id="@+id/about_repository"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoLink="web"
         android:text="@string/about_repository_url" />
-
-    <Button
-        android:id="@+id/about_open_repo_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/about_visit_repository" />
 
 </io.spaceapi.community.myhackerspace.AboutLayout>
