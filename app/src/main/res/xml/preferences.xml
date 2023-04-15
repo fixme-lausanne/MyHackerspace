@@ -43,4 +43,7 @@
         android:defaultValue="30"
         android:inputType="number" />
 
+    <PreferenceCategory android:title="@string/prefs_about_title">
+    </PreferenceCategory>
+
 </PreferenceScreen>

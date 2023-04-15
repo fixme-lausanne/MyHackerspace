@@ -44,6 +44,7 @@ Licensed under GNU's GPL 3, see README
     <string name="prefs_transparent_summary">Widget\'s background will be transparent instead of gray</string>
     <string name="prefs_text_title">Show status text</string>
     <string name="prefs_text_summary">Add a text with the status under the widget</string>
+    <string name="prefs_about_title">About This App</string>
 
     <string name="api_status">Status</string>
     <string name="api_lastchange">Last change: </string>
@@ -88,4 +89,11 @@ Licensed under GNU's GPL 3, see README
     <string name="api_sensor_radiation">Radiation</string>
     <string name="api_sensor_total_member_count">Member Count</string>
     <string name="api_sensor_account_balance">Account Balance</string>
+
+
+    <string name="about_version_title">App Version:</string>
+    <string name="about_license_title">License:</string>
+    <string name="about_license_text">GNU GENERAL PUBLIC LICENSE Version 3</string>
+    <string name="about_visit_repository">Visit Repository</string>
+    <string name="about_repository_url" translatable="false">https://github.com/spaceapi-community/my-hackerspace</string>
 </resources>

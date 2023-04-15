@@ -5,11 +5,16 @@
  */
 package io.spaceapi.community.myhackerspace;
 
+import static android.view.ViewGroup.LayoutParams.*;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 public class Prefs extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
@@ -31,6 +36,7 @@ public class Prefs extends PreferenceActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        this.getListView().addFooterView(AboutLayout.create(this)); // tried addContentView
         PreferenceScreen ps = getPreferenceScreen();
         ps.getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
