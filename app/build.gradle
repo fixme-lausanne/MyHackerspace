@@ -8,8 +8,8 @@ android {
         applicationId "io.spaceapi.community.myhackerspace"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 102
-        versionName "2.0.2"
+        versionCode 103
+        versionName "2.1.0"
     }
 
     buildTypes {

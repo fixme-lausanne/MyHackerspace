@@ -8,6 +8,33 @@ Possible tags:
 - [change] A change that's neither a feature nor a bugfix
 - [i18n] Internationalization / translation
 
+
+## v2.1.0 (2023-04-16)
+
+- [feature] Add information about the app to settings ([#18])
+- [bug] Fix widget crashing on Android 12 ([#24])
+- [bug] Export widget config activity to fix crashing OpenLauncher ([#33])
+- [change] Reverse latitude and longitude displayed on the screen ([#37])
+- [change] Improvements for widget ([#34])
+- [change] Upgrade dependencies, change TargetSDK to 33 ([#42])
+
+Contributors to this version:
+
+- Danilo Bargen (@dbrgn)
+- Nicco Kunzmann (@niccokunzmann)
+- Adrian Pascu (@adipascu)
+- Frieder Hannenheim (@FriederHannenheim)
+
+Thanks!
+
+[#18]: https://github.com/spaceapi-community/my-hackerspace/pull/18
+[#24]: https://github.com/spaceapi-community/my-hackerspace/pull/24
+[#33]: https://github.com/spaceapi-community/my-hackerspace/pull/33
+[#34]: https://github.com/spaceapi-community/my-hackerspace/pull/34
+[#37]: https://github.com/spaceapi-community/my-hackerspace/pull/37
+[#42]: https://github.com/spaceapi-community/my-hackerspace/pull/42
+
+
 ## v2.0.2 (2022-08-07)
 
 Unfortunately the app was pulled down from Google Play by Google due to
@@ -22,11 +49,13 @@ Changes:
 - [change] Rename package to `io.spaceapi.community.myhackerspace`
 - [info] Add F-Droid metadata
 
+
 ## v2.0.1 (2021-05-14)
 
 - [bug] Fix refresh button ([#5][i5])
 
 [i5]: https://github.com/spaceapi-community/my-hackerspace/pull/5
+
 
 ## v2.0.0 (2021-02-20)
 
@@ -57,21 +86,25 @@ Changes:
 [i77]: https://github.com/fixme-lausanne/MyHackerspace/pull/77
 [i85]: https://github.com/fixme-lausanne/MyHackerspace/pull/85
 
+
 ## v1.8.3 (2017-01-XX)
 
 - Change links from SpaceAPI.net to SpaceDirectory.org
 - Display all webcams
+
 
 ## v1.8.2 (2016-07-02)
 
 - Fix camera and stream url being displayed
 - Fix twitter link to the new url format
 
+
 ## v1.8.1 (2016-05-06)
 
 - Uses custom API directory end point (https://spaceapi.fixme.ch/directory.json)
 - Allow editing of the API directory end point and the current hackerspace API
 - Add Danish translation (thanks Mikkel)
+
 
 ## v1.8 (2016-04-14)
 
@@ -81,9 +114,11 @@ Changes:
 - Fix http to https redirection
 - General fixes
 
+
 ## v1.7.4.1 (2014-08-26)
 
 - Fix crash when there's no error message
+
 
 ## v1.7.4 (2014-08-07)
 
@@ -94,30 +129,36 @@ Changes:
 - Add status message to the widget (thanks Fpletz)
 - Fix bugs: widget updates, ignore ext fields, click from widget
 
+
 ## v1.7.3 (2013-10-25)
 
 - Fix regression with widget custom open/close logo
 - Fix order of hackerspaces with different cases
+
 
 ## v1.7.2 (2013-09-09)
 
 - Better layout for sensors
 - Support more fields for sensors (machines, names, properties)
 
+
 ## v1.7.1 (2013-09-06)
 
 - Faster http requests (Use DefaultHttpClient instead of HttpURLConnection)
+
 
 ## v1.7 (2013-09-05)
 
 - Full support of SpaceAPI 0.13, drops mixed api definition: hackerspaces must comply to the level they declare!
 - Widget transparency preference added (by default transparency is deactivated)
 
+
 ## v1.6.1 (2013-06-04)
 
 - French translation
 - Fix the widget's image not updating
 - Change to the new spaceapi url
+
 
 ## v1.6 (2013-01-02)
 
@@ -129,15 +170,18 @@ Changes:
 - Fix lat/lon link
 - Fix crash when maps/email app not found
 
+
 ## v1.5.1 (2012-10-29)
 
 - Bug fixes
 - Add a spinner when loading image
 - Faster download
 
+
 ## v1.5 (2012-05-19)
 
 - Only download image if there is a change of state (better battery live and reduce network usage)
+
 
 ## v1.4 (2012-05-15)
 
@@ -149,15 +193,19 @@ Changes:
 - BUGFIX: Theme shoud be correct on all devices/versions
 - BUGFIX: Should work after reboot correctly
 
+
 ## v1.3 (2012-05-08)
 
 - White theme by default (may break on samsung devices)
 - Check if network is enabled
 - Handle rotation correctly
 
+
 ## v1.2 (2012-05-06)
 
+
 ## v1.1 (2012-05-04)
+
 
 ## v1.0 (2012-04-29)
 

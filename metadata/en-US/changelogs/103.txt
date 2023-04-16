@@ -1,0 +1,6 @@
+- [feature] Add information about the app to settings
+- [bug] Fix widget crashing on Android 12
+- [bug] Export widget config activity to fix crashing OpenLauncher
+- [change] Reverse latitude and longitude displayed on the screen
+- [change] Improvements for widget
+- [change] Upgrade dependencies, change TargetSDK to 33
