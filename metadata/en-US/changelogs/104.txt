@@ -1,0 +1,2 @@
+- [bug] Fix a bug when parsing v14 endpoints that contain a SpaceFED key without a "spacephone" field
+- [bug] Temporarily use directory from GitHub directly to speed up loading

@@ -9,6 +9,23 @@ Possible tags:
 - [i18n] Internationalization / translation
 
 
+## v2.1.1 (2023-04-27)
+
+- [bug] Fix a bug when parsing v14 endpoints that contain a SpaceFED key
+  without a "spacephone" field ([#44])
+- [bug] Temporarily use directory from GitHub directly to speed up loading
+  ([#45])
+
+Contributors to this version:
+
+- Danilo Bargen (@dbrgn)
+
+Thanks!
+
+[#44]: https://github.com/spaceapi-community/my-hackerspace/pull/44
+[#45]: https://github.com/spaceapi-community/my-hackerspace/pull/45
+
+
 ## v2.1.0 (2023-04-16)
 
 - [feature] Add information about the app to settings ([#18])
@@ -33,6 +50,7 @@ Thanks!
 [#34]: https://github.com/spaceapi-community/my-hackerspace/pull/34
 [#37]: https://github.com/spaceapi-community/my-hackerspace/pull/37
 [#42]: https://github.com/spaceapi-community/my-hackerspace/pull/42
+[#44]: https://github.com/spaceapi-community/my-hackerspace/pull/44
 
 
 ## v2.0.2 (2022-08-07)
