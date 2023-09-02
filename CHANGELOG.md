@@ -11,6 +11,7 @@ Possible tags:
 
 # Unreleased
 
+- [feature] Show state "last change" timestamp as localized datetime
 - [change] Drop support for Android 5–7, require at least Android 8
 - [change] Remove old autolinking-workaround for HTC devices ([#48])
 
