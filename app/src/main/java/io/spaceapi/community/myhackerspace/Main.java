@@ -229,27 +229,6 @@ public class Main extends Activity {
         return dialog;
     }
 
-    @Override
-    @UiThread
-    public void startActivity(Intent intent) {
-        // http://stackoverflow.com/questions/13691241/autolink-not-working-on-htc-htclinkifydispatcher
-        try {
-            /* First attempt at fixing an HTC broken by evil Apple patents. */
-            if (intent.getComponent() != null
-                    && ".HtcLinkifyDispatcherActivity".equals(intent
-                            .getComponent().getShortClassName()))
-                intent.setComponent(null);
-            super.startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            /*
-             * Probably an HTC broken by evil Apple patents. This is not
-             * perfect, but better than crashing the whole application.
-             */
-            Log.e(Main.TAG, e.getMessage());
-            super.startActivity(Intent.createChooser(intent, null));
-        }
-    }
-
     private void setViewVisibility(boolean show) {
         int visibility1 = View.GONE;
         int visibility2 = View.VISIBLE;
