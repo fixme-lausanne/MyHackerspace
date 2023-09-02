@@ -11,7 +11,8 @@ Possible tags:
 
 # Unreleased
 
-- Remove old autolinking-workaround for HTC devices ([#48])
+- [change] Drop support for Android 5–7, require at least Android 8
+- [change] Remove old autolinking-workaround for HTC devices ([#48])
 
 [#48]: https://github.com/spaceapi-community/my-hackerspace/pull/48
 
