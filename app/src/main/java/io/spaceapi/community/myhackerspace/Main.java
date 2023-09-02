@@ -130,8 +130,7 @@ public class Main extends Activity {
             getHsList();
             showHsInfo(getIntent(), true);
         } else {
-            showError(getString(R.string.error_title) + getString(R.string.error_network_title),
-                    getString(R.string.error_network_msg));
+            showNetworkError();
         }
     }
 
@@ -171,8 +170,7 @@ public class Main extends Activity {
             if (hasNetwork()) {
                 showHsInfo(getIntent(), true);
             } else {
-                showError(getString(R.string.error_title) + getString(R.string.error_network_title),
-                    getString(R.string.error_network_msg));
+                showNetworkError();
             }
             return true;
         } else if (id == R.id.menu_choose) {
@@ -415,7 +413,7 @@ public class Main extends Activity {
     private AlertDialog showError(String title, String msg, boolean ret) {
         if (title != null && msg != null) {
             AlertDialog dialog = new AlertDialog.Builder(Main.this)
-                    .setTitle(getString(R.string.error_title) + title)
+                    .setTitle(getString(R.string.error_title) + " " + title)
                     .setMessage(msg)
                     .setNeutralButton(getString(R.string.ok), null).create();
             if (ret) {
@@ -425,6 +423,10 @@ public class Main extends Activity {
             }
         }
         return null;
+    }
+
+    private void showNetworkError() {
+        showError(getString(R.string.error_network_title), getString(R.string.error_network_msg));
     }
 
     private void dismissLoading() {
