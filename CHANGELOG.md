@@ -9,6 +9,13 @@ Possible tags:
 - [i18n] Internationalization / translation
 
 
+# Unreleased
+
+- Remove old autolinking-workaround for HTC devices ([#48])
+
+[#48]: https://github.com/spaceapi-community/my-hackerspace/pull/48
+
+
 ## v2.1.1 (2023-04-27)
 
 - [bug] Fix a bug when parsing v14 endpoints that contain a SpaceFED key
