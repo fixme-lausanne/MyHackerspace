@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012-2017 Aubort Jean-Baptiste (Rorist)
- * Copyright (C) 2020-2022 Danilo Bargen (dbrgn)
+ * Copyright (C) 2020-2023 Danilo Bargen (dbrgn)
  * Licensed under GNU's GPL 3, see README
  */
 package io.spaceapi.community.myhackerspace;
@@ -52,6 +52,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -87,8 +91,9 @@ public class Main extends Activity {
     protected static final String STATE_URL = "url";
     private static final int DIALOG_LOADING = 0;
     private static final int DIALOG_LIST = 1;
-    private static final String MAP_SEARCH = "geo:0,0?q=";
     private static final String MAP_COORD = "geo:%s,%s?z=23&q=";
+
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
 
     // Shared preferences
     private SharedPreferences mPrefs;
@@ -678,8 +683,9 @@ public class Main extends Activity {
 
             // Status last change
             if (data.state != null && data.state.lastchange != null) {
-                // TODO: Do we need to properly format the date? Maybe using relative time?
-                addEntry(iftr, vg, getString(R.string.api_lastchange) + " " + data.state.lastchange);
+                final ZonedDateTime lastchange = data.state.lastchange.atZone(ZoneId.systemDefault());
+                final String lastchangeString = lastchange.format(this.dateTimeFormatter);
+                addEntry(iftr, vg, getString(R.string.api_lastchange) + " " + lastchangeString);
             }
 
             // Location

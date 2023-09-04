@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "io.spaceapi.community.myhackerspace"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 33
         versionCode 104
         versionName "2.1.1"
@@ -33,7 +33,7 @@ dependencies {
     implementation "androidx.annotation:annotation:1.6.0"
 
     // SpaceAPI Library
-    implementation "io.github.spaceapi-community:spaceapi-kt:0.4.1"
+    implementation "io.github.spaceapi-community:spaceapi-kt:0.5.0"
 
     // JUnit for testing
     testImplementation 'junit:junit:4.13.2'

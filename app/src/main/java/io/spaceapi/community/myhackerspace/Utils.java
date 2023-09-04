@@ -11,8 +11,7 @@ public class Utils {
     /**
      * Join the strings using the specified separator.
      */
-    public static @Nullable
-    String joinStrings(@NonNull String separator, String... strings) {
+    public static @Nullable String joinStrings(@NonNull String separator, String... strings) {
         final StringBuilder builder = new StringBuilder();
         boolean empty = true;
         for (String string : strings) {
