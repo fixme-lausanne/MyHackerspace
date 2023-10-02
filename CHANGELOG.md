@@ -11,11 +11,25 @@ Possible tags:
 
 # Unreleased
 
-- [feature] Show state "last change" timestamp as localized datetime
+
+# v2.1.2 (2023-10-02)
+
+- [feature] Show state "last change" timestamp as localized datetime ([#47])
+- [bug] Use correct mastodon property ([#49])
+- [bug] Fix network error message
 - [change] Drop support for Android 5–7, require at least Android 8
 - [change] Remove old autolinking-workaround for HTC devices ([#48])
 
+Contributors to this version:
+
+- cyroxx (@cyroxx)
+- Danilo Bargen (@dbrgn)
+
+Thanks!
+
+[#47]: https://github.com/spaceapi-community/my-hackerspace/pull/47
 [#48]: https://github.com/spaceapi-community/my-hackerspace/pull/48
+[#49]: https://github.com/spaceapi-community/my-hackerspace/pull/49
 
 
 ## v2.1.1 (2023-04-27)

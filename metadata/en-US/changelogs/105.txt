@@ -1,0 +1,5 @@
+- [feature] Show state "last change" timestamp as localized datetime
+- [bug] Use correct mastodon property
+- [bug] Fix network error message
+- [change] Drop support for Android 5–7, require at least Android 8
+- [change] Remove old autolinking-workaround for HTC devices
