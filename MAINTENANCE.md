@@ -7,6 +7,7 @@ This project is maintained by the SpaceAPI community.
 Maintainers (may review and merge):
 
 - @dbrgn
+- @niccokunzmann
 
 People with publication rights on Google Play:
 
