@@ -1,12 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "30.0.3"
-
     defaultConfig {
         applicationId "io.spaceapi.community.myhackerspace"
         minSdkVersion 26
+        compileSdk 34
         targetSdkVersion 34
         versionCode 105
         versionName "2.1.2"
