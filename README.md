@@ -1,6 +1,8 @@
 My Hackerspace
 ==============
 
+>  **Discontinued** The current development takes place at [spaceapi-community/my-hackerspace](https://github.com/spaceapi-community/my-hackerspace).
+
 - Status of hackerspaces using the [SpaceAPI](https://spaceapi.io/)
 - Show information about the space (contact, location, sensors, ...)
 - Status widget, multiple widgets supported
