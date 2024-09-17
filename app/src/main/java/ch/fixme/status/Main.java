@@ -37,7 +37,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -60,6 +59,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import androidx.annotation.UiThread;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class Main extends Activity {
 
@@ -700,65 +700,65 @@ public class Main extends Activity {
                     ArrayList<HashMap<String, String>> sensorsData = sensors
                             .get(name);
                     for (HashMap<String, String> elem : sensorsData) {
-                        RelativeLayout rl = (RelativeLayout) iftr.inflate(
+                        ConstraintLayout sensorView = (ConstraintLayout) iftr.inflate(
                                 R.layout.entry_sensor, null);
                         if (elem.containsKey(ParseGeneric.API_SENSOR_VALUE)) {
-                            ((TextView) rl.findViewById(R.id.entry_value))
+                            ((TextView) sensorView.findViewById(R.id.entry_value))
                                     .setText(elem.get(ParseGeneric.API_SENSOR_VALUE));
                         } else {
-                            rl.findViewById(R.id.entry_value).setVisibility(
+                            sensorView.findViewById(R.id.entry_value).setVisibility(
                                     View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_UNIT)) {
-                            ((TextView) rl.findViewById(R.id.entry_unit))
+                            ((TextView) sensorView.findViewById(R.id.entry_unit))
                                     .setText(elem.get(ParseGeneric.API_SENSOR_UNIT));
                         } else {
-                            rl.findViewById(R.id.entry_unit).setVisibility(
+                            sensorView.findViewById(R.id.entry_unit).setVisibility(
                                     View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_NAME)) {
-                            ((TextView) rl.findViewById(R.id.entry_name))
+                            ((TextView) sensorView.findViewById(R.id.entry_name))
                                     .setText(elem.get(ParseGeneric.API_SENSOR_NAME));
                         } else {
-                            rl.findViewById(R.id.entry_name).setVisibility(
+                            sensorView.findViewById(R.id.entry_name).setVisibility(
                                     View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_LOCATION)) {
-                            ((TextView) rl.findViewById(R.id.entry_location))
+                            ((TextView) sensorView.findViewById(R.id.entry_location))
                                     .setText(elem
                                             .get(ParseGeneric.API_SENSOR_LOCATION));
                         } else {
-                            rl.findViewById(R.id.entry_location).setVisibility(
+                            sensorView.findViewById(R.id.entry_location).setVisibility(
                                     View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_DESCRIPTION)) {
-                            ((TextView) rl.findViewById(R.id.entry_description))
+                            ((TextView) sensorView.findViewById(R.id.entry_description))
                                     .setText(elem
                                             .get(ParseGeneric.API_SENSOR_DESCRIPTION));
                         } else {
-                            rl.findViewById(R.id.entry_description)
+                            sensorView.findViewById(R.id.entry_description)
                                     .setVisibility(View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_PROPERTIES)) {
-                            ((TextView) rl.findViewById(R.id.entry_properties))
+                            ((TextView) sensorView.findViewById(R.id.entry_properties))
                                     .setText(elem
                                             .get(ParseGeneric.API_SENSOR_PROPERTIES));
                         } else {
-                            rl.findViewById(R.id.entry_properties)
+                            sensorView.findViewById(R.id.entry_properties)
                                     .setVisibility(View.GONE);
                         }
                         if (elem.containsKey(ParseGeneric.API_SENSOR_MACHINES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other))
+                            ((TextView) sensorView.findViewById(R.id.entry_other))
                                     .setText(elem
                                             .get(ParseGeneric.API_SENSOR_MACHINES));
                         } else if (elem.containsKey(ParseGeneric.API_SENSOR_NAMES)) {
-                            ((TextView) rl.findViewById(R.id.entry_other))
+                            ((TextView) sensorView.findViewById(R.id.entry_other))
                                     .setText(elem.get(ParseGeneric.API_SENSOR_NAMES));
                         } else {
-                            rl.findViewById(R.id.entry_other).setVisibility(
+                            sensorView.findViewById(R.id.entry_other).setVisibility(
                                     View.GONE);
                         }
-                        vg.addView(rl);
+                        vg.addView(sensorView);
                     }
                 }
             }
